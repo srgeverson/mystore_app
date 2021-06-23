@@ -1,7 +1,7 @@
 # MyStore - Sistema de Controle de Loja
 Este sistema servirá para acompanhar e gerenciar as vendas da empresa.
 
-## 📌 Versão ainda em produção
+## 📌 Versão ainda em desenvolvimento
 1.0.0
 
 ### Pré-requisitos
