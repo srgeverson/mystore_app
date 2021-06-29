@@ -9,24 +9,37 @@ Antes de começar, você vai precisar ter instalado em sua máquina as seguintes
 [Git](https://git-scm.com) e [Node.js](https://nodejs.org/en/) 
 Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/)
 
+A criação e a execução do projeto foram realizadas seguindo a documentação oficial
+[React Native](https://reactnative.dev/docs/environment-setup).
+
 ## 🚀 Como o projeto foi desenvolvido
 
 ```bash
 
-### Instalando o Expo
-$ npm install -g expo-cli
-
 ### Criando o Projeto
-$ expo init mystore_app
+$ npx react-native init mystore_app
+
+### Executando o Metro Bundle
+$ npx react-native start
 
 ### Executando projeto no Android
-$ expo start --android
+$ npx react-native run-android
 
 ```
 
 #### 🎲 Rodando a aplicação
 
 ```bash
+
+### Baixando o projeto
+$ https://github.com/tcc-mystore/mystore_app.git
+
+### Entrando no diretótio
+$ cd mysrore_app
+
+### Instalando as dependências
+$ npm install
+
 
 ```
 
