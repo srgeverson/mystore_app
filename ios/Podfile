@@ -12,6 +12,8 @@ target 'mystore_app' do
     :hermes_enabled => false
   )
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
   target 'mystore_appTests' do
     inherit! :complete
     # Pods for testing

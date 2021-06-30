@@ -25,6 +25,22 @@ $ npx react-native start
 ### Executando projeto no Android
 $ npx react-native run-android
 
+### Navegação
+$ npm install @react-navigation/native
+
+### 
+$ npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+
+### 
+$ npm install react-native-gesture-handler
+
+### 
+$ npx react-native link react-native-gesture-handler
+
+### 
+$ npm install @react-navigation/stack
+
+
 ```
 
 #### 🎲 Rodando a aplicação
