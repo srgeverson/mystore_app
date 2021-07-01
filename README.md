@@ -25,6 +25,33 @@ $ npx react-native start
 ### Executando projeto no Android
 $ npx react-native run-android
 
+### Biblioteca de navegação
+$ npm install @react-navigation/native
+
+### Instalação das dependências base de navegação
+$ npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+
+### 
+$ npm install react-native-gesture-handler
+
+### 
+$ npx react-native link react-native-gesture-handler
+
+### Navegação stack
+$ npm install @react-navigation/stack
+
+### Elementos/Componentes do React Native
+$ npm install react-native-elements
+
+### Biblioteca de icones React Native
+$ npm install react-native-vector-icons
+
+### Associando o React Native Icons ao projeto
+$ npx react-native link react-native-vector-icons
+
+### Biblioteca de icones Font Awesome
+$ npm install --save @fortawesome/fontawesome-free
+
 ```
 
 #### 🎲 Rodando a aplicação
