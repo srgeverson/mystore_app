@@ -9,7 +9,7 @@ const Login = () => {
     const navigation = useNavigation();
 
     const novoUsuario = () => {
-        navigation.navigate('Cadastrar');
+        navigation.navigate('BemVindo');
     }
 
     return (
