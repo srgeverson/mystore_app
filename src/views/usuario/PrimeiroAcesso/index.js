@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const Cadastrar = () => {
+const PrimeiroAcesso = () => {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Cadastrar</Text>
+            <Text>Primeiro Acesso</Text>
         </View>
     )
 }
 
-export default Cadastrar;
+export default PrimeiroAcesso;
