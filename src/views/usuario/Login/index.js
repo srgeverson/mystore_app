@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Input, Image } from 'react-native-elements';
-import logo from '../../../assets/images/logo.png'
+import logo from '../../../assets/images/logo.png';
+import { Icon } from 'react-native-elements'
 
 const Login = () => {
 
@@ -30,6 +31,8 @@ const Login = () => {
                 title="Entrar"
                 color='green'
                 onPress={novoUsuario} />
+                <Icon
+  name='rowing' />
 
         </View>
     )
