@@ -16,8 +16,8 @@ const Routes = () => {
             <Stack.Navigator>
                 {/* Rotas sem autênticação */}
                 <Stack.Screen name="Login" component={Login} options={{headerShown: false, }}/>
-                <Stack.Screen name="PrimeiroAcesso" component={PrimeiroAcesso} />
-                <Stack.Screen name="RecuperarSenha" component={RecuperarSenha} />
+                <Stack.Screen name="PrimeiroAcesso" component={PrimeiroAcesso} options={{headerShown: false, }}/>
+                <Stack.Screen name="RecuperarSenha" component={RecuperarSenha} options={{headerShown: false, }}/>
                 {/* Rotas com autênticação */}
                 <Stack.Screen name="BemVindo" component={BemVindo} />
                 {/* 
