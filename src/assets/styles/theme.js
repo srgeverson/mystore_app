@@ -1,3 +1,8 @@
+import React from "react";
+import { Dimensions } from "react-native";
+
+const logoWidth = 200;
+
 export const theme = {
     colors: {
         primary: '#007bff',
@@ -10,10 +15,15 @@ export const theme = {
         dark: '#343a40',
     },
     sizes: {
-        icon: 15
+        icon: 15,
+        logoWidth: logoWidth,
+        logoHeight: 150
     },
     margins: {
         iconTextLeft: 5,
-        iconTextRight:5
+        iconTextRight: 5
+    },
+    positions: {
+        imageLogoLeft: (Dimensions.get('window').width - logoWidth) / 4
     }
 }
