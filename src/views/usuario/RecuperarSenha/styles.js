@@ -6,14 +6,6 @@ const styles = StyleSheet.create({
         width: theme.sizes.logoWidth,
         height: theme.sizes.logoHeight,
         marginLeft: theme.positions.imageLogoLeft
-    },
-    recuperarSenha: {
-        color: theme.colors.primary,
-        fontSize: 15,
-    },
-    validarAcesso: {
-        color: theme.colors.primary,
-        fontSize: 15,
     }
 });
 
