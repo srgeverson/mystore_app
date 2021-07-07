@@ -54,7 +54,10 @@ $ npm install --save @fortawesome/fontawesome-free
 
 ### Cliente http
 $ npm install --save axios
-
+spositivo ainda vou decidir
+$ npm install @react-native-async-storage/async-storage
+# Ou
+$ npm install --save react-native-sqlite-storage
 ```
 
 #### 🎲 Rodando a aplicação
