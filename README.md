@@ -52,6 +52,9 @@ $ npx react-native link react-native-vector-icons
 ### Biblioteca de icones Font Awesome
 $ npm install --save @fortawesome/fontawesome-free
 
+### Cliente http
+$ npm install --save axios
+
 ```
 
 #### 🎲 Rodando a aplicação
