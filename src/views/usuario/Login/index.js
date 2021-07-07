@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Alert, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Input, Card, Text } from 'react-native-elements';
@@ -6,6 +6,7 @@ import logo from '../../../assets/images/logo.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
 import BotaoEntrar from '../../../components/BotaoEntrar';
+import { AuthorityContext } from '../../../core/contexts';
 
 const Login = () => {
 
@@ -14,13 +15,15 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
+    const { signIn } = useContext(AuthorityContext);
+
     const criticas = () => {
         if (!email) {
-            Alert.alert("Dados incompletos","Preencha o campo email!");
+            Alert.alert("Dados incompletos", "Preencha o campo email!");
             return false;
         }
         if (!senha) {
-            Alert.alert("Dados incompletos","Preencha o campo senha!");
+            Alert.alert("Dados incompletos", "Preencha o campo senha!");
             return false;
         }
 
@@ -30,6 +33,17 @@ const Login = () => {
     const entrar = async () => {
         if (!criticas()) return;
         navigation.navigate('BemVindo');
+        setLoading(true);
+        // await api.post('/login', { email, password })
+        //     .then((response) => {
+        //         AsyncStorage.setItem('@token', response.data.token);
+        signIn();
+        //         setLoading(false);
+        //     })
+        //     .catch((err) => {
+        //         setLoading(false);
+        //         Alert.alert("", err.response.data.message);
+        //     })
     }
 
     const recuperarSenha = () => {
