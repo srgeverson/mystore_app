@@ -40,6 +40,9 @@ $ npx react-native link react-native-gesture-handler
 ### Navegação stack
 $ npm install @react-navigation/stack
 
+### Navegação drawer
+npm install @react-navigation/drawer
+
 ### Elementos/Componentes do React Native
 $ npm install react-native-elements
 
