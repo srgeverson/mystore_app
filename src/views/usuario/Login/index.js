@@ -14,6 +14,7 @@ const Login = () => {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [carregando, setCarregando] = useState(false);
 
     const { signIn } = useContext(AuthorityContext);
 
@@ -33,7 +34,7 @@ const Login = () => {
     const entrar = async () => {
         if (!criticas()) return;
         navigation.navigate('BemVindo');
-        setLoading(true);
+        setCarregando(true);
         // await api.post('/login', { email, password })
         //     .then((response) => {
         //         AsyncStorage.setItem('@token', response.data.token);
@@ -55,33 +56,32 @@ const Login = () => {
     }
 
     return (
-        <>
-            <View>
-                <Card>
-                    <Card.Image source={logo} style={styles.logo} />
-                    <Input
-                        placeholder="Digite seu email aqui"
-                        onChangeText={value => setEmail(value)}
-                        errorMessage={!email ? 'E-mail é obrigatório!' : ''}
-                        leftIcon={<Icon name="envelope" size={18} />} />
 
-                    <Input
-                        placeholder='Digite sua senha aqui'
-                        onChangeText={value => setSenha(value)}
-                        errorMessage={!senha ? 'Senha é obrigatório!' : ''}
-                        secureTextEntry={true}
-                        leftIcon={<Icon name="key" size={18} />} />
+        <View>
+            <Card>
+                <Card.Image source={logo} style={styles.logo} />
+                <Input
+                    placeholder="Digite seu email aqui"
+                    onChangeText={value => setEmail(value)}
+                    errorMessage={!email ? 'E-mail é obrigatório!' : ''}
+                    leftIcon={<Icon name="envelope" size={18} />} />
 
-                    <BotaoEntrar titulo="Entrar" pressionado={entrar} />
-                    <Card.Divider />
-                    <Card.Title>
-                        <Text style={styles.recuperarSenha} onPress={recuperarSenha}>Esqueceu a senha?</Text>
-                        {' '}
-                        <Text style={styles.validarAcesso} onPress={validarAcesso}>Primeiro acesso?</Text>
-                    </Card.Title>
-                </Card>
-            </View>
-        </>
+                <Input
+                    placeholder='Digite sua senha aqui'
+                    onChangeText={value => setSenha(value)}
+                    errorMessage={!senha ? 'Senha é obrigatório!' : ''}
+                    secureTextEntry={true}
+                    leftIcon={<Icon name="key" size={18} />} />
+
+                <BotaoEntrar carregando={carregando} titulo="Entrar" pressionado={entrar} />
+                <Card.Divider />
+                <Card.Title>
+                    <Text style={styles.recuperarSenha} onPress={recuperarSenha}>Esqueceu a senha?</Text>
+                    {'  '}
+                    <Text style={styles.validarAcesso} onPress={validarAcesso}>Primeiro acesso?</Text>
+                </Card.Title>
+            </Card>
+        </View>
     )
 }
 
