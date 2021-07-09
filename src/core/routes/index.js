@@ -8,14 +8,13 @@ import { AuthorityContext } from '../contexts';
 import Login from '../../views/usuario/Login';
 import PrimeiroAcesso from '../../views/usuario/PrimeiroAcesso';
 import RecuperarSenha from '../../views/usuario/RecuperarSenha';
-import BemVindo from '../../views/mystore/BemVindo';
 
 const Stack = createStackNavigator();
 
 const Routes = () => {
     const [token, setToken] = useState(null);
 
-    const authContext = useMemo(() => {
+    const authorizationContext = useMemo(() => {
         return {
             signIn: async () => {
                 //             const valToken = AsyncStorage.getItem('@token');
@@ -44,7 +43,7 @@ const Routes = () => {
     }, []);
 
     return (
-        <AuthorityContext.Provider value={authContext}>
+        <AuthorityContext.Provider value={authorizationContext}>
             <NavigationContainer>
                 {
                     token ? (
