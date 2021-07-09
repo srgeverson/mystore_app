@@ -33,7 +33,6 @@ const Login = () => {
 
     const entrar = async () => {
         if (!criticas()) return;
-        navigation.navigate('BemVindo');
         setCarregando(true);
         // await api.post('/login', { email, password })
         //     .then((response) => {

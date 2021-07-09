@@ -13,17 +13,17 @@ import BemVindo from '../../views/mystore/BemVindo';
 const Stack = createStackNavigator();
 
 const Routes = () => {
-    const [token, setToken] = useState('null');
+    const [token, setToken] = useState(null);
 
     const authContext = useMemo(() => {
         return {
             signIn: async () => {
                 //             const valToken = AsyncStorage.getItem('@token');
-                //             setUserToken(valToken);
+                setToken('valToken');
             },
             signOut: () => {
                 //             AsyncStorage.removeItem('@token');
-                //             setUserToken(null);
+                setToken(null);
             }
         }
     }, []);
