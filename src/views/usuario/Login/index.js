@@ -5,7 +5,7 @@ import { Input, Card, Text } from 'react-native-elements';
 import logo from '../../../assets/images/logo.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
-import BotaoEntrar from '../../../components/BotaoEntrar';
+import BotaoEntrar from '../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../core/contexts';
 
 const Login = () => {
