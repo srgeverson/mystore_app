@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Card, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -20,7 +20,7 @@ const PrimeiroAcesso = () => {
 
     return (
         <>
-            <View>
+            <SafeAreaView>
                 <Card>
                     <Card.Title>Validar Acesso</Card.Title>
                     <Card.Divider />
@@ -33,7 +33,7 @@ const PrimeiroAcesso = () => {
                     />
                     <BotaoConfirmar titulo="Validar" pressionado={validarAcesso} />
                 </Card>
-            </View>
+            </SafeAreaView>
         </>
     )
 }

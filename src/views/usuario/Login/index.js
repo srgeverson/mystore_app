@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Alert, View } from 'react-native';
+import { Alert, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Input, Card, Text } from 'react-native-elements';
 import logo from '../../../assets/images/logo.png';
@@ -56,7 +56,7 @@ const Login = () => {
 
     return (
 
-        <View>
+        <SafeAreaView>
             <Card>
                 <Card.Image source={logo} style={styles.logo} />
                 <Input
@@ -80,7 +80,7 @@ const Login = () => {
                     <Text style={styles.validarAcesso} onPress={validarAcesso}>Primeiro acesso?</Text>
                 </Card.Title>
             </Card>
-        </View>
+        </SafeAreaView>
     )
 }
 
