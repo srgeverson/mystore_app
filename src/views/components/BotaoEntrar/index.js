@@ -2,7 +2,7 @@ import React from 'react';
 import { ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { theme } from '../../assets/styles/theme';
+import { theme } from '../../../assets/styles/theme';
 
 const BotaoEntrar = (props) => {
     return (
