@@ -1,16 +1,20 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BemVindo from '../../views/mystore/BemVindo';
+import ListarFornecedor from '../../views/fornecedor/ListarFornecedor';
 
 const Stack = createStackNavigator();
 
+const screenOptionStyle = {
+    headerBackTitle: "Voltar",
+}
+
 const BemVindoStackNavigator = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={screenOptionStyle}>
             <Stack.Screen name="BemVindo" component={BemVindo} options={{ headerShown: false, }} />
             {/* 
             Rotas com autênticação
-                     <Stack.Screen name="ListarFornecedor" component={ListarFornecedor} />
                      <Stack.Screen name="CadastrarFornecedor" component={CadastrarFornecedor} />
                      <Stack.Screen name="ListarProduto" component={ListarProduto} />
                      <Stack.Screen name="CadastrarProduto" component={CadastrarProduto} />
@@ -29,5 +33,12 @@ const BemVindoStackNavigator = () => {
     );
 };
 
+const ListarFornecedorStackNavigator = () => {
+    return (
+        <Stack.Navigator  screenOptions={screenOptionStyle}>
+            <Stack.Screen name="ListarFornecedor" component={ListarFornecedor} />
+        </Stack.Navigator>
+    );
+};
 
-export { BemVindoStackNavigator };
+export { BemVindoStackNavigator, ListarFornecedorStackNavigator };
