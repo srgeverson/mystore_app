@@ -12,7 +12,7 @@ import RecuperarSenha from '../../views/usuario/RecuperarSenha';
 const Stack = createStackNavigator();
 
 const Routes = () => {
-    const [token, setToken] = useState(null);
+    const [token, setToken] = useState('null');
 
     const authorizationContext = useMemo(() => {
         return {
