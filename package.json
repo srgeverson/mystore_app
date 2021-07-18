@@ -7,7 +7,11 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "generate-apk-windows": "cd android && gradlew assembleRelease",
+    "generate-apk-linux": "cd android && ./gradlew assembleRelease",
+		"show-apk-windows": "explorer android\\app\\build\\outputs\\bundle\\release",
+    "show-apk-linux": "nautilus android/app/build/outputs/bundle/release"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",
