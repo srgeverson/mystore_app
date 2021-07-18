@@ -55,7 +55,6 @@ const Login = () => {
     }
 
     return (
-
         <SafeAreaView>
             <Card>
                 <Card.Image source={logo} style={styles.logo} />
