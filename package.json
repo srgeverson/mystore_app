@@ -10,10 +10,11 @@
     "lint": "eslint .",
     "generate-apk-windows": "cd android && gradlew assembleRelease",
     "generate-apk-linux": "cd android && ./gradlew assembleRelease",
-		"show-apk-windows": "explorer android\\app\\build\\outputs\\bundle\\release",
+    "show-apk-windows": "explorer android\\app\\build\\outputs\\bundle\\release",
     "show-apk-linux": "nautilus android/app/build/outputs/bundle/release"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/drawer": "^5.12.5",
     "@react-navigation/native": "^5.9.4",
@@ -26,7 +27,8 @@
     "react-native-reanimated": "^2.2.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.4.0",
-    "react-native-vector-icons": "^8.1.0"
+    "react-native-vector-icons": "^8.1.0",
+    "react-native-webview": "^11.13.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
