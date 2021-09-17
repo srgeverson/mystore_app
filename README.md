@@ -52,7 +52,7 @@ $ npm install react-native-vector-icons
 ### Associando o React Native Icons ao projeto
 $ npx react-native link react-native-vector-icons
 
-### Biblioteca de icones Font Awesome
+### Biblioteca de icones Font Awesome [Configuração](https://github.com/FortAwesome/react-native-fontawesome)
 $ npm install --save @fortawesome/fontawesome-free
 
 ### Cliente http
