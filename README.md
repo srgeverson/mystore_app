@@ -60,8 +60,6 @@ $ npm install --save axios
 
 #Salvar dados no positivo ainda vou decidir
 $ npm install @react-native-async-storage/async-storage
-# Ou
-$ npm install --save react-native-sqlite-storage
 
 ### Estilização de componentes !!!!!CONFLITOU!!!!!
 $ npm install --save styled-components
