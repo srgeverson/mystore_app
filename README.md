@@ -65,6 +65,9 @@ $ npm install --save react-native-sqlite-storage
 
 ### Estilização de componentes !!!!!CONFLITOU!!!!!
 $ npm install --save styled-components
+
+### Autenticação Base64
+$ npm install --save bse64
 ```
 
 #### 🎲 Rodando a aplicação
