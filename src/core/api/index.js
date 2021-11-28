@@ -31,12 +31,17 @@ const authorizationServerLogin = async (email, senha) => {
         ).then((response) => {
             console.log(`Token de acesso gerado com sucesso!`);
             return response.data;
-        }).catch((err) => {
+        }).catch((error) => {
             console.log(`Erro ao gerar o token de acesso!`);
-            if( err.response ){
-                console.log(Promise.resolve({ error })); // => the response payload 
+            if (error.response) {
+                return {
+                    codigo: error.response.status,
+                    erro: error.response.data.error,
+                    mensagem: error.response.data.error_description,
+                }
+            } else {
+                throw error;
             }
-            return err;
         });
     } catch (error) {
         console.log(`Erro ao gerar o token de acesso -> ${new Date()} -> erro: ${error}`);
@@ -54,12 +59,20 @@ const authorizationServerRecuperarSenha = async () => {
         ).then((response) => {
             console.log(`Token de recuperação de senha gerado com sucesso!`);
             return response.data;
-        }).catch((err) => {
+        }).catch((error) => {
             console.log(`Erro ao gerar token de recuperação de senha!`);
-            throw err;
+            if (error.response) {
+                return {
+                    codigo: error.response.status,
+                    erro: error.response.data.error,
+                    mensagem: error.response.data.error_description,
+                }
+            } else {
+                throw error;
+            }
         });
     } catch (error) {
-        console.log(`Erro ao gerar token de recuperação de senha -> ${new Date()} -> erro: ${error}`);
+        console.log(`Erro ao gerar token de recuperação de senha -> ${new Date()} -> erro: ${error.response}`);
     }
 }
 
