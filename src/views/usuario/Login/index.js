@@ -7,13 +7,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
 import BotaoEntrar from '../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../core/contexts';
+import { api, authorizationServerLogin } from '../../../core/api';
 
 const Login = () => {
 
     const navigation = useNavigation();
 
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const [email, setEmail] = useState('paulistensetecnologia@gmail.com');
+    const [senha, setSenha] = useState('123456');
     const [carregando, setCarregando] = useState(false);
 
     const { signIn } = useContext(AuthorityContext);
@@ -34,16 +35,9 @@ const Login = () => {
     const entrar = async () => {
         if (!criticas()) return;
         setCarregando(true);
-        // await api.post('/login', { email, password })
-        //     .then((response) => {
-        //         AsyncStorage.setItem('@token', response.data.token);
-        signIn();
-        //         setLoading(false);
-        //     })
-        //     .catch((err) => {
-        //         setLoading(false);
-        //         Alert.alert("", err.response.data.message);
-        //     })
+        const teste = await authorizationServerLogin(email, senha);
+        console.log(teste);
+        setCarregando(false);
     }
 
     const recuperarSenha = () => {
@@ -59,15 +53,19 @@ const Login = () => {
             <Card>
                 <Card.Image source={logo} style={styles.logo} />
                 <Input
+                    keyboardType='email-address'
+                    autoCapitalize = 'none'
                     placeholder="Digite seu email aqui"
                     onChangeText={value => setEmail(value)}
-                    errorMessage={!email ? 'E-mail é obrigatório!' : ''}
+                    value={email}
+                    errorMessage={!email && 'E-mail é obrigatório!'}
                     leftIcon={<Icon name="envelope" size={18} />} />
 
                 <Input
                     placeholder='Digite sua senha aqui'
                     onChangeText={value => setSenha(value)}
-                    errorMessage={!senha ? 'Senha é obrigatório!' : ''}
+                    value={senha}
+                    errorMessage={!senha && 'Senha é obrigatório!'}
                     secureTextEntry={true}
                     leftIcon={<Icon name="key" size={18} />} />
 
