@@ -4,6 +4,7 @@ import { Alert } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { Header, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {rootEntryPoint} from '../../../services/UsuarioService';
 
 const BemVindo = () => {
 
@@ -42,6 +43,11 @@ const BemVindo = () => {
                     }
                 />}
             />
+            <Button title='Teste' onPress={async () => {
+                const teste = await rootEntryPoint();
+                console.log(JSON.stringify(teste))
+                //Alert.alert('Opa' + )
+            }} />
         </SafeAreaView>
     )
 }

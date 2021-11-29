@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const URL_API = 'http://localhost:8080';
 
-const api = async (token) => {
+const api = (token) => {
     try {
-        return await axios.create({
+        return axios.create({
             baseURL: URL_API,
             headers: {
                 'Accept': 'application/json',
