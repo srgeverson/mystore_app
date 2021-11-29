@@ -7,7 +7,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
 import BotaoEntrar from '../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../core/contexts';
-import { api, authorizationServerLogin } from '../../../core/api';
+import { authorizationServerLogin } from '../../../core/api';
+import { salvarTokenLogin } from '../../../services/UsuarioService';
 
 const Login = () => {
 
@@ -17,7 +18,7 @@ const Login = () => {
     const [senha, setSenha] = useState('123456');
     const [carregando, setCarregando] = useState(false);
 
-    const { signIn } = useContext(AuthorityContext);
+    const { signIn, signOut } = useContext(AuthorityContext);
 
     const criticas = () => {
         if (!email) {
@@ -35,8 +36,15 @@ const Login = () => {
     const entrar = async () => {
         if (!criticas()) return;
         setCarregando(true);
-        const teste = await authorizationServerLogin(email, senha);
-        console.log(teste);
+        const dadosAutenticacao = await authorizationServerLogin(email, senha);
+        if (dadosAutenticacao.access_token) {
+            try {
+                await salvarTokenLogin(dadosAutenticacao.access_token, dadosAutenticacao.expires_in);
+                signIn();
+            } catch (error) {
+                console.log(`Ocorreu erro em /src/viwes/usuario/Login -> ${new Date()} -> erro: ${error}`);
+            }
+        }
         setCarregando(false);
     }
 
@@ -54,7 +62,7 @@ const Login = () => {
                 <Card.Image source={logo} style={styles.logo} />
                 <Input
                     keyboardType='email-address'
-                    autoCapitalize = 'none'
+                    autoCapitalize='none'
                     placeholder="Digite seu email aqui"
                     onChangeText={value => setEmail(value)}
                     value={email}

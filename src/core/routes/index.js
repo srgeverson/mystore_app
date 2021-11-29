@@ -2,9 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DrawerNavigator from './DrawerNavigator';
-//import AsyncStorage from '@react-native-community/async-storage';
 import { AuthorityContext } from '../contexts';
-//import { getValToken } from './services/auth';
+import { getTokenLogin, limparTokenLogin } from '../../services/UsuarioService';
 import Login from '../../views/usuario/Login';
 import PrimeiroAcesso from '../../views/usuario/PrimeiroAcesso';
 import RecuperarSenha from '../../views/usuario/RecuperarSenha';
@@ -12,29 +11,36 @@ import RecuperarSenha from '../../views/usuario/RecuperarSenha';
 const Stack = createStackNavigator();
 
 const Routes = () => {
-    const [token, setToken] = useState('null');
+    const [token, setToken] = useState(null);
 
     const authorizationContext = useMemo(() => {
         return {
-            signIn: async () => {
-                //             const valToken = AsyncStorage.getItem('@token');
-                setToken('valToken');
+            signIn: () => {
+                try {
+                    getToken();
+                } catch (error) {
+                    console.log(`Erro na função signIn -> ${new Date()} -> erro: ${error}`);
+                }
             },
             signOut: () => {
-                //             AsyncStorage.removeItem('@token');
-                setToken(null);
+                try {
+                    limparTokenLogin();
+                    setToken(null);
+                } catch (error) {
+                    console.log(`Erro na função signOut -> ${new Date()} -> erro: ${error}`);
+                }
             }
         }
     }, []);
 
     const getToken = async () => {
         try {
-            //         const valalidarToken = await getValToken();
-            //         if (valToken !== null) {
-            //             setUserToken(valToken);
-            //         }
+            const valueToken = await getTokenLogin();
+            if (valueToken !== null) {
+                setToken(valueToken);
+            }
         } catch (error) {
-            //         setUserToken(null);
+            console.log(`Erro na função getToken -> ${new Date()} -> erro: ${error}`);
         }
     };
 
