@@ -43,6 +43,7 @@ const Login = () => {
                 signIn();
             } catch (error) {
                 console.log(`Ocorreu erro em /src/viwes/usuario/Login -> ${new Date()} -> erro: ${error}`);
+                signOut();
             }
         }
         setCarregando(false);
