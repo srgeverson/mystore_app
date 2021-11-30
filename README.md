@@ -66,6 +66,25 @@ $ npm install --save styled-components
 
 ### Autenticação Base64
 $ npm install --save bse64
+
+### Biblioteca de configuração de variáveis de ambiente
+$ npm install --save react-native-config
+
+$ react-native link react-native-config
+
+## no arquivo android/app/build.gradle adicione na segunda linha do arquivo o seguinte código
+$ apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
+## Crie o arquivo .env.dev e .env.prod na raiz do projeto
+$ .env.development 
+$ .env.production
+
+## agora no seu arquivo package.json em scripts vamos adicionar este código:
+$ "scripts": {
+	...
+	"android-dev": "ENVFILE=.env.dev react-native run-android",
+	"android-prod": "ENVFILE=.env.prod react-native run-android"
+},
 ```
 
 #### 🎲 Rodando a aplicação

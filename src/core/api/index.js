@@ -1,11 +1,10 @@
 import axios from 'axios';
-
-const URL_API = 'http://localhost:8080';
+import  Config  from  'react-native-config';
 
 const api = (token) => {
     try {
         return axios.create({
-            baseURL: URL_API,
+            baseURL: Config.MY_URL,
             headers: {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -19,7 +18,7 @@ const api = (token) => {
 const authorizationServerLogin = async (email, senha) => {
     try {
         return await axios.create({
-            baseURL: URL_API,
+            baseURL: Config.MY_URL,
             headers: {
                 'Accept': 'application/json',
                 'Authorization': 'Basic bXlzdG9yZS1hcHA6MTIzMzIx',
@@ -32,7 +31,7 @@ const authorizationServerLogin = async (email, senha) => {
             console.log(`Token de acesso gerado com sucesso!`);
             return response.data;
         }).catch((error) => {
-            console.log(`Erro ao gerar o token de acesso!`);
+            console.log(`Erro ao gerar o token de acesso!${Config.MY_URL}`);
             if (error.response) {
                 return {
                     codigo: error.response.status,
@@ -51,13 +50,13 @@ const authorizationServerLogin = async (email, senha) => {
 const authorizationServerRecuperarSenha = async () => {
     try {
         return await axios.create({
-            baseURL: URL_API,
-            headers: { 'Authorization': 'Basic bXlzdG9yZS13ZWI6MTIzMzIx', 'Content-Type': 'application/x-www-form-urlencoded' },
+            baseURL: Config.MY_URL,
+            headers: { 'Authorization': 'Basic bXlzdG9yZS1tYW5hZ2VyOjEyMzMyMQ==', 'Content-Type': 'application/x-www-form-urlencoded' },
         }).post(
             '/oauth/token',
             `grant_type=client_credentials`
         ).then((response) => {
-            console.log(`Token de recuperação de senha gerado com sucesso!`);
+            console.log(`Token de recuperação de senha gerado com sucesso!${response.data}`);
             return response.data;
         }).catch((error) => {
             console.log(`Erro ao gerar token de recuperação de senha!`);

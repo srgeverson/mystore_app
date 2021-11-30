@@ -11,7 +11,10 @@
     "generate-apk-windows": "cd android && gradlew assembleRelease",
     "generate-apk-linux": "cd android && ./gradlew assembleRelease",
     "show-apk-windows": "explorer android\\app\\build\\outputs\\bundle\\release",
-    "show-apk-linux": "nautilus android/app/build/outputs/bundle/release"
+    "show-apk-linux": "nautilus android/app/build/outputs/bundle/release",
+    "android-development": "ENVFILE=.env.development react-native run-android",
+    "ios-development": "ENVFILE=.env.development react-native run-ios",
+	  "android-production": "ENVFILE=.env.production react-native run-android"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
@@ -24,6 +27,7 @@
     "base-64": "^1.0.0",
     "react": "17.0.1",
     "react-native": "0.64.2",
+    "react-native-config": "^1.4.5",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-reanimated": "^2.2.2",
