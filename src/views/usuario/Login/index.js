@@ -45,6 +45,8 @@ const Login = () => {
                 console.log(`Ocorreu erro em /src/viwes/usuario/Login -> ${new Date()} -> erro: ${error}`);
                 signOut();
             }
+        }else{
+            Alert.alert("Dados inválidos", "Preencha corretamente e tente novamente!"); 
         }
         setCarregando(false);
     }
