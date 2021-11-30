@@ -22,8 +22,6 @@ const PrimeiroAcesso = () => {
         <>
             <SafeAreaView>
                 <Card>
-                    <Card.Title>Validar Acesso</Card.Title>
-                    <Card.Divider />
                     <Card.Image source={logo} style={styles.logo} />
                     <Input
                         placeholder="Digite seu email aqui"

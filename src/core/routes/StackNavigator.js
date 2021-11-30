@@ -36,7 +36,7 @@ const BemVindoStackNavigator = () => {
 const ListarFornecedorStackNavigator = () => {
     return (
         <Stack.Navigator  screenOptions={screenOptionStyle}>
-            <Stack.Screen name="ListarFornecedor" component={ListarFornecedor} />
+            <Stack.Screen name="ListarFornecedor" component={ListarFornecedor} options={{ headerShown: false, }}/>
         </Stack.Navigator>
     );
 };

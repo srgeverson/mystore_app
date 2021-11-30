@@ -57,8 +57,8 @@ const Routes = () => {
                     ) : (
                         <Stack.Navigator>
                             <Stack.Screen name="Login" component={Login} options={{ headerShown: false, }} />
-                            <Stack.Screen name="PrimeiroAcesso" component={PrimeiroAcesso} options={{ headerShown: false, }} />
-                            <Stack.Screen name="RecuperarSenha" component={RecuperarSenha} options={{ headerShown: false, }} />
+                            <Stack.Screen name="PrimeiroAcesso" component={PrimeiroAcesso} options={{ headerShown: true, headerBackTitle: 'Voltar', title: 'Validar Primeiro acesso' }} />
+                            <Stack.Screen name="RecuperarSenha" component={RecuperarSenha} options={{ headerShown: true, headerBackTitle: 'Voltar', title: 'Recuperar Senha' }} />
                         </Stack.Navigator>
                     )
                 }

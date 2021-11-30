@@ -1,4 +1,5 @@
 import React from 'react';
+import { ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from '../../../assets/styles/theme';
@@ -10,13 +11,16 @@ const BotaoConfirmar = (props) => {
                 title={props.titulo}
                 onPress={props.pressionado}
                 icon={
-                    <Icon
-                        name="check"
-                        size={theme.sizes.icon}
-                        color={theme.colors.light}
-                        style={{ marginRight: theme.margins.iconTextRight }} />
+                    props.carregando ?
+                        <ActivityIndicator size={theme.sizes.icon} color={theme.colors.light} />
+                        :
+                        <Icon
+                            name="check"
+                            size={theme.sizes.icon}
+                            color={theme.colors.light}
+                            style={{ marginRight: theme.margins.iconTextRight }} />
                 }
-                style={{ color: theme.colors.primary }}
+                disabled={props.carregando || props.desabilitado}
             />
         </>
     )
