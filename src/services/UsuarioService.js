@@ -97,6 +97,31 @@ export const rootEntryPoint = async () => {
     }
 }
 
+export const validarAcesso = async (uri, dados) => {
+    const token = await authorizationServerRecuperarSenha();
+    try {
+        return await api(token.access_token)
+            .put(`/v${versao}${uri}`, dados)
+            .then((respose) => {
+                if (respose)
+                    return { codigo: 204, };
+            }).catch((error) => {
+                console.log(`Erro na requisição da API andpoint cadastrar-senha! Erro: ${error}`);
+                if (error.response) {
+                    return {
+                        codigo: error.response.status,
+                        erro: error.response.error ? error.response.error : error.title,
+                        mensagem: error.response.error_description ? error.response.error_description : error.detail,
+                    }
+                } else {
+                    throw error;
+                }
+            });
+    } catch (error) {
+        console.log(`Erro no método cadastrar-senha do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
 export const salvarTokenLogin = async (access_token, expires_in) => {
     try {
         await AsyncStorage.setItem('@access_token', access_token);
