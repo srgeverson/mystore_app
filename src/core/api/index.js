@@ -1,5 +1,6 @@
 import axios from 'axios';
-import  Config  from  'react-native-config';
+import { encode } from 'base-64';
+import Config from 'react-native-config';
 
 const api = (token) => {
     try {
@@ -21,7 +22,7 @@ const authorizationServerLogin = async (email, senha) => {
             baseURL: Config.MY_URL,
             headers: {
                 'Accept': 'application/json',
-                'Authorization': 'Basic bXlzdG9yZS1hcHA6MTIzMzIx',
+                'Authorization': `Basic ${encode(`${Config.CLIENT_ID_APP}:${Config.CLIENT_SECRET_APP}`)}`,
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
         }).post(
@@ -31,7 +32,7 @@ const authorizationServerLogin = async (email, senha) => {
             console.log(`Token de acesso gerado com sucesso!`);
             return response.data;
         }).catch((error) => {
-            console.log(`Erro ao gerar o token de acesso!${Config.MY_URL}`);
+            console.log(`Erro ao gerar o token de acesso!`);
             if (error.response) {
                 return {
                     codigo: error.response.status,
@@ -51,7 +52,10 @@ const authorizationServerRecuperarSenha = async () => {
     try {
         return await axios.create({
             baseURL: Config.MY_URL,
-            headers: { 'Authorization': 'Basic bXlzdG9yZS1tYW5hZ2VyOjEyMzMyMQ==', 'Content-Type': 'application/x-www-form-urlencoded' },
+            headers: { 
+                'Authorization': `Basic ${encode(`${Config.CLIENT_ID_MANAGER}:${Config.CLIENT_SECRET_MANAGER}`)}`, 
+                'Content-Type': 'application/x-www-form-urlencoded' 
+            },
         }).post(
             '/oauth/token',
             `grant_type=client_credentials`
