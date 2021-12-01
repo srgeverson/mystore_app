@@ -13,8 +13,9 @@
     "show-apk-windows": "explorer android\\app\\build\\outputs\\bundle\\release",
     "show-apk-linux": "nautilus android/app/build/outputs/bundle/release",
     "android-development": "ENVFILE=.env.development react-native run-android",
+	  "android-production": "ENVFILE=.env.production react-native run-android",
     "ios-development": "ENVFILE=.env.development react-native run-ios",
-	  "android-production": "ENVFILE=.env.production react-native run-android"
+    "ios-production": "ENVFILE=.env.production react-native run-ios"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
