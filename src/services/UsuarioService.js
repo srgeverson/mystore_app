@@ -17,8 +17,7 @@ export const getTokenLogin = async () => {
         const dataExpiresMilisegundos = expiresMilisegundos + dataTokenMilisegundos;
         const dataAtualMilisegundos = new Date().getTime();
         const dataRestanteMilisegundos = dataExpiresMilisegundos - dataAtualMilisegundos;
-        
-        if (token !== null && dataRestanteMilisegundos > 0) {
+        if (token !== null || dataRestanteMilisegundos > 0) {
             return token;
         } else {
             return null;

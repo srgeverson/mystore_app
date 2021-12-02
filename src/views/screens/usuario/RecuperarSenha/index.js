@@ -3,10 +3,10 @@ import { Alert, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Card, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import logo from '../../../assets/images/logo.png';
-import BotaoConfirmar from '../../components/BotaoConfirmar';
+import logo from '../../../../assets/images/logo.png';
+import BotaoConfirmar from '../../../components/BotaoConfirmar';
 import styles from './styles';
-import { recuperarSenha } from '../../../services/UsuarioService';
+import { recuperarSenha } from '../../../../services/UsuarioService';
 
 const RecuperarSenha = () => {
 

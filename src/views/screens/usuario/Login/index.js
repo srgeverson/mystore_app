@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Alert, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Input, Card, Text } from 'react-native-elements';
-import logo from '../../../assets/images/logo.png';
+import logo from '../../../../assets/images/logo.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
 import BotaoEntrar from '../../../components/BotaoEntrar';
@@ -47,6 +47,7 @@ const Login = () => {
             }
             //Quando dá erro de comunicação com o servidor e não existe token salvo
             else if (retornoAutenticacao.codigo == 503 && !token) {
+                console.log(token);
                 console.log(retornoAutenticacao.codigo )
                 Alert.alert("Atênção", "Falha ao conectar com o servidor ou este é seu primeiro acesso!");
             }

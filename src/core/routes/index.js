@@ -4,9 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import DrawerNavigator from './DrawerNavigator';
 import { AuthorityContext } from '../contexts';
 import { getTokenLogin, limparTokenLogin } from '../../services/UsuarioService';
-import Login from '../../views/usuario/Login';
-import PrimeiroAcesso from '../../views/usuario/PrimeiroAcesso';
-import RecuperarSenha from '../../views/usuario/RecuperarSenha';
+import Login from '../../views/screens/usuario/Login';
+import PrimeiroAcesso from '../../views/screens/usuario/PrimeiroAcesso';
+import RecuperarSenha from '../../views/screens/usuario/RecuperarSenha';
 
 const Stack = createStackNavigator();
 
