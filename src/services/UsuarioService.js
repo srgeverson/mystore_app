@@ -17,15 +17,7 @@ export const getTokenLogin = async () => {
         const dataExpiresMilisegundos = expiresMilisegundos + dataTokenMilisegundos;
         const dataAtualMilisegundos = new Date().getTime();
         const dataRestanteMilisegundos = dataExpiresMilisegundos - dataAtualMilisegundos;
-        // console.log(`
-        //              data=${data} 
-        //              dataTokenMilisegundos=${dataTokenMilisegundos} 
-        //              expires=${expires} 
-        //              expiresMilisegundos=${expiresMilisegundos}
-        //              dataExpiresMilisegundos=${dataExpiresMilisegundos}
-        //              dataAtualMilisegundos=${dataAtualMilisegundos}
-        //              dataRestanteMilisegundos=${dataRestanteMilisegundos / 1000 / 69 / 69}
-        //              `);
+        
         if (token !== null && dataRestanteMilisegundos > 0) {
             return token;
         } else {

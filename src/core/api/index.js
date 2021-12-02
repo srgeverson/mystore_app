@@ -32,15 +32,20 @@ const authorizationServerLogin = async (email, senha) => {
             console.log(`Token de acesso gerado com sucesso!`);
             return response.data;
         }).catch((error) => {
-            console.log(`Erro ao gerar o token de acesso!`);
+            console.log(`Não foi possível gerar o token de acesso!`);
+            console.log(JSON.stringify(Config.MY_URL))
             if (error.response) {
                 return {
                     codigo: error.response.status,
                     erro: error.response.data.error,
                     mensagem: error.response.data.error_description,
                 }
-            } else {
-                throw error;
+            }else{
+                return {
+                    codigo: 503,
+                    erro: error.name,
+                    mensagem: error.message,
+                }
             }
         });
     } catch (error) {

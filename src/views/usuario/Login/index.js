@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Alert, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Input, Card, Text } from 'react-native-elements';
@@ -8,7 +8,7 @@ import styles from './styles';
 import BotaoEntrar from '../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../core/contexts';
 import { authorizationServerLogin } from '../../../core/api';
-import { salvarTokenLogin } from '../../../services/UsuarioService';
+import { salvarTokenLogin, getTokenLogin } from '../../../services/UsuarioService';
 
 const Login = () => {
 
@@ -17,38 +17,51 @@ const Login = () => {
     const [email, setEmail] = useState('paulistensetecnologia@gmail.com');
     const [senha, setSenha] = useState('123456');
     const [carregando, setCarregando] = useState(false);
+    const [token, setToken] = useState(null);
 
     const { signIn, signOut } = useContext(AuthorityContext);
 
-    const criticas = () => {
-        if (!email) {
-            Alert.alert("Dados incompletos", "Preencha o campo email!");
-            return false;
-        }
-        if (!senha) {
-            Alert.alert("Dados incompletos", "Preencha o campo senha!");
-            return false;
-        }
-
-        return true;
+    const recuperaTokenSalvo = async () => {
+        setCarregando(true);
+        const tokenSalvo = await getTokenLogin();
+        setToken(tokenSalvo);
+        setCarregando(false);
     }
 
+    useEffect(() => {
+        recuperaTokenSalvo();
+    }, [])
+
     const entrar = async () => {
-        if (!criticas()) return;
-        setCarregando(true);
-        const dadosAutenticacao = await authorizationServerLogin(email, senha);
-        if (dadosAutenticacao.access_token) {
-            try {
-                await salvarTokenLogin(dadosAutenticacao.access_token, dadosAutenticacao.expires_in);
+        try {
+            setCarregando(true);
+            var retornoAutenticacao = null;
+            if (!token)
+                retornoAutenticacao = await authorizationServerLogin(email, senha);
+            if (token) {
                 signIn();
-            } catch (error) {
-                console.log(`Ocorreu erro em /src/viwes/usuario/Login -> ${new Date()} -> erro: ${error}`);
-                signOut();
             }
-        }else{
-            Alert.alert("Dados inválidos", "Preencha corretamente e tente novamente!"); 
+            //Quando dá erro de comunicação com o servidor e existe token salvo
+            else if (retornoAutenticacao.codigo == 503 && token) {
+                signIn();
+            }
+            //Quando dá erro de comunicação com o servidor e não existe token salvo
+            else if (retornoAutenticacao.codigo == 503 && !token) {
+                console.log(retornoAutenticacao.codigo )
+                Alert.alert("Atênção", "Falha ao conectar com o servidor ou este é seu primeiro acesso!");
+            }
+            //Quando retornar o token
+            else if (retornoAutenticacao.access_token) {
+                await salvarTokenLogin(retornoAutenticacao.access_token, retornoAutenticacao.expires_in);
+                signIn();
+            } else {
+                Alert.alert("Dados inválidos", "Preencha corretamente e tente novamente!");
+            }
+        } catch (error) {
+            console.log(`Ocorreu erro em /src/viwes/usuario/Login -> ${new Date()} -> erro: ${error}`);
+        } finally {
+            setCarregando(false);
         }
-        setCarregando(false);
     }
 
     const recuperarSenha = () => {
@@ -80,7 +93,7 @@ const Login = () => {
                     secureTextEntry={true}
                     leftIcon={<Icon name="key" size={18} />} />
 
-                <BotaoEntrar carregando={carregando} titulo="Entrar" pressionado={entrar} />
+                <BotaoEntrar carregando={carregando} titulo="Entrar" pressionado={entrar} desabilitado={!email || !senha} />
                 <Card.Divider />
                 <Card.Title>
                     <Text style={styles.recuperarSenha} onPress={recuperarSenha}>Esqueceu a senha?</Text>
