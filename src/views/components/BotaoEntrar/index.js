@@ -20,7 +20,7 @@ const BotaoEntrar = (props) => {
                             color={theme.colors.light}
                             style={{ marginRight: theme.margins.iconTextRight }} />
                 }
-                disabled={props.carregando}
+                disabled={props.carregando || props.desabilitado}
             />
         </>
     )
