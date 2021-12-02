@@ -1,13 +1,13 @@
 import React from 'react';
 import { SafeAreaView, Text } from 'react-native';
 
-const ListarFornecedor = () => {
+const Listar = () => {
 
     return (
         <SafeAreaView>
-            <Text>ListarFornecedor</Text>
+            <Text>Permissões</Text>
         </SafeAreaView>
     )
 }
 
-export default ListarFornecedor;
+export default Listar;
