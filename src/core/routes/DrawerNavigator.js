@@ -7,6 +7,7 @@ import { AuthorityContext } from '../contexts';
 import { rootEntryPoint } from '../../services/UsuarioService';
 import { Button } from 'react-native-elements';
 import { Alert } from 'react-native';
+import HeaderLeft from '../../views/components/HeaderLeft';
 
 const Drawer = createDrawerNavigator();
 
@@ -17,12 +18,13 @@ const DrawerCustom = (props) => {
     return (
         <DrawerContentScrollView {...props}>
             <DrawerItemList {...props} />
+            <DrawerItem label="Fechar" onPress={() => props.navigation.closeDrawer()} icon={() => <Icon name='close' size={20} color='#007bff' />} />
             <DrawerItem label="Sair" onPress={() => signOut()} icon={() => <Icon name='sign-out' size={20} color='#007bff' />} />
         </DrawerContentScrollView>
     );
 }
 
-const DrawerNavigator = (props) => {
+const DrawerNavigator = () => {
 
     const [menusDisponiveis, setMenusDisponiveis] = useState(null);
 
@@ -50,23 +52,8 @@ const DrawerNavigator = (props) => {
             return <Icon name={icon ? icon : 'exclamation-triangle'} size={size ? size : 20} color={'#dc3545'} />
         }
     }
-    const getHeaderLeft = () => {
-        try {
-            return (<Button
-                icon={
-                    <Icon
-                        onPress={() => alert('ops')}
-                        name="bars"
-                        size={20}
-                        color='#FFF' />
-                }
-            />);
-        } catch (error) {
-            console.log(`Erro no método getHeaderLeft do arquivo DrawerNavigator -> ${new Date()} -> erro: ${error}`);
-        }
-    }
+    
     const getHeaderRight = () => {
-        {console.log(offline)}
         try {
             return (
             <Button
@@ -96,8 +83,7 @@ const DrawerNavigator = (props) => {
                 headerShown: true, title: title, drawerIcon: (focused) => getIcones(icone, null, focused),
                 headerTitleAlign: 'center',
                 headerTitleStyle: { color: '#FFF' },
-                headerLeft: () => getHeaderLeft(),
-                //headerLeft: () => <Button title='teste' onPress={() => navigation.openDrawer()} />,
+                headerLeft: () => <HeaderLeft />,
                 headerRight: () => getHeaderRight(),
                 headerStyle: { backgroundColor: '#1B8BD1', }
             }} />
@@ -110,7 +96,7 @@ const DrawerNavigator = (props) => {
 
     return (
         <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />}>
-            {true && getScrens('BemVindo', BemVindoStackNavigator, 'MyStore', 'home')}
+            {true && getScrens('BemVindo', BemVindoStackNavigator, 'Página Inicial', 'home')}
             {menusDisponiveis && getScrens("ListarCidades", ListarCidadesStackNavigator, 'Lista de Cidades', 'building')}
             {/* {menusDisponiveis && <Drawer.Screen name="ListarEmpresas" component={ListarEmpresasStackNavigator} options={{ headerShown: true, title: 'Lista de Empresas',drawerIcon: (focused)=><Icon name='home' size={20} color={focused? '#007bff' : '#6c757d'}/>  , }} />} */}
             {menusDisponiveis && getScrens("ListarEstados", ListarEstadosStackNavigator, 'Lista de Estados', 'globe')}

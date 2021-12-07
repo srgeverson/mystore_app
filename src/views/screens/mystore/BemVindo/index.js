@@ -1,16 +1,16 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
-import { Button } from 'react-native-elements';
-import {rootEntryPoint} from '../../../../services/UsuarioService';
+import { SafeAreaView, Image } from 'react-native';
+import logo from '../../../../assets/images/logo.png';
+import styles from './styles';
+
 
 const BemVindo = () => {
 
     return (
-        <SafeAreaView>
-            {/* <Button title='Teste' onPress={async () => {
-                const teste = await rootEntryPoint();
-                console.log(JSON.stringify(teste));
-            }} /> */}
+        <SafeAreaView style={styles.container}>
+            <Image
+                source={logo}
+            />
         </SafeAreaView>
     )
 }
