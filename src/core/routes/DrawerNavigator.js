@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import theme from '../../assets/styles/theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { BemVindoStackNavigator, ListarCidadesStackNavigator, ListarEstadosStackNavigator, ListarPermissoesStackNavigator, ListarUsuariosStackNavigator } from './StackNavigator';
+import { BemVindoStackNavigator, Teste, ListarCidadesStackNavigator, ListarEstadosStackNavigator, ListarPermissoesStackNavigator, ListarUsuariosStackNavigator } from './StackNavigator';
 import { AuthorityContext } from '../contexts';
 import { rootEntryPoint } from '../../services/UsuarioService';
-import { Button } from 'react-native-elements';
-import { Alert } from 'react-native';
 import HeaderLeft from '../../views/components/HeaderLeft';
+import ModalCarregando from '../../views/components/ModalCarregando';
+import HeaderRight from '../../views/components/HeaderRight';
 
 const Drawer = createDrawerNavigator();
 
@@ -25,12 +25,14 @@ const DrawerCustom = (props) => {
 }
 
 const DrawerNavigator = () => {
+    const [carregando, setCarregando] = useState(false);
 
     const [menusDisponiveis, setMenusDisponiveis] = useState(null);
 
     const [offline, setOffLine] = useState(true);
 
     const getEndpoints = async () => {
+        setCarregando(true);
         try {
             const entryPoint = await rootEntryPoint();
             if (entryPoint._links) {
@@ -42,6 +44,9 @@ const DrawerNavigator = () => {
         } catch (error) {
             console.log(`Erro no método getEndpoints do arquivo DrawerNavigator -> ${new Date()} -> erro: ${error}`);
         }
+        finally {
+            setCarregando(false);
+        }
     }
 
     const getIcones = (icon, size, focused) => {
@@ -52,30 +57,6 @@ const DrawerNavigator = () => {
             return <Icon name={icon ? icon : 'exclamation-triangle'} size={size ? size : 20} color={'#dc3545'} />
         }
     }
-    
-    const getHeaderRight = () => {
-        try {
-            return (
-            <Button
-                icon={
-                    offline ?
-                        <Icon
-                            onPress={() => Alert.alert('Dispositivo off-line', 'Dados serão sincronizados com o servidor quando voltar a internet!')}
-                            name="warning"
-                            size={20}
-                            color='#FFFF00' />
-                        :
-                        <Icon
-                            onPress={() => Alert.alert('Dispositivo on-line', 'Dados estão sincronizados com o servidor!')}
-                            name="check-circle"
-                            size={20}
-                            color='#90EE90' />
-                }
-            />);
-        } catch (error) {
-            console.log(`Erro no método getHeaderRight do arquivo DrawerNavigator -> ${new Date()} -> erro: ${error}`);
-        }
-    }
 
     const getScrens = (name, component, title, icone) => {
         return (
@@ -84,7 +65,7 @@ const DrawerNavigator = () => {
                 headerTitleAlign: 'center',
                 headerTitleStyle: { color: '#FFF' },
                 headerLeft: () => <HeaderLeft />,
-                headerRight: () => getHeaderRight(),
+                headerRight: () => <HeaderRight carregando={carregando} offline={offline} />,
                 headerStyle: { backgroundColor: '#1B8BD1', }
             }} />
         );
@@ -94,9 +75,10 @@ const DrawerNavigator = () => {
         getEndpoints();
     }, []);
 
-    return (
+    return (<>
         <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />}>
             {true && getScrens('BemVindo', BemVindoStackNavigator, 'Página Inicial', 'home')}
+            {true && getScrens('Teste', Teste, 'Teste do APP', 'code')}
             {menusDisponiveis && getScrens("ListarCidades", ListarCidadesStackNavigator, 'Lista de Cidades', 'building')}
             {/* {menusDisponiveis && <Drawer.Screen name="ListarEmpresas" component={ListarEmpresasStackNavigator} options={{ headerShown: true, title: 'Lista de Empresas',drawerIcon: (focused)=><Icon name='home' size={20} color={focused? '#007bff' : '#6c757d'}/>  , }} />} */}
             {menusDisponiveis && getScrens("ListarEstados", ListarEstadosStackNavigator, 'Lista de Estados', 'globe')}
@@ -105,6 +87,8 @@ const DrawerNavigator = () => {
             {menusDisponiveis && getScrens("ListarPermissoes", ListarPermissoesStackNavigator, 'Lista de Permissões', 'unlock-alt')}
             {menusDisponiveis && getScrens("ListarUsuarios", ListarUsuariosStackNavigator, 'Lista de Usuarios', 'users')}
         </Drawer.Navigator>
+        {carregando && <ModalCarregando pagina='Configurando permissões' />}
+    </>
     );
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BemVindo from '../../views/screens/mystore/BemVindo';
+import Teste from '../../views/screens/mystore/Test';
 import ListarCidades from '../../views/screens/cidades/Listar';
 import ListarEstados from '../../views/screens/estados/Listar';
 import ListarPermissoes from '../../views/screens/permissoes/Listar';
@@ -20,6 +21,13 @@ const BemVindoStackNavigator = () => {
     );
 };
 
+const TesteStackNavigator = () => {
+    return (
+        <Stack.Navigator screenOptions={screenOptionStyle}>
+            <Stack.Screen name="Teste" component={Teste} options={{ headerShown: false, }} />
+        </Stack.Navigator>
+    );
+};
 
 const ListarCidadesStackNavigator = () => {
     return (
@@ -53,4 +61,4 @@ const ListarUsuariosStackNavigator = () => {
     );
 };
 
-export { BemVindoStackNavigator, ListarCidadesStackNavigator, ListarEstadosStackNavigator, ListarPermissoesStackNavigator, ListarUsuariosStackNavigator };
+export { BemVindoStackNavigator, Teste, ListarCidadesStackNavigator, ListarEstadosStackNavigator, ListarPermissoesStackNavigator, ListarUsuariosStackNavigator };

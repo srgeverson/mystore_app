@@ -15,24 +15,6 @@ const Listar = () => {
 
     const [carregando, setCarregando] = useState(false);
 
-    // const cidades = [
-    //     {
-    //         nome: 'Caucaia',
-    //         imagem: null,
-    //         sigla: 'CAU'
-    //     },
-    //     {
-    //         nome: 'Eusébio',
-    //         imagem: null,
-    //         sigla: 'EUS'
-    //     },
-    //     {
-    //         nome: 'Fortaleza',
-    //         imagem: null,
-    //         sigla: 'FOR'
-    //     },
-    // ]
-
     const pesquisarCidades = async () => {
         try {
             setCarregando(true);
