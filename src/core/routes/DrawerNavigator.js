@@ -77,8 +77,8 @@ const DrawerNavigator = () => {
 
     return (<>
         <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />}>
-            {true && getScrens('BemVindo', BemVindoStackNavigator, 'Página Inicial', 'home')}
             {true && getScrens('Teste', Teste, 'Teste do APP', 'code')}
+            {true && getScrens('BemVindo', BemVindoStackNavigator, 'Página Inicial', 'home')}
             {menusDisponiveis && getScrens("ListarCidades", ListarCidadesStackNavigator, 'Lista de Cidades', 'building')}
             {/* {menusDisponiveis && <Drawer.Screen name="ListarEmpresas" component={ListarEmpresasStackNavigator} options={{ headerShown: true, title: 'Lista de Empresas',drawerIcon: (focused)=><Icon name='home' size={20} color={focused? '#007bff' : '#6c757d'}/>  , }} />} */}
             {menusDisponiveis && getScrens("ListarEstados", ListarEstadosStackNavigator, 'Lista de Estados', 'globe')}
