@@ -65,21 +65,73 @@ class Databese {
         database_version,
         database_displayname,
         database_size,
-      ).then((db) =>{
-      const query = "SELECT * FROM usuarios";
-      const array = [];
-      this.db = db;
-      this.db
-        .transaction((tx) => {
-          tx.executeSql(query, array)
-            .then(([tx, results]) => {
-              resolve(results);
-            });
-        }).then((okCallback) => {
-          console.log(`SELECT executado com sucesso! selectAll -> ${new Date()} -> okCallback: ${okCallback}`);
-        }).catch((errorCallback) => {
-          console.log(`Erro ao executar SELECT! selectAll -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
-        });
+      ).then((db) => {
+        const query = "SELECT * FROM usuarios WHERE (1=1);";
+        const array = [];
+        this.db = db;
+        this.db
+          .transaction((tx) => {
+            tx.executeSql(query, array)
+              .then(([tx, results]) => {
+                resolve(results);
+              });
+          }).then((okCallback) => {
+            console.log(`SELECT executado com sucesso! selectAll -> ${new Date()} -> okCallback: ${okCallback}`);
+          }).catch((errorCallback) => {
+            console.log(`Erro ao executar SELECT! selectAll -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+          });
+      });
+    });
+  }
+
+  selectAllByParam(nome) {
+    return new Promise((resolve) => {
+      SQLite.openDatabase(
+        database_name,
+        database_version,
+        database_displayname,
+        database_size,
+      ).then((db) => {
+        const query = `SELECT * FROM usuarios WHERE (nome LIKE '%${nome}%');`;
+        const array = [];
+        this.db = db;
+        this.db
+          .transaction((tx) => {
+            tx.executeSql(query, array)
+              .then(([tx, results]) => {
+                resolve(results);
+              });
+          }).then((okCallback) => {
+            console.log(`SELECT executado com sucesso! selectAllByParam -> ${new Date()} -> okCallback: ${okCallback}`);
+          }).catch((errorCallback) => {
+            console.log(`Erro ao executar SELECT! selectAllByParam -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+          });
+      });
+    });
+  }
+
+  deleteById(id) {
+    return new Promise((resolve) => {
+      SQLite.openDatabase(
+        database_name,
+        database_version,
+        database_displayname,
+        database_size,
+      ).then((db) => {
+        const query = "DELETE FROM usuarios WHERE (id = ?);";
+        const array = [id];
+        this.db = db;
+        this.db
+          .transaction((tx) => {
+            tx.executeSql(query, array)
+              .then(([tx, results]) => {
+                resolve(results);
+              });
+          }).then((okCallback) => {
+            console.log(`DELETE executado com sucesso! delete -> ${new Date()} -> okCallback: ${okCallback}`);
+          }).catch((errorCallback) => {
+            console.log(`Erro ao executar DELETE! delete -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+          });
       });
     });
   }
@@ -99,7 +151,30 @@ class Databese {
     }
   }
 
-  insertOrReplace(usuarios) {
+  insertOrReplaceBatch(usuarios) {
+    if (!this.db)
+      this.initDB();
+    return new Promise((resolve) => {
+      this.db
+        .transaction((tx) => {
+          for (let i = 0; i < usuarios.length; i++) {
+            tx.executeSql('INSERT OR REPLACE INTO usuarios VALUES (?, ?, ?);', [
+              usuarios[i].id,
+              usuarios[i].nome,
+              usuarios[i].ativo,
+            ]).then(([tx, results]) => {
+              resolve(results);
+            });
+          }
+        }).then((okCallback) => {
+          console.log(`Dados salvos com sucesso! insertOrReplace -> ${new Date()} -> okCallback: ${okCallback}`);
+        }).catch((errorCallback) => {
+          console.log(`Erro ao salvar dados! insertOrReplace -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+        });
+    });
+  }
+
+  updateBatch(usuarios) {
     console.log(JSON.stringify(usuarios));
     if (!this.db)
       this.initDB();
@@ -107,10 +182,10 @@ class Databese {
       this.db
         .transaction((tx) => {
           for (let i = 0; i < usuarios.length; i++) {
-            tx.executeSql('INSERT OR REPLACE INTO usuarios VALUES (?, ?, ?)', [
-              usuarios[i].id,
+            tx.executeSql('UPDATE usuarios SET nome = ?,  ativo = ? WHERE (id = ?);', [
               usuarios[i].nome,
               usuarios[i].ativo,
+              usuarios[i].id,
             ]).then(([tx, results]) => {
               resolve(results);
             });

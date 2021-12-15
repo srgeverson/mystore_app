@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, Alert, View } from 'react-native';
-import { Divider, SpeedDial, ListItem } from 'react-native-elements';
+import { Divider, SpeedDial, ListItem ,SearchBar} from 'react-native-elements';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Databese from '../../../../core/database';
+import BarraDePesquisa from '../../../components/BarraDePesquisa';
 import ModalCarregando from '../../../components/ModalCarregando';
 
 const Listar = () => {
@@ -19,12 +20,31 @@ const Listar = () => {
             const usuarios = [];
             const usuario = {
                 id: id,
-                nome: 'Geverson',
+                nome: 'Geverson substui',
                 ativo: true
             }
             usuarios.push(usuario);
-            const cadastro = await Databese.insertOrReplace(usuarios);
+            const cadastro = await Databese.insertOrReplaceBatch(usuarios);
             console.log(`Cadsatrando...${JSON.stringify(cadastro)}`);
+        } catch (error) {
+            console.log(`Ocorreu erro em /src/viwes/mystore/Test -> ${new Date()} -> erro: ${error}`);
+        } finally {
+            setCarregando(false);
+        }
+    }
+
+    const atualizarUsuario = async () => {
+        setCarregando(true);
+        try {
+            const usuarios = [];
+            const usuario = {
+                id: 5,
+                nome: 'Geverson update',
+                ativo: false
+            }
+            usuarios.push(usuario);
+            const cadastro = await Databese.updateBatch(usuarios);
+            console.log(`Atualizando...${JSON.stringify(cadastro)}`);
         } catch (error) {
             console.log(`Ocorreu erro em /src/viwes/mystore/Test -> ${new Date()} -> erro: ${error}`);
         } finally {
@@ -53,10 +73,40 @@ const Listar = () => {
         }
     }
 
+    const pesquisarUsuario = async (nome) => {
+        setCarregando(true);
+        try {
+            const lista = await Databese.selectAllByParam(nome);
+            console.log(`Pesquisando...${JSON.stringify(lista)}`);
+            var temp = [];
+            for (let i = 0; i < lista.rows.length; ++i) {
+                temp.push(lista.rows.item(i));
+            }
+            setRetorno(temp);
+        } catch (error) {
+            console.log(`Ocorreu no método listarUsuario erro em /src/viwes/mystore/Test -> ${new Date()} -> erro: ${error}`);
+        } finally {
+            setCarregando(false);
+        }
+    }
+
+    const deletearUsuario = async (id) => {
+        setCarregando(true);
+        try {
+            const lista = await Databese.deleteById(1);
+            console.log(`Deletando...${JSON.stringify(lista)}`);
+        } catch (error) {
+            console.log(`Ocorreu no método deletearUsuario erro em /src/viwes/mystore/Test -> ${new Date()} -> erro: ${error}`);
+        } finally {
+            setCarregando(false);
+        }
+    }
+
     useEffect(() => {
         // if (retorno.length > 0)
-        console.log(`Opa...${JSON.stringify(retorno)}`);
+        // console.log(`Opa...${JSON.stringify(retorno)}`);
         // for (let i = 0; i < retorno.length; ++i)
+        console.log(valor);
     }, [])
 
     const keyExtractor = (item, index) => index.toString();
@@ -67,55 +117,35 @@ const Listar = () => {
                 // Alert.alert('Clique', `Objeto ${item.id} foi clicada!`)
             }}>
             <ListItem.Content>
-                <ListItem.Title>{`ID: ${item.id}  - Nome :${item.nome}`}</ListItem.Title>
-                <ListItem.Subtitle>{`ID: ${item.id}  - Nome :${item.nome}`}</ListItem.Subtitle>
+                <ListItem.Title>{`Código: ${item.id}  - Nome : ${item.nome}`}</ListItem.Title>
+                <ListItem.Subtitle>{`Ativado: ${item.ativo ? 'Sim' : 'Não'}`}</ListItem.Subtitle>
             </ListItem.Content>
         </ListItem>
     );
 
+const [valor, setValor] = useState(null);
+
     return (
-        <SafeAreaView style={{ flex: 1,  }}>
-           <Divider
-                orientation="horizontal"
-                subHeader="INSERT"
-                subHeaderStyle={{ color: 'blue' }} />
-            <Icon name='user-plus' size={50} color='#8B97A3' onPress={() => {
-                console.log(`Cadastrando...`);
-                salvarUsuario();
-            }} />
-            <Divider
-                orientation="horizontal"
-                subHeader="SELECT"
-                subHeaderStyle={{ color: 'blue' }} />
-            <Icon name='list' size={50} color='#8B97A3' onPress={() => {
-                console.log(`Listando...`);
-                listarUsuario();
-            }} />
-    
-          
-                {
-                    retorno.length > 0
-                        ?
-                    // <ScrollView>
-                    //     </ScrollView>
-                        <FlatList
-                            keyExtractor={keyExtractor}
-                            data={retorno}
-                            renderItem={renderItem}
-                        />
-                        // retorno.map((item, i) => {
-                        //     return  <ListItem key={i} style={{height:50} } 
-                        //             bottomDivider onPress={() => Alert.alert('Clique', `Objeto ${item.id} foi clicada!`)}>
-                        //             <ListItem.Content>
-                        //                 <ListItem.Title>{`ID: ${item.id}  - Nome :${item.nome}`}</ListItem.Title>
-                        //                 <ListItem.Subtitle>{`ID: ${item.id}  - Nome :${item.nome}`}</ListItem.Subtitle>
-                        //             </ListItem.Content>
-                        //         </ListItem>
-                        // })
-                        :
-                        <Text>Listagem vazia...</Text>
-                }
-           
+        <SafeAreaView style={{ flex: 1, }}>
+           <SearchBar
+                lightTheme={true}
+                placeholder={`Digite o nome da cidade aqui...`}
+                searchIcon={<Icon name='search' size={20} color='#8B97A3' onPress={() => pesquisarUsuario(valor)} />}
+                clearIcon={<Icon name='close' size={20} color='#8B97A3' onPress={() => setValor(null)} />}
+                onChangeText={value => setValor(value)}
+                value={valor} />
+            {
+                retorno.length > 0
+                    ?
+                    <FlatList
+                        keyExtractor={keyExtractor}
+                        data={retorno}
+                        renderItem={renderItem}
+                    />
+                    :
+                    <Text>Listagem vazia...</Text>
+            }
+
             <SpeedDial
                 color='#007BFF'
                 isOpen={open}
@@ -151,6 +181,40 @@ const Listar = () => {
                     onPress={() => {
                         console.log(`Apagando...`);
                         Databese.dropDatabase();
+                    }} />
+                <SpeedDial.Action
+                    color='#007BFF'
+                    icon={<Icon name='user-plus' size={20} color='#FFF' />}
+                    title="Cadastrar"
+                    onPress={() => {
+                        console.log(`Cadastrando...`);
+                        salvarUsuario();
+                        console.log(`Listando...`);
+                        listarUsuario();
+                    }} />
+                <SpeedDial.Action
+                    color='#007BFF'
+                    icon={<Icon name='list-ol' size={20} color='#FFF' />}
+                    title="Listar"
+                    onPress={() => {
+                        console.log(`Listando...`);
+                        listarUsuario();
+                    }} />
+                <SpeedDial.Action
+                    color='#007BFF'
+                    icon={<Icon name='user-times' size={20} color='#FFF' />}
+                    title="Apagar"
+                    onPress={() => {
+                        console.log(`Apagando...`);
+                        deletearUsuario(0);
+                    }} />
+                <SpeedDial.Action
+                    color='#007BFF'
+                    icon={<Icon name='refresh' size={20} color='#FFF' />}
+                    title="Atualizar"
+                    onPress={() => {
+                        console.log(`Atualizando...`);
+                        atualizarUsuario();
                     }} />
             </SpeedDial>
             {carregando && <ModalCarregando pagina='Testes' />}
