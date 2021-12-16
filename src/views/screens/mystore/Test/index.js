@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Text, SafeAreaView, Alert, View } from 'react-native';
-import { Divider, SpeedDial, ListItem ,SearchBar} from 'react-native-elements';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { Text, SafeAreaView, } from 'react-native';
+import { SpeedDial, ListItem ,SearchBar} from 'react-native-elements';
+import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Databese from '../../../../core/database';
-import BarraDePesquisa from '../../../components/BarraDePesquisa';
 import ModalCarregando from '../../../components/ModalCarregando';
 
 const Listar = () => {
@@ -93,7 +92,7 @@ const Listar = () => {
     const deletearUsuario = async (id) => {
         setCarregando(true);
         try {
-            const lista = await Databese.deleteById(1);
+            const lista = await Databese.deleteById(id);
             console.log(`Deletando...${JSON.stringify(lista)}`);
         } catch (error) {
             console.log(`Ocorreu no método deletearUsuario erro em /src/viwes/mystore/Test -> ${new Date()} -> erro: ${error}`);
@@ -106,7 +105,7 @@ const Listar = () => {
         // if (retorno.length > 0)
         // console.log(`Opa...${JSON.stringify(retorno)}`);
         // for (let i = 0; i < retorno.length; ++i)
-        console.log(valor);
+        //console.log(valor);
     }, [])
 
     const keyExtractor = (item, index) => index.toString();
@@ -130,9 +129,7 @@ const [valor, setValor] = useState(null);
            <SearchBar
                 lightTheme={true}
                 placeholder={`Digite o nome da cidade aqui...`}
-                searchIcon={<Icon name='search' size={20} color='#8B97A3' onPress={() => pesquisarUsuario(valor)} />}
-                clearIcon={<Icon name='close' size={20} color='#8B97A3' onPress={() => setValor(null)} />}
-                onChangeText={value => setValor(value)}
+                onChangeText={value => pesquisarUsuario(value)}
                 value={valor} />
             {
                 retorno.length > 0
