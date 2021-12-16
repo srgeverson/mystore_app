@@ -53,7 +53,15 @@ const Login = () => {
             }
             //Quando retornar o token
             else if (retornoAutenticacao.access_token) {
-                await salvarTokenLogin(retornoAutenticacao.access_token, retornoAutenticacao.expires_in);
+                await salvarTokenLogin(
+                    retornoAutenticacao.access_token, 
+                    retornoAutenticacao.token_type,
+                    retornoAutenticacao.expires_in,
+                    retornoAutenticacao.scope,
+                    retornoAutenticacao.usuarios_id,
+                    retornoAutenticacao.nome_completo,
+                    retornoAutenticacao.jti
+                    );
                 signIn();
             } else {
                 Alert.alert("Dados inválidos", "Preencha corretamente e tente novamente!");

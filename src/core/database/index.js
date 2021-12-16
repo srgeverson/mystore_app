@@ -17,6 +17,47 @@ class Databese {
     this.db = null;
   }
 
+  closeDatabase(db) {
+    if (db) {
+      db.close()
+        .then((okCallback) => {
+          console.log(`Conexão fechada com sucesso! closeDatabase -> ${new Date()} -> okCallback: ${okCallback}`);
+        })
+        .catch((errorCallback) => {
+          console.log(`Erro ao fechar conexão com banco de dados! closeDatabase -> ${new Date()} -> errorCallback: ${errorCallback}`);
+          this.errorCB(errorCallback);
+        });
+    } else {
+      console.log(`Conexão já está fechada! closeDatabase -> ${new Date()} DB: ${JSON.stringify(db)}`);
+    }
+  }
+
+  createTable(tx, table, tableName) {
+    //Variável do SQCRIPT de SQL.
+    let sql = `CREATE TABLE IF NOT EXISTS ${tableName} `;
+    //Criando array com as colunas da tabela.
+    const createColumns = [];
+    for (const key in table) {
+      createColumns.push(
+        `${key} ${table[key].type.type} ${table[key].primary_key ? 'PRIMARY KEY NOT NULL' : ''
+        } default ${table[key].default_value}`,
+      );
+    }
+    //Lendo o array de colunas montado o SQL das colunas e contatenando com a instrução SQL.
+    sql += `(${createColumns.join(', ')});`;
+    //Executando o script de criação da tabela.
+    tx.executeSql(
+      sql,
+      [],
+      (okCallback) => {
+        console.log(`Tabela ${tableName} criada com sucesso! createTable -> ${new Date()} -> okCallback: ${JSON.stringify(okCallback)}`);
+      },
+      (errorCallback) => {
+        console.log(`Não foi possível criar a tabela ${tableName}! createTable -> ${new Date()} -> errorCallback: ${errorCallback}`);
+      },
+    );
+  }
+
   initDB() {
     let db;
     return new Promise((resolve) => {
@@ -58,7 +99,7 @@ class Databese {
     });
   }
 
-  selectAll() {
+  select(sql, params) {
     return new Promise((resolve) => {
       SQLite.openDatabase(
         database_name,
@@ -66,25 +107,23 @@ class Databese {
         database_displayname,
         database_size,
       ).then((db) => {
-        const query = "SELECT * FROM usuarios WHERE (1=1);";
-        const array = [];
         this.db = db;
         this.db
           .transaction((tx) => {
-            tx.executeSql(query, array)
+            tx.executeSql(sql, params)
               .then(([tx, results]) => {
                 resolve(results);
               });
           }).then((okCallback) => {
-            console.log(`SELECT executado com sucesso! selectAll -> ${new Date()} -> okCallback: ${okCallback}`);
+            console.log(`SELECT executado com sucesso! select -> ${new Date()} -> okCallback: ${okCallback}`);
           }).catch((errorCallback) => {
-            console.log(`Erro ao executar SELECT! selectAll -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+            console.log(`Erro ao executar SELECT! select -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
           });
       });
     });
   }
 
-  selectAllByParam(nome) {
+  delete(sql, params) {
     return new Promise((resolve) => {
       SQLite.openDatabase(
         database_name,
@@ -92,126 +131,19 @@ class Databese {
         database_displayname,
         database_size,
       ).then((db) => {
-        const query = `SELECT * FROM usuarios WHERE (nome LIKE '%${nome}%');`;
-        const array = [];
         this.db = db;
-        this.db
-          .transaction((tx) => {
-            tx.executeSql(query, array)
-              .then(([tx, results]) => {
-                resolve(results);
-              });
-          }).then((okCallback) => {
-            console.log(`SELECT executado com sucesso! selectAllByParam -> ${new Date()} -> okCallback: ${okCallback}`);
-          }).catch((errorCallback) => {
-            console.log(`Erro ao executar SELECT! selectAllByParam -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
-          });
-      });
-    });
-  }
-
-  deleteById(id) {
-    return new Promise((resolve) => {
-      SQLite.openDatabase(
-        database_name,
-        database_version,
-        database_displayname,
-        database_size,
-      ).then((db) => {
-        const query = "DELETE FROM usuarios WHERE (id = ?);";
-        const array = [id];
-        this.db = db;
-        this.db
-          .transaction((tx) => {
-            tx.executeSql(query, array)
-              .then(([tx, results]) => {
-                resolve(results);
-              });
-          }).then((okCallback) => {
-            console.log(`DELETE executado com sucesso! delete -> ${new Date()} -> okCallback: ${okCallback}`);
-          }).catch((errorCallback) => {
-            console.log(`Erro ao executar DELETE! delete -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
-          });
-      });
-    });
-  }
-
-  closeDatabase(db) {
-    if (db) {
-      db.close()
-        .then((okCallback) => {
-          console.log(`Conexão fechada com sucesso! closeDatabase -> ${new Date()} -> okCallback: ${okCallback}`);
-        })
-        .catch((errorCallback) => {
-          console.log(`Erro ao fechar conexão com banco de dados! closeDatabase -> ${new Date()} -> errorCallback: ${errorCallback}`);
-          this.errorCB(errorCallback);
-        });
-    } else {
-      console.log(`Conexão já está fechada! closeDatabase -> ${new Date()} DB: ${JSON.stringify(db)}`);
-    }
-  }
-
-  insertOrReplaceBatch(usuarios) {
-    if (!this.db)
-      this.initDB();
-    return new Promise((resolve) => {
-      this.db
-        .transaction((tx) => {
-          for (let i = 0; i < usuarios.length; i++) {
-            tx.executeSql('INSERT OR REPLACE INTO usuarios VALUES (?, ?, ?);', [
-              usuarios[i].id,
-              usuarios[i].nome,
-              usuarios[i].ativo,
-            ]).then(([tx, results]) => {
-              resolve(results);
-            });
-          }
-        }).then((okCallback) => {
-          console.log(`Dados salvos com sucesso! insertOrReplace -> ${new Date()} -> okCallback: ${okCallback}`);
-        }).catch((errorCallback) => {
-          console.log(`Erro ao salvar dados! insertOrReplace -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
-        });
-    });
-  }
-
-  updateBatch(usuarios) {
-    console.log(JSON.stringify(usuarios));
-    if (!this.db)
-      this.initDB();
-    return new Promise((resolve) => {
-      this.db
-        .transaction((tx) => {
-          for (let i = 0; i < usuarios.length; i++) {
-            tx.executeSql('UPDATE usuarios SET nome = ?,  ativo = ? WHERE (id = ?);', [
-              usuarios[i].nome,
-              usuarios[i].ativo,
-              usuarios[i].id,
-            ]).then(([tx, results]) => {
-              resolve(results);
-            });
-          }
-        }).then((okCallback) => {
-          console.log(`Dados salvos com sucesso! insertOrReplace -> ${new Date()} -> okCallback: ${okCallback}`);
-        }).catch((errorCallback) => {
-          console.log(`Erro ao salvar dados! insertOrReplace -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
-        });
-    });
-  }
-
-  createTablesFromSchema() {
-    try {
-      if (this.db) {
         this.db.transaction((tx) => {
-          for (const name in schema.Tables) {
-            this.createTable(tx, schema.Tables[name], name);
-          }
+          tx.executeSql(sql, params)
+            .then(([tx, results]) => {
+              resolve(results);
+            });
+        }).then((okCallback) => {
+          console.log(`DELETE executado com sucesso! delete -> ${new Date()} -> okCallback: ${okCallback}`);
+        }).catch((errorCallback) => {
+          console.log(`Erro ao executar DELETE! delete -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
         });
-      } else {
-        console.log(`Não foi possível criar as tabelas do aplicativo! createTablesFromSchema -> ${new Date()} -> error: Conexão com o banco de dados está fechada!`);
-      }
-    } catch (error) {
-      console.error(`Erro ao criar as tabelas do aplicativo! createTablesFromSchema -> ${new Date()} -> error: ${error}`);
-    }
+      });
+    });
   }
 
   dropDatabase() {
@@ -238,30 +170,75 @@ class Databese {
     });
   }
 
-  createTable(tx, table, tableName) {
-    //Variável do SQCRIPT de SQL.
-    let sql = `CREATE TABLE IF NOT EXISTS ${tableName} `;
-    //Criando array com as colunas da tabela.
-    const createColumns = [];
-    for (const key in table) {
-      createColumns.push(
-        `${key} ${table[key].type.type} ${table[key].primary_key ? 'PRIMARY KEY NOT NULL' : ''
-        } default ${table[key].default_value}`,
-      );
-    }
-    //Lendo o array de colunas montado o SQL das colunas e contatenando com a instrução SQL.
-    sql += `(${createColumns.join(', ')});`;
-    //Executando o script de criação da tabela.
-    tx.executeSql(
-      sql,
-      [],
-      (okCallback) => {
-        console.log(`Tabela ${tableName} criada com sucesso! createTable -> ${new Date()} -> okCallback: ${JSON.stringify(okCallback)}`);
-      },
-      (errorCallback) => {
-        console.log(`Não foi possível criar a tabela ${tableName}! createTable -> ${new Date()} -> errorCallback: ${errorCallback}`);
-      },
-    );
+  insert(sql, params) {
+    return new Promise((resolve) => {
+      SQLite.openDatabase(
+        database_name,
+        database_version,
+        database_displayname,
+        database_size,
+      ).then((db) => {
+        this.db = db;
+        this.db
+          .transaction((tx) => {
+            tx.executeSql(sql, [params])
+              .then(([tx, results]) => {
+                resolve(results);
+              });
+          }).then((okCallback) => {
+            console.log(`Dados salvos com sucesso! insertOrReplace -> ${new Date()} -> okCallback: ${okCallback}`);
+          }).catch((errorCallback) => {
+            console.log(`Erro ao salvar dados! insertOrReplace -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+          });
+      });
+    });
+  }
+
+  select(sql, params) {
+    return new Promise((resolve) => {
+      SQLite.openDatabase(
+        database_name,
+        database_version,
+        database_displayname,
+        database_size,
+      ).then((db) => {
+        this.db = db;
+        this.db
+          .transaction((tx) => {
+            tx.executeSql(sql, params)
+              .then(([tx, results]) => {
+                resolve(results);
+              });
+          }).then((okCallback) => {
+            console.log(`SELECT executado com sucesso! selectAllByParam -> ${new Date()} -> okCallback: ${okCallback}`);
+          }).catch((errorCallback) => {
+            console.log(`Erro ao executar SELECT! selectAllByParam -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+          });
+      });
+    });
+  }
+
+  update(sql, params) {
+    return new Promise((resolve) => {
+      SQLite.openDatabase(
+        database_name,
+        database_version,
+        database_displayname,
+        database_size,
+      ).then((db) => {
+        this.db = db;
+        this.db
+          .transaction((tx) => {
+            tx.executeSql(sql, params).then(([tx, results]) => {
+              resolve(results);
+            });
+          }).then((okCallback) => {
+            console.log(`Dados atualizados com sucesso! update -> ${new Date()} -> okCallback: ${okCallback}`);
+          }).catch((errorCallback) => {
+            console.log(`Erro ao atualizae dados! update -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+          });
+      });
+    });
   }
 }
 

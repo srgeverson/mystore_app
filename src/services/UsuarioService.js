@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api, authorizationServerRecuperarSenha } from '../core/api';
+import UsuarioRepository from '../repository/UsuarioRepository';
 
 const versao = '1';
 
@@ -113,12 +114,64 @@ export const validarAcesso = async (uri, dados) => {
     }
 }
 
-export const salvarTokenLogin = async (access_token, expires_in) => {
+export const salvarTokenLogin = async (access_token, token_type, expires_in, scope, usuarios_id, nome_completo, jti) => {
     try {
+        const usuario = {
+            accessToken: access_token,
+            tokenType: token_type,
+            expiresIn: expires_in,
+            scope: scope,
+            id: usuarios_id,
+            nome: nome_completo,
+            jti: jti,
+            data: new Date()
+        }
+
         await AsyncStorage.setItem('@access_token', access_token);
-        await AsyncStorage.setItem('@expires_in', JSON.stringify(expires_in));
-        await AsyncStorage.setItem('@data', JSON.stringify(new Date()));
+        await AsyncStorage.setItem('@expires_in', JSON.stringify(usuario.expiresIn));
+        await AsyncStorage.setItem('@data', JSON.stringify(usuario.data));
+        UsuarioRepository.insertOrReplace(usuario);
     } catch (error) {
         console.log(`Erro no método salvarTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const apagarPorId = async (id) => {
+    try {
+        return UsuarioRepository.deleteById(id);
+    } catch (error) {
+        console.log(`Erro no método apagarPorId do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const atualizar = async (usuario) => {
+    try {
+        return UsuarioRepository.updateAllById(usuario);
+    } catch (error) {
+        console.log(`Erro no método cadastrar do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const buscarPorConterNome = async (nome) => {
+    try {
+        return UsuarioRepository.selectLikeByNome(nome);
+    } catch (error) {
+        console.log(`Erro no método buscarPorConterNome do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const buscarTodos = async () => {
+    try {
+        return UsuarioRepository.selectAll();
+    } catch (error) {
+        console.log(`Erro no método buscarTodos do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const cadastrar = async (usuario) => {
+    try {
+        return UsuarioRepository.insert(usuario);
+    } catch (error) {
+        console.log(`Erro no método cadastrar do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }
 }

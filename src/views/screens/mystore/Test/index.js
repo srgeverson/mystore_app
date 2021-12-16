@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, } from 'react-native';
-import { SpeedDial, ListItem ,SearchBar} from 'react-native-elements';
+import { SpeedDial, ListItem, SearchBar } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Databese from '../../../../core/database';
 import ModalCarregando from '../../../components/ModalCarregando';
+import { apagarPorId, atualizar, buscarPorConterNome, buscarTodos, cadastrar } from '../../../../services/UsuarioService';
 
 const Listar = () => {
     const [open, setOpen] = useState(false);
@@ -15,15 +16,13 @@ const Listar = () => {
     const salvarUsuario = async () => {
         setCarregando(true);
         try {
-            setId(id + 1);
-            const usuarios = [];
+            setId(id);
             const usuario = {
                 id: id,
-                nome: 'Geverson substui',
+                nome: 'Geverson Souza',
                 ativo: true
             }
-            usuarios.push(usuario);
-            const cadastro = await Databese.insertOrReplaceBatch(usuarios);
+            const cadastro = await cadastrar(usuario);
             console.log(`Cadsatrando...${JSON.stringify(cadastro)}`);
         } catch (error) {
             console.log(`Ocorreu erro em /src/viwes/mystore/Test -> ${new Date()} -> erro: ${error}`);
@@ -35,14 +34,12 @@ const Listar = () => {
     const atualizarUsuario = async () => {
         setCarregando(true);
         try {
-            const usuarios = [];
             const usuario = {
                 id: 5,
                 nome: 'Geverson update',
                 ativo: false
             }
-            usuarios.push(usuario);
-            const cadastro = await Databese.updateBatch(usuarios);
+            const cadastro = await atualizar(usuario);
             console.log(`Atualizando...${JSON.stringify(cadastro)}`);
         } catch (error) {
             console.log(`Ocorreu erro em /src/viwes/mystore/Test -> ${new Date()} -> erro: ${error}`);
@@ -54,15 +51,12 @@ const Listar = () => {
     const listarUsuario = async () => {
         setCarregando(true);
         try {
-            const lista = await Databese.selectAll();
+            const lista = await buscarTodos();
             console.log(`Listagem...${JSON.stringify(lista)}`);
             var temp = [];
             for (let i = 0; i < lista.rows.length; ++i) {
-                //console.log(JSON.stringify(lista.rows.item(i)));
                 temp.push(lista.rows.item(i));
-            }
-            for (let i = 0; i < temp.length; ++i) {
-                console.log(JSON.stringify(temp[i]));
+                console.log(JSON.stringify(lista.rows.item(i)));
             }
             setRetorno(temp);
         } catch (error) {
@@ -75,7 +69,7 @@ const Listar = () => {
     const pesquisarUsuario = async (nome) => {
         setCarregando(true);
         try {
-            const lista = await Databese.selectAllByParam(nome);
+            const lista = await buscarPorConterNome(nome);
             console.log(`Pesquisando...${JSON.stringify(lista)}`);
             var temp = [];
             for (let i = 0; i < lista.rows.length; ++i) {
@@ -92,8 +86,8 @@ const Listar = () => {
     const deletearUsuario = async (id) => {
         setCarregando(true);
         try {
-            const lista = await Databese.deleteById(id);
-            console.log(`Deletando...${JSON.stringify(lista)}`);
+            const remove = await apagarPorId(id);
+            console.log(`Deletando...${JSON.stringify(remove)}`);
         } catch (error) {
             console.log(`Ocorreu no método deletearUsuario erro em /src/viwes/mystore/Test -> ${new Date()} -> erro: ${error}`);
         } finally {
@@ -122,11 +116,11 @@ const Listar = () => {
         </ListItem>
     );
 
-const [valor, setValor] = useState(null);
+    const [valor, setValor] = useState(null);
 
     return (
         <SafeAreaView style={{ flex: 1, }}>
-           <SearchBar
+            <SearchBar
                 lightTheme={true}
                 placeholder={`Digite o nome da cidade aqui...`}
                 onChangeText={value => pesquisarUsuario(value)}
