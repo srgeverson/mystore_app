@@ -54,11 +54,11 @@ const Login = () => {
             //Quando retornar o token
             else if (retornoAutenticacao.access_token) {
                 await salvarTokenLogin(
-                    retornoAutenticacao.access_token, 
-                    retornoAutenticacao.token_type,
-                    retornoAutenticacao.expires_in,
-                    retornoAutenticacao.scope,
                     retornoAutenticacao.usuarios_id,
+                    retornoAutenticacao.access_token, 
+                    retornoAutenticacao.expires_in,
+                    retornoAutenticacao.token_type,
+                    retornoAutenticacao.scope,
                     retornoAutenticacao.nome_completo,
                     retornoAutenticacao.jti
                     );

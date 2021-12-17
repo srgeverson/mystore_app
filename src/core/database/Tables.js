@@ -24,32 +24,7 @@ export const Tables = {
         },
     },
     usuarios: {
-        id: {
-            type: Types.INTEGER,
-            primary_key: true,
-            default_value: null,
-        },
-        nome: {
-            type: Types.TEXT,
-            primary_key: false,
-            default_value: null,
-        },
-        tokenType: {
-            type: Types.TEXT,
-            primary_key: false,
-            default_value: null,
-        },
         accessToken: {
-            type: Types.TEXT,
-            primary_key: false,
-            default_value: null,
-        },
-        scope: {
-            type: Types.TEXT,
-            primary_key: false,
-            default_value: null,
-        },
-        jti: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
@@ -61,6 +36,31 @@ export const Tables = {
         },
         expiresIn: {
             type: Types.LONG,
+            primary_key: false,
+            default_value: null,
+        },
+        id: {
+            type: Types.INTEGER,
+            primary_key: true,
+            default_value: null,
+        },
+        jti: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        nome: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        scope: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        tokenType: {
+            type: Types.TEXT,
             primary_key: false,
             default_value: null,
         },

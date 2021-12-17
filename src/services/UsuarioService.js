@@ -114,23 +114,15 @@ export const validarAcesso = async (uri, dados) => {
     }
 }
 
-export const salvarTokenLogin = async (access_token, token_type, expires_in, scope, usuarios_id, nome_completo, jti) => {
+export const salvarTokenLogin = async (usuarios_id, token, expires_in, token_type, scope, nome_completo, jti
+) => {
     try {
-        const usuario = {
-            accessToken: access_token,
-            tokenType: token_type,
-            expiresIn: expires_in,
-            scope: scope,
-            id: usuarios_id,
-            nome: nome_completo,
-            jti: jti,
-            data: new Date()
-        }
-
-        await AsyncStorage.setItem('@access_token', access_token);
-        await AsyncStorage.setItem('@expires_in', JSON.stringify(usuario.expiresIn));
-        await AsyncStorage.setItem('@data', JSON.stringify(usuario.data));
-        UsuarioRepository.insertOrReplace(usuario);
+        const data = new Date();
+        const  expiresIn = expires_in;
+        await AsyncStorage.setItem('@access_token', token);
+        await AsyncStorage.setItem('@expires_in', JSON.stringify(expiresIn));
+        await AsyncStorage.setItem('@data', JSON.stringify(data));
+        UsuarioRepository.insertOrReplace({ id:usuarios_id, accessToken: token, expiresIn, data, tokenType: token_type, scope, nome:nome_completo, jti  });
     } catch (error) {
         console.log(`Erro no método salvarTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }
@@ -171,6 +163,14 @@ export const buscarTodos = async () => {
 export const cadastrar = async (usuario) => {
     try {
         return UsuarioRepository.insert(usuario);
+    } catch (error) {
+        console.log(`Erro no método cadastrar do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const teste = async (usuario) => {
+    try {
+        return UsuarioRepository.insertOrReplace(usuario);
     } catch (error) {
         console.log(`Erro no método cadastrar do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }

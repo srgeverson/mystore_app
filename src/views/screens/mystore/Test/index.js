@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, SafeAreaView, } from 'react-native';
+import { Text, SafeAreaView, Alert, } from 'react-native';
 import { SpeedDial, ListItem, SearchBar } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Databese from '../../../../core/database';
 import ModalCarregando from '../../../components/ModalCarregando';
-import { apagarPorId, atualizar, buscarPorConterNome, buscarTodos, cadastrar } from '../../../../services/UsuarioService';
+import { apagarPorId, atualizar, buscarPorConterNome, buscarTodos, cadastrar, teste } from '../../../../services/UsuarioService';
 
 const Listar = () => {
     const [open, setOpen] = useState(false);
@@ -56,7 +56,7 @@ const Listar = () => {
             var temp = [];
             for (let i = 0; i < lista.rows.length; ++i) {
                 temp.push(lista.rows.item(i));
-                console.log(JSON.stringify(lista.rows.item(i)));
+                // console.log(JSON.stringify(lista.rows.item(i)));
             }
             setRetorno(temp);
         } catch (error) {
@@ -107,7 +107,7 @@ const Listar = () => {
     const renderItem = ({ item }) => (
         <ListItem key={item.id} style={{ height: 50 }}
             bottomDivider onPress={() => {
-                // Alert.alert('Clique', `Objeto ${item.id} foi clicada!`)
+                Alert.alert('Clique', `Objeto ${item.accessToken} foi clicada!`)
             }}>
             <ListItem.Content>
                 <ListItem.Title>{`Código: ${item.id}  - Nome : ${item.nome}`}</ListItem.Title>
@@ -180,6 +180,16 @@ const Listar = () => {
                     onPress={() => {
                         console.log(`Cadastrando...`);
                         salvarUsuario();
+                        // teste({
+                        //     accessToken: 'token teste',
+                        //     data: new Date(),
+                        //     expiresIn: 0,
+                        //     id: -1,
+                        //     jti: 'jti',
+                        //     nome: 'geverson',
+                        //     tokenType: 'tipo token',
+                        //     scope: 'escopo',
+                        // });
                         console.log(`Listando...`);
                         listarUsuario();
                     }} />

@@ -25,12 +25,20 @@ class UsuarioRepository {
                 });
         });
     }
-
+    
     insertOrReplace(usuario) {
-        console.log(JSON.stringify(usuario));
         return new Promise((resolve, reject) => {
-            Database.insert(`INSERT OR REPLACE INTO usuarios (accessToken, tokenType, expiresIn, scope, id, nome, jti, data) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`, 
-            [usuario.accessToken, usuario.tokenType, usuario.expiresIn, usuario.scope, usuario.id, usuario.nome, usuario.jti, usuario.data])
+            Database.insert('INSERT OR REPLACE INTO usuarios (accessToken, data, expiresIn, id, jti, nome, tokenType, scope) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                [
+                    usuario.accessToken ? usuario.accessToken : null,
+                    usuario.data ? JSON.stringify(usuario.data) : null,
+                    usuario.expiresIn ? usuario.expiresIn : 0,
+                    usuario.id ? usuario.id : 0,
+                    usuario.jti ? usuario.jti : null,
+                    usuario.nome ? usuario.nome : null,
+                    usuario.tokenType ? usuario.tokenType : null,
+                    usuario.scope ? usuario.scope : null,
+                ])
                 .then((success) => {
                     resolve(success);
                 })

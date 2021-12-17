@@ -181,7 +181,7 @@ class Databese {
         this.db = db;
         this.db
           .transaction((tx) => {
-            tx.executeSql(sql, [params])
+            tx.executeSql(sql, params)
               .then(([tx, results]) => {
                 resolve(results);
               });
