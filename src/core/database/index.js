@@ -58,71 +58,6 @@ class Databese {
     );
   }
 
-  initDB() {
-    let db;
-    return new Promise((resolve) => {
-      SQLite.echoTest().then(() => {
-        SQLite.openDatabase(
-          database_name,
-          database_version,
-          database_displayname,
-          database_size,
-        ).then((DB) => {
-          this.db = DB;
-          db = DB;
-          db.executeSql('SELECT 1 FROM usuarios LIMIT 1')
-            .then((okCallback) => {
-              console.log(`Verificando as tabelas existentes! initDB -> ${new Date()} -> okCallback: ${okCallback}`);
-            })
-            .catch((errorCallback) => {
-              console.log(`Existe tabelas a serem criadas! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
-              db.transaction((tx) => {
-                for (const name in schema.Tables) {
-                  this.createTable(tx, schema.Tables[name], name);
-                }
-              })
-                .then((okCallback) => {
-                  console.log(`Criação das tabelas executado com sucesso! initDB -> ${new Date()} -> okCallback: ${okCallback}`);
-                })
-                .catch((errorCallback) => {
-                  console.log(`Erro na criação das tabelas! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
-                });
-            });
-          resolve(db);
-        })
-          .catch((errorCallback) => {
-            console.log(`Erro ao inicializar banco de dados! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
-          });
-      }).catch((error) => {
-        console.log(`Erro ao inicializar banco de dados! initDB -> ${new Date()} -> error: ${error}`);
-      });
-    });
-  }
-
-  select(sql, params) {
-    return new Promise((resolve) => {
-      SQLite.openDatabase(
-        database_name,
-        database_version,
-        database_displayname,
-        database_size,
-      ).then((db) => {
-        this.db = db;
-        this.db
-          .transaction((tx) => {
-            tx.executeSql(sql, params)
-              .then(([tx, results]) => {
-                resolve(results);
-              });
-          }).then((okCallback) => {
-            console.log(`SELECT executado com sucesso! select -> ${new Date()} -> okCallback: ${okCallback}`);
-          }).catch((errorCallback) => {
-            console.log(`Erro ao executar SELECT! select -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
-          });
-      });
-    });
-  }
-
   delete(sql, params) {
     return new Promise((resolve) => {
       SQLite.openDatabase(
@@ -170,6 +105,47 @@ class Databese {
     });
   }
 
+  initDB() {
+    let db;
+    return new Promise((resolve) => {
+      SQLite.echoTest().then(() => {
+        SQLite.openDatabase(
+          database_name,
+          database_version,
+          database_displayname,
+          database_size,
+        ).then((DB) => {
+          this.db = DB;
+          db = DB;
+          db.executeSql('SELECT 1 FROM usuarios LIMIT 1')
+            .then((okCallback) => {
+              console.log(`Verificando as tabelas existentes! initDB -> ${new Date()} -> okCallback: ${okCallback}`);
+            })
+            .catch((errorCallback) => {
+              console.log(`Existe tabelas a serem criadas! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
+              db.transaction((tx) => {
+                for (const name in schema.Tables) {
+                  this.createTable(tx, schema.Tables[name], name);
+                }
+              })
+                .then((okCallback) => {
+                  console.log(`Criação das tabelas executado com sucesso! initDB -> ${new Date()} -> okCallback: ${okCallback}`);
+                })
+                .catch((errorCallback) => {
+                  console.log(`Erro na criação das tabelas! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
+                });
+            });
+          resolve(db);
+        })
+          .catch((errorCallback) => {
+            console.log(`Erro ao inicializar banco de dados! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
+          });
+      }).catch((error) => {
+        console.log(`Erro ao inicializar banco de dados! initDB -> ${new Date()} -> error: ${error}`);
+      });
+    });
+  }
+
   insert(sql, params) {
     return new Promise((resolve) => {
       SQLite.openDatabase(
@@ -189,6 +165,30 @@ class Databese {
             console.log(`Dados salvos com sucesso! insertOrReplace -> ${new Date()} -> okCallback: ${okCallback}`);
           }).catch((errorCallback) => {
             console.log(`Erro ao salvar dados! insertOrReplace -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+          });
+      });
+    });
+  }
+
+  select(sql, params) {
+    return new Promise((resolve) => {
+      SQLite.openDatabase(
+        database_name,
+        database_version,
+        database_displayname,
+        database_size,
+      ).then((db) => {
+        this.db = db;
+        this.db
+          .transaction((tx) => {
+            tx.executeSql(sql, params)
+              .then(([tx, results]) => {
+                resolve(results);
+              });
+          }).then((okCallback) => {
+            console.log(`SELECT executado com sucesso! select -> ${new Date()} -> okCallback: ${okCallback}`);
+          }).catch((errorCallback) => {
+            console.log(`Erro ao executar SELECT! select -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
           });
       });
     });
