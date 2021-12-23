@@ -6,14 +6,21 @@ const versao = '1';
 
 export const getTokenLogin = async () => {
     try {
-        const token = await AsyncStorage.getItem('@access_token');
-        const expires = await AsyncStorage.getItem('@expires_in');
+        const usuarioAutenticadoAnteriormente = await UsuarioRepository.selectByTokenExpireData();
+
+        console.log(JSON.stringify(usuarioAutenticadoAnteriormente.rows.item(0).data));
+
+        const token = usuarioAutenticadoAnteriormente.rows.item(0).accessToken;
+        //const token = await AsyncStorage.getItem('@access_token');
+        const expires = usuarioAutenticadoAnteriormente.rows.item(0).expiresIn;
+        //const expires = await AsyncStorage.getItem('@expires_in');
         const expiresMilisegundos = Math.round((//Usando esta função para arredondar os valores em caso utilise uma divisão
             expires //Tempo de expiração em segundos
             - 60 //Subtraindo para compensar a diferença do servidor até o registro do token no local storage
         ) * 1000 //Milisegundos para realizar os calculos da datas
         )
-        const data = await AsyncStorage.getItem('@data');
+        //const data = await AsyncStorage.getItem('@data');
+        const data = usuarioAutenticadoAnteriormente.rows.item(0).data;
         const dataTokenMilisegundos = new Date(JSON.parse(data)).getTime();
         const dataExpiresMilisegundos = expiresMilisegundos + dataTokenMilisegundos;
         const dataAtualMilisegundos = new Date().getTime();
@@ -55,9 +62,10 @@ export const recuperarSenha = async (uri) => {
 
 export const limparTokenLogin = async () => {
     try {
-        await AsyncStorage.removeItem('@access_token');
-        await AsyncStorage.removeItem('@expires_in');
-        await AsyncStorage.removeItem('@data');
+        //await AsyncStorage.removeItem('@access_token');
+        //await AsyncStorage.removeItem('@expires_in');
+        //await AsyncStorage.removeItem('@data');
+        await UsuarioRepository.deleteAll();
     } catch (error) {
         console.log(`Erro no método getTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }
@@ -114,20 +122,6 @@ export const validarAcesso = async (uri, dados) => {
     }
 }
 
-export const salvarTokenLogin = async (usuarios_id, token, expires_in, token_type, scope, nome_completo, jti
-) => {
-    try {
-        const data = new Date();
-        const  expiresIn = expires_in;
-        await AsyncStorage.setItem('@access_token', token);
-        await AsyncStorage.setItem('@expires_in', JSON.stringify(expiresIn));
-        await AsyncStorage.setItem('@data', JSON.stringify(data));
-        UsuarioRepository.insertOrReplace({ id:usuarios_id, accessToken: token, expiresIn, data, tokenType: token_type, scope, nome:nome_completo, jti  });
-    } catch (error) {
-        console.log(`Erro no método salvarTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
-    }
-}
-
 export const apagarPorId = async (id) => {
     try {
         return UsuarioRepository.deleteById(id);
@@ -136,9 +130,9 @@ export const apagarPorId = async (id) => {
     }
 }
 
-export const atualizar = async (usuario) => {
+export const atualizarPorId = async (id) => {
     try {
-        return UsuarioRepository.updateAllById(usuario);
+        return UsuarioRepository.updateAllById(id);
     } catch (error) {
         console.log(`Erro no método cadastrar do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }
@@ -168,10 +162,15 @@ export const cadastrar = async (usuario) => {
     }
 }
 
-export const teste = async (usuario) => {
+export const salvarTokenLogin = async (usuarios_id, token, expires_in, token_type, scope, nome_completo, jti) => {
     try {
-        return UsuarioRepository.insertOrReplace(usuario);
+        const data = new Date();
+        const expiresIn = expires_in;
+        //await AsyncStorage.setItem('@access_token', token);
+        //await AsyncStorage.setItem('@expires_in', JSON.stringify(expiresIn));
+        //await AsyncStorage.setItem('@data', JSON.stringify(data));
+        UsuarioRepository.insertOrReplace({ id: usuarios_id, accessToken: token, expiresIn, data, tokenType: token_type, scope, nome: nome_completo, jti });
     } catch (error) {
-        console.log(`Erro no método cadastrar do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+        console.log(`Erro no método salvarTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }
 }

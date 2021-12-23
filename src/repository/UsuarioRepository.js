@@ -2,6 +2,18 @@ import Database from "../core/database";
 
 class UsuarioRepository {
 
+    deleteAll() {
+        return new Promise((resolve, reject) => {
+            Database.delete(`DELETE FROM usuarios;`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
     deleteById(id) {
         return new Promise((resolve, reject) => {
             Database.delete(`DELETE FROM usuarios WHERE (id = ?);`, [id])
@@ -63,6 +75,18 @@ class UsuarioRepository {
     selectLikeByNome(nome) {
         return new Promise((resolve, reject) => {
             Database.select(`SELECT * FROM usuarios WHERE (nome LIKE '%${nome}%');`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    selectByTokenExpireData(){
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT * FROM usuarios WHERE (accessToken IS NOT NULL AND expiresIn IS NOT NULL AND data IS NOT NULL);`, [])
                 .then((success) => {
                     resolve(success);
                 })
