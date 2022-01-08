@@ -99,9 +99,6 @@ export const recuperarSenha = async (uri) => {
 
 export const limparTokenLogin = async () => {
     try {
-        //await AsyncStorage.removeItem('@access_token');
-        //await AsyncStorage.removeItem('@expires_in');
-        //await AsyncStorage.removeItem('@data');
         await UsuarioRepository.deleteAll();
     } catch (error) {
         console.log(`Erro no método getTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
