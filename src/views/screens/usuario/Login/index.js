@@ -9,6 +9,7 @@ import BotaoEntrar from '../../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../../core/contexts';
 import { authorizationServerLogin } from '../../../../core/api';
 import { salvarTokenLogin, getTokenLogin } from '../../../../services/UsuarioService';
+import Database from '../../../../core/database';
 
 const Login = () => {
 
@@ -23,6 +24,9 @@ const Login = () => {
 
     const recuperaTokenSalvo = async () => {
         setCarregando(true);
+        //Provisório
+        //console.log(`Inicializando...`);
+        //await Database.initDB();
         const tokenSalvo = await getTokenLogin();
         setToken(tokenSalvo);
         setCarregando(false);
