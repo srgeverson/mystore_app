@@ -1,8 +1,47 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api, authorizationServerRecuperarSenha } from '../core/api';
 import UsuarioRepository from '../repository/UsuarioRepository';
 
 const versao = '1';
+
+export const apagarPorId = async (id) => {
+    try {
+        return UsuarioRepository.deleteById(id);
+    } catch (error) {
+        console.log(`Erro no método apagarPorId do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const atualizarPorId = async (id) => {
+    try {
+        return UsuarioRepository.updateAllById(id);
+    } catch (error) {
+        console.log(`Erro no método cadastrar do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const buscarPorConterNome = async (nome) => {
+    try {
+        return UsuarioRepository.selectLikeByNome(nome);
+    } catch (error) {
+        console.log(`Erro no método buscarPorConterNome do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const buscarTodos = async () => {
+    try {
+        return UsuarioRepository.selectAll();
+    } catch (error) {
+        console.log(`Erro no método buscarTodos do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const cadastrar = async (usuario) => {
+    try {
+        return UsuarioRepository.insert(usuario);
+    } catch (error) {
+        console.log(`Erro no método cadastrar do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
 
 export const getTokenLogin = async () => {
     try {
@@ -11,15 +50,13 @@ export const getTokenLogin = async () => {
         console.log(JSON.stringify(usuarioAutenticadoAnteriormente.rows.item(0).data));
 
         const token = usuarioAutenticadoAnteriormente.rows.item(0).accessToken;
-        //const token = await AsyncStorage.getItem('@access_token');
         const expires = usuarioAutenticadoAnteriormente.rows.item(0).expiresIn;
-        //const expires = await AsyncStorage.getItem('@expires_in');
         const expiresMilisegundos = Math.round((//Usando esta função para arredondar os valores em caso utilise uma divisão
             expires //Tempo de expiração em segundos
             - 60 //Subtraindo para compensar a diferença do servidor até o registro do token no local storage
         ) * 1000 //Milisegundos para realizar os calculos da datas
         )
-        //const data = await AsyncStorage.getItem('@data');
+
         const data = usuarioAutenticadoAnteriormente.rows.item(0).data;
         const dataTokenMilisegundos = new Date(JSON.parse(data)).getTime();
         const dataExpiresMilisegundos = expiresMilisegundos + dataTokenMilisegundos;
@@ -122,53 +159,10 @@ export const validarAcesso = async (uri, dados) => {
     }
 }
 
-export const apagarPorId = async (id) => {
-    try {
-        return UsuarioRepository.deleteById(id);
-    } catch (error) {
-        console.log(`Erro no método apagarPorId do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
-    }
-}
-
-export const atualizarPorId = async (id) => {
-    try {
-        return UsuarioRepository.updateAllById(id);
-    } catch (error) {
-        console.log(`Erro no método cadastrar do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
-    }
-}
-
-export const buscarPorConterNome = async (nome) => {
-    try {
-        return UsuarioRepository.selectLikeByNome(nome);
-    } catch (error) {
-        console.log(`Erro no método buscarPorConterNome do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
-    }
-}
-
-export const buscarTodos = async () => {
-    try {
-        return UsuarioRepository.selectAll();
-    } catch (error) {
-        console.log(`Erro no método buscarTodos do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
-    }
-}
-
-export const cadastrar = async (usuario) => {
-    try {
-        return UsuarioRepository.insert(usuario);
-    } catch (error) {
-        console.log(`Erro no método cadastrar do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
-    }
-}
-
 export const salvarTokenLogin = async (usuarios_id, token, expires_in, token_type, scope, nome_completo, jti) => {
     try {
         const data = new Date();
         const expiresIn = expires_in;
-        //await AsyncStorage.setItem('@access_token', token);
-        //await AsyncStorage.setItem('@expires_in', JSON.stringify(expiresIn));
-        //await AsyncStorage.setItem('@data', JSON.stringify(data));
         UsuarioRepository.insertOrReplace({ id: usuarios_id, accessToken: token, expiresIn, data, tokenType: token_type, scope, nome: nome_completo, jti });
     } catch (error) {
         console.log(`Erro no método salvarTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
