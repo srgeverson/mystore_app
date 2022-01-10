@@ -1,6 +1,35 @@
 import { Types } from "./Types";
 
 export const Tables = {
+    cidades: {
+        id: {
+            type: Types.INTEGER,
+            primary_key: true,
+            default_value: null,
+        },
+        nome: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        estados_id: {
+            type: Types.INTEGER,
+            primary_key: false,
+            default_value: null,
+        },
+    },
+    estados: {
+        id: {
+            type: Types.INTEGER,
+            primary_key: true,
+            default_value: null,
+        },
+        nome: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+    },
     permissoes: {
         id: {
             type: Types.INTEGER,
