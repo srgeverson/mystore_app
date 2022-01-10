@@ -93,7 +93,7 @@ export const recuperarSenha = async (uri) => {
                 }
             });
     } catch (error) {
-        console.log(`Erro no método codigo-acesso do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+        console.log(`Erro no método recuperarSenha do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }
 }
 

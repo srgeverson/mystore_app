@@ -1,19 +1,19 @@
 import { api } from '../core/api';
-import CidadeRepository from '../repository/CidadeRepository';
+import EstadoRepository from '../repository/EstadoRepository';
 import { getTokenLogin } from './UsuarioService';
 const versao = '1';
 
-export const getCidades = async (nome) => {
+export const getEstados = async (nome) => {
     const token = await getTokenLogin();
     try {
         return await api(token)
-            .get(`/v${versao}/cidades`)
+            .get(`/v${versao}/estados`)
             .then((respose) => {
                 if (respose.data !== null) {
                     return respose.data;
                 }
             }).catch((error) => {
-                console.log(`Erro na requisição da API andpoint getCidades!`);
+                console.log(`Erro na requisição da API andpoint getEstados!`);
                 if (error.response) {
                     return {
                         codigo: error.response.status,
@@ -25,22 +25,22 @@ export const getCidades = async (nome) => {
                 }
             });
     } catch (error) {
-        console.log(`Erro no método getCidades do arquivo CidadesService -> ${new Date()} -> erro: ${error}`);
+        console.log(`Erro no método getEstado do arquivo EstadoService -> ${new Date()} -> erro: ${error}`);
     }
 }
 
 export const buscarPorConterNome = async (nome) => {
     try {
-        return CidadeRepository.selectLikeByNome(nome);
+        return EstadoRepository.selectLikeByNome(nome);
     } catch (error) {
-        console.log(`Erro no método buscarPorConterNome do arquivo CidadesService -> ${new Date()} -> erro: ${error}`);
+        console.log(`Erro no método buscarPorConterNome do arquivo EstadoService -> ${new Date()} -> erro: ${error}`);
     }
 }
 
-export const cadastrar = async (cidade) => {
+export const cadastrar = async (estado) => {
     try {
-        return CidadeRepository.insert(cidade);
+        return EstadoRepository.insert(estado);
     } catch (error) {
-        console.log(`Erro no método cadastrar do arquivo CidadesService -> ${new Date()} -> erro: ${error}`);
+        console.log(`Erro no método cadastrar do arquivo EstadoService -> ${new Date()} -> erro: ${error}`);
     }
 }

@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BemVindo from '../../views/screens/mystore/BemVindo';
 import Teste from '../../views/screens/mystore/Test';
 import ListarCidades from '../../views/screens/cidades/Listar';
+import CadastrarCidades from '../../views/screens/cidades/Cadastrar';
 import ListarEstados from '../../views/screens/estados/Listar';
 import ListarPermissoes from '../../views/screens/permissoes/Listar';
 import ListarUsuarios from '../../views/screens/usuario/Listar';
@@ -37,6 +38,14 @@ const ListarCidadesStackNavigator = () => {
     );
 };
 
+const CadastrarCidadeStackNavigator = () => {
+    return (
+        <Stack.Navigator screenOptions={screenOptionStyle}>
+            <Stack.Screen name="CadastrarCidade" component={CadastrarCidades} options={{ headerShown: false, }} />
+        </Stack.Navigator>
+    );
+};
+
 const ListarEstadosStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={screenOptionStyle}>
@@ -61,4 +70,12 @@ const ListarUsuariosStackNavigator = () => {
     );
 };
 
-export { BemVindoStackNavigator, Teste, ListarCidadesStackNavigator, ListarEstadosStackNavigator, ListarPermissoesStackNavigator, ListarUsuariosStackNavigator };
+export {
+    BemVindoStackNavigator,
+    CadastrarCidadeStackNavigator,
+    Teste,
+    ListarCidadesStackNavigator,
+    ListarEstadosStackNavigator,
+    ListarPermissoesStackNavigator,
+    ListarUsuariosStackNavigator
+};

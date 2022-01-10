@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import { Alert, SafeAreaView, } from 'react-native';
-import { ListItem, Avatar, SearchBar, SpeedDial, Text } from 'react-native-elements';
+import { SearchBar, SpeedDial, Text, ListItem } from 'react-native-elements';
+import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { getCidades } from '../../../../services/CidadeService';
+import { buscarPorConterNome, cadastrar, getCidades } from '../../../../services/CidadeService';
 import ModalCarregando from '../../../components/ModalCarregando';
 
 const Listar = () => {
+
+    const navigation = useNavigation();
 
     const [nomeCidade, setNomeCidade] = useState(null);
 
@@ -15,12 +19,19 @@ const Listar = () => {
 
     const [carregando, setCarregando] = useState(false);
 
-    const pesquisarCidades = async () => {
+    const [retorno, setRetorno] = useState([]);
+
+    const pesquisarCidadesAPI = async () => {
         try {
             setCarregando(true);
             var retorno = await getCidades(nomeCidade);
-            if (retorno._embedded.cidades)
+            if (retorno._embedded.cidades) {
                 setCidades(retorno._embedded.cidades);
+                for (let index = 0; index < retorno._embedded.cidades.length; index++) {
+                    const element = retorno._embedded.cidades[index];
+                    //await cadastrar({id: element.id, nome: element.nome, estados_id: element.estado.id});
+                }
+            }
 
         } catch (error) {
             console.log(`Ocorreu erro em /src/viwes/cidades/Listar -> ${new Date()} -> erro: ${error}`);
@@ -29,30 +40,62 @@ const Listar = () => {
         }
     }
 
+    useEffect(() => {
+        pesquisarCidadesAPI();
+    }, [])
+
+    const pesquisarCidades = async (nome) => {
+        setCarregando(true);
+        try {
+            const lista = await buscarPorConterNome(nome);
+            console.log(`Pesquisando...${JSON.stringify(lista)}`);
+            var temp = [];
+            for (let i = 0; i < lista.rows.length; ++i) {
+                temp.push(lista.rows.item(i));
+            }
+            setRetorno(temp);
+        } catch (error) {
+            console.log(`Ocorreu no método pesquisarCidades erro em /src/viwes/cidades/Listar -> ${new Date()} -> erro: ${error}`);
+        } finally {
+            setCarregando(false);
+        }
+    }
+
+    const keyExtractor = (item, index) => index.toString();
+
+    const renderItem = ({ item }) => (
+        <ListItem key={item.id} style={{ height: 50 }}
+            bottomDivider onPress={() => {
+                Alert.alert('Clique', `Objeto ${item.accessToken} foi clicada!`)
+            }}>
+            <ListItem.Content>
+                <ListItem.Title>{`Código: ${item.id}  - Nome : ${item.nome}`}</ListItem.Title>
+                <ListItem.Subtitle>{`Ativado: ${item.ativo ? 'Sim' : 'Não'}`}</ListItem.Subtitle>
+            </ListItem.Content>
+        </ListItem>
+    );
+
+    const [valor, setValor] = useState(null);
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <SearchBar
                 lightTheme={true}
                 placeholder={`Digite o nome da cidade aqui...`}
-                searchIcon={<Icon name='search' size={20} color='#8B97A3' onPress={() => pesquisarCidades()} />}
-                clearIcon={<Icon name='close' size={20} color='#8B97A3' onPress={() => setNomeCidade(null)} />}
-                onChangeText={value => setNomeCidade(value)}
-                value={nomeCidade} />
+                onChangeText={value => pesquisarCidades(value)}
+                value={valor} />
             {
-                cidades.length > 0
+                retorno.length > 0
                     ?
-                    cidades.map((objeto, codigo) => (
-                        <ListItem key={codigo} bottomDivider onPress={() => Alert.alert('Clique', `Cidade ${objeto.nome} foi clicada!`)}>
-                            {objeto.imagem && <Avatar source={{ uri: objeto.imagem }} />}
-                            <ListItem.Content>
-                                <ListItem.Title>{objeto.nome}</ListItem.Title>
-                                <ListItem.Subtitle>{objeto.sigla}</ListItem.Subtitle>
-                            </ListItem.Content>
-                        </ListItem>
-                    ))
+                    <FlatList
+                        keyExtractor={keyExtractor}
+                        data={retorno}
+                        renderItem={renderItem}
+                    />
                     :
                     <Text>Listagem vazia...</Text>
             }
+
             <SpeedDial
                 color='#007BFF'
                 isOpen={open}
@@ -64,7 +107,7 @@ const Listar = () => {
                     color='#007BFF'
                     icon={<Icon name='plus' size={20} color='#FFF' />}
                     title="Cadastrar"
-                    onPress={() => Alert.alert('Clique', `Botão cadastrar foi acionado!`)} />
+                    onPress={() => navigation.navigate('CadastrarCidade')} />
             </SpeedDial>
             {carregando && <ModalCarregando pagina='Listar cidades' />}
         </SafeAreaView>

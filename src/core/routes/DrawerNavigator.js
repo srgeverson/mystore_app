@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import theme from '../../assets/styles/theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { BemVindoStackNavigator, Teste, ListarCidadesStackNavigator, ListarEstadosStackNavigator, ListarPermissoesStackNavigator, ListarUsuariosStackNavigator } from './StackNavigator';
+import { BemVindoStackNavigator, Teste, ListarCidadesStackNavigator, ListarEstadosStackNavigator, ListarPermissoesStackNavigator, ListarUsuariosStackNavigator, CadastrarCidadeStackNavigator } from './StackNavigator';
 import { AuthorityContext } from '../contexts';
 import { rootEntryPoint } from '../../services/UsuarioService';
 import HeaderLeft from '../../views/components/HeaderLeft';
@@ -80,6 +80,7 @@ const DrawerNavigator = () => {
             {true && getScrens('Teste', Teste, 'Teste do APP', 'code')}
             {true && getScrens('BemVindo', BemVindoStackNavigator, 'Página Inicial', 'home')}
             {menusDisponiveis && getScrens("ListarCidades", ListarCidadesStackNavigator, 'Lista de Cidades', 'building')}
+            {menusDisponiveis && getScrens("CadastrarCidade", CadastrarCidadeStackNavigator, 'Cadastro de Cidades', 'building')}
             {/* {menusDisponiveis && <Drawer.Screen name="ListarEmpresas" component={ListarEmpresasStackNavigator} options={{ headerShown: true, title: 'Lista de Empresas',drawerIcon: (focused)=><Icon name='home' size={20} color={focused? '#007bff' : '#6c757d'}/>  , }} />} */}
             {menusDisponiveis && getScrens("ListarEstados", ListarEstadosStackNavigator, 'Lista de Estados', 'globe')}
             {/* {menusDisponiveis && <Drawer.Screen name="ListarFormasPagamento" component={ListarFormasPagamentoStackNavigator} options={{ headerShown: true, title: 'Lista de Formas de Pagamento',drawerIcon: (focused)=><Icon name='home' size={20} color={focused? '#007bff' : '#6c757d'}/>  , }} />} */}
