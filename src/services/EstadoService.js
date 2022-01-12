@@ -3,7 +3,7 @@ import EstadoRepository from '../repository/EstadoRepository';
 import { getTokenLogin } from './UsuarioService';
 const versao = '1';
 
-export const getEstados = async (nome) => {
+export const getEstados = async () => {
     const token = await getTokenLogin();
     try {
         return await api(token)
@@ -40,6 +40,15 @@ export const buscarPorConterNome = async (nome) => {
 export const cadastrar = async (estado) => {
     try {
         return EstadoRepository.insert(estado);
+    } catch (error) {
+        console.log(`Erro no método cadastrar do arquivo EstadoService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+
+export const cadastrarOuAtualizar = async (estado) => {
+    try {
+        return EstadoRepository.insertOrReplace(estado);
     } catch (error) {
         console.log(`Erro no método cadastrar do arquivo EstadoService -> ${new Date()} -> erro: ${error}`);
     }

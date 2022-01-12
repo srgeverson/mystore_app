@@ -4,7 +4,7 @@ import { Alert, SafeAreaView, } from 'react-native';
 import { SearchBar, SpeedDial, Text, ListItem } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { buscarPorConterNome, cadastrar, getCidades } from '../../../../services/CidadeService';
+import { buscarPorConterNome, cadastrarOuAtualizar, getCidades } from '../../../../services/CidadeService';
 import ModalCarregando from '../../../components/ModalCarregando';
 
 const Listar = () => {
@@ -29,7 +29,7 @@ const Listar = () => {
                 setCidades(retorno._embedded.cidades);
                 for (let index = 0; index < retorno._embedded.cidades.length; index++) {
                     const element = retorno._embedded.cidades[index];
-                    //await cadastrar({id: element.id, nome: element.nome, estados_id: element.estado.id});
+                    await cadastrarOuAtualizar({ id: element.id, nome: element.nome, estados_id: element.estado.id });
                 }
             }
 

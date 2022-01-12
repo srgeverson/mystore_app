@@ -44,3 +44,11 @@ export const cadastrar = async (cidade) => {
         console.log(`Erro no método cadastrar do arquivo CidadesService -> ${new Date()} -> erro: ${error}`);
     }
 }
+
+export const cadastrarOuAtualizar = async (cidade) => {
+    try {
+        return CidadeRepository.insertOrReplace(cidade);
+    } catch (error) {
+        console.log(`Erro no método cadastrar do arquivo CidadesService -> ${new Date()} -> erro: ${error}`);
+    }
+}
