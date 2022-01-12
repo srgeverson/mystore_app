@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Databese from '../../../../core/database';
 import ModalCarregando from '../../../components/ModalCarregando';
 import { apagarPorId, atualizar, buscarPorConterNome, buscarTodos, cadastrar, teste } from '../../../../services/UsuarioService';
+import { testeURLExterna } from '../../../../core/api';
 
 const Listar = () => {
     const [open, setOpen] = useState(false);
@@ -118,6 +119,14 @@ const Listar = () => {
 
     const [valor, setValor] = useState(null);
 
+    const testeURL = async () => {
+        await testeURLExterna()
+        //.get(`/users/srgeverson`)
+        .get("")
+        .then((success) => { console.console.log("Sucesso!!!"+JSON.stringify(success)); })
+        .catch((error) => { console.log('Erro!!! '+JSON.stringify(error)) })
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, }}>
             <SearchBar
@@ -216,6 +225,14 @@ const Listar = () => {
                     onPress={() => {
                         console.log(`Atualizando...`);
                         atualizarUsuario();
+                    }} />
+                <SpeedDial.Action
+                    color='#007BFF'
+                    icon={<Icon name='adjust' size={20} color='#FFF' />}
+                    title="Teste URL externa"
+                    onPress={() => {
+                        console.log(`Testando URL externa...`);
+                        testeURL();
                     }} />
             </SpeedDial>
             {carregando && <ModalCarregando pagina='Testes' />}
