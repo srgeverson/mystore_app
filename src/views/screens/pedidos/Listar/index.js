@@ -4,47 +4,47 @@ import { Alert, SafeAreaView, } from 'react-native';
 import { SearchBar, SpeedDial, Text, ListItem } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { buscarPorConterNome, cadastrarOuAtualizar, getCidades } from '../../../../services/CidadeService';
+import { buscarPorConterNome, cadastrarOuAtualizar, getPedidos } from '../../../../services/PedidoService';
 import ModalCarregando from '../../../components/ModalCarregando';
 
 const Listar = () => {
 
     const navigation = useNavigation();
 
-    const [nomeCidade, setNomeCidade] = useState(null);
+    const [nomePedido, setNomePedido] = useState(null);
 
     const [open, setOpen] = useState(false);
 
-    const [cidades, setCidades] = useState([]);
+    const [pedidos, setPedidos] = useState([]);
 
     const [carregando, setCarregando] = useState(false);
 
     const [retorno, setRetorno] = useState([]);
 
-    const pesquisarCidadesAPI = async () => {
+    const pesquisarPedidosAPI = async () => {
         try {
             setCarregando(true);
-            var retorno = await getCidades(nomeCidade);
-            if (retorno._embedded.cidades) {
-                setCidades(retorno._embedded.cidades);
-                for (let index = 0; index < retorno._embedded.cidades.length; index++) {
-                    const element = retorno._embedded.cidades[index];
+            var retorno = await getPedidos(nomePedido);
+            if (retorno._embedded.pedidos) {
+                setPedidos(retorno._embedded.pedidos);
+                for (let index = 0; index < retorno._embedded.pedidos.length; index++) {
+                    const element = retorno._embedded.pedidos[index];
                     await cadastrarOuAtualizar({ id: element.id, nome: element.nome, estados_id: element.estado.id });
                 }
             }
 
         } catch (error) {
-            console.log(`Ocorreu erro em /src/viwes/cidades/Listar -> ${new Date()} -> erro: ${error}`);
+            console.log(`Ocorreu erro em /src/viwes/pedidos/Listar -> ${new Date()} -> erro: ${error}`);
         } finally {
             setCarregando(false);
         }
     }
 
     useEffect(() => {
-        pesquisarCidadesAPI();
+        pesquisarPedidosAPI();
     }, [])
 
-    const pesquisarCidades = async (nome) => {
+    const pesquisarPedidos = async (nome) => {
         setCarregando(true);
         try {
             const lista = await buscarPorConterNome(nome);
@@ -55,7 +55,7 @@ const Listar = () => {
             }
             setRetorno(temp);
         } catch (error) {
-            console.log(`Ocorreu no método pesquisarCidades erro em /src/viwes/cidades/Listar -> ${new Date()} -> erro: ${error}`);
+            console.log(`Ocorreu no método pesquisarPedidos erro em /src/viwes/pedidos/Listar -> ${new Date()} -> erro: ${error}`);
         } finally {
             setCarregando(false);
         }
@@ -81,8 +81,8 @@ const Listar = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <SearchBar
                 lightTheme={true}
-                placeholder={`Digite o nome da cidade aqui...`}
-                onChangeText={value => pesquisarCidades(value)}
+                placeholder={`Digite o nome da pedido aqui...`}
+                onChangeText={value => pesquisarPedidos(value)}
                 value={valor} />
             {
                 retorno.length > 0
@@ -107,9 +107,9 @@ const Listar = () => {
                     color='#007BFF'
                     icon={<Icon name='plus' size={20} color='#FFF' />}
                     title="Cadastrar"
-                    onPress={() => navigation.navigate('CadastrarCidade')} />
+                    onPress={() => navigation.navigate('CadastrarPedido')} />
             </SpeedDial>
-            {carregando && <ModalCarregando pagina='Listar cidades' />}
+            {carregando && <ModalCarregando pagina='Listar pedidos' />}
         </SafeAreaView>
     )
 }

@@ -4,47 +4,47 @@ import { Alert, SafeAreaView, } from 'react-native';
 import { SearchBar, SpeedDial, Text, ListItem } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { buscarPorConterNome, cadastrarOuAtualizar, getCidades } from '../../../../services/CidadeService';
+import { buscarPorConterNome, cadastrarOuAtualizar, getCompras } from '../../../../services/CompraService';
 import ModalCarregando from '../../../components/ModalCarregando';
 
 const Listar = () => {
 
     const navigation = useNavigation();
 
-    const [nomeCidade, setNomeCidade] = useState(null);
+    const [nomeCompra, setNomeCompra] = useState(null);
 
     const [open, setOpen] = useState(false);
 
-    const [cidades, setCidades] = useState([]);
+    const [compras, setCompras] = useState([]);
 
     const [carregando, setCarregando] = useState(false);
 
     const [retorno, setRetorno] = useState([]);
 
-    const pesquisarCidadesAPI = async () => {
+    const pesquisarComprasAPI = async () => {
         try {
             setCarregando(true);
-            var retorno = await getCidades(nomeCidade);
-            if (retorno._embedded.cidades) {
-                setCidades(retorno._embedded.cidades);
-                for (let index = 0; index < retorno._embedded.cidades.length; index++) {
-                    const element = retorno._embedded.cidades[index];
+            var retorno = await getCompras(nomeCompra);
+            if (retorno._embedded.compras) {
+                setCompras(retorno._embedded.compras);
+                for (let index = 0; index < retorno._embedded.compras.length; index++) {
+                    const element = retorno._embedded.compras[index];
                     await cadastrarOuAtualizar({ id: element.id, nome: element.nome, estados_id: element.estado.id });
                 }
             }
 
         } catch (error) {
-            console.log(`Ocorreu erro em /src/viwes/cidades/Listar -> ${new Date()} -> erro: ${error}`);
+            console.log(`Ocorreu erro em /src/viwes/compras/Listar -> ${new Date()} -> erro: ${error}`);
         } finally {
             setCarregando(false);
         }
     }
 
     useEffect(() => {
-        pesquisarCidadesAPI();
+        pesquisarComprasAPI();
     }, [])
 
-    const pesquisarCidades = async (nome) => {
+    const pesquisarCompras = async (nome) => {
         setCarregando(true);
         try {
             const lista = await buscarPorConterNome(nome);
@@ -55,7 +55,7 @@ const Listar = () => {
             }
             setRetorno(temp);
         } catch (error) {
-            console.log(`Ocorreu no método pesquisarCidades erro em /src/viwes/cidades/Listar -> ${new Date()} -> erro: ${error}`);
+            console.log(`Ocorreu no método pesquisarCompras erro em /src/viwes/compras/Listar -> ${new Date()} -> erro: ${error}`);
         } finally {
             setCarregando(false);
         }
@@ -82,7 +82,7 @@ const Listar = () => {
             <SearchBar
                 lightTheme={true}
                 placeholder={`Digite o nome da cidade aqui...`}
-                onChangeText={value => pesquisarCidades(value)}
+                onChangeText={value => pesquisarCompras(value)}
                 value={valor} />
             {
                 retorno.length > 0
@@ -107,9 +107,9 @@ const Listar = () => {
                     color='#007BFF'
                     icon={<Icon name='plus' size={20} color='#FFF' />}
                     title="Cadastrar"
-                    onPress={() => navigation.navigate('CadastrarCidade')} />
+                    onPress={() => navigation.navigate('CadastrarCompra')} />
             </SpeedDial>
-            {carregando && <ModalCarregando pagina='Listar cidades' />}
+            {carregando && <ModalCarregando pagina='Listar compras' />}
         </SafeAreaView>
     )
 }
