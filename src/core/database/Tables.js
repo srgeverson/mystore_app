@@ -18,6 +18,25 @@ export const Tables = {
             default_value: null,
         },
     },
+    clientes: {
+        id: {
+            type: Types.INTEGER,
+            primary_key: true,
+            default_value: null,
+        },
+        nome: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+    }, 
+    compras: {
+        id: {
+            type: Types.INTEGER,
+            primary_key: true,
+            default_value: null,
+        },
+    },
     estados: {
         id: {
             type: Types.INTEGER,
@@ -27,6 +46,13 @@ export const Tables = {
         nome: {
             type: Types.TEXT,
             primary_key: false,
+            default_value: null,
+        },
+    },
+    pedidos: {
+        id: {
+            type: Types.INTEGER,
+            primary_key: true,
             default_value: null,
         },
     },

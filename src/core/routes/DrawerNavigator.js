@@ -1,13 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
-import theme from '../../assets/styles/theme';
+// import theme from '../../assets/styles/theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { BemVindoStackNavigator, Teste, ListarCidadesStackNavigator, ListarEstadosStackNavigator, ListarPermissoesStackNavigator, ListarUsuariosStackNavigator, CadastrarCidadeStackNavigator } from './StackNavigator';
 import { AuthorityContext } from '../contexts';
 import { rootEntryPoint } from '../../services/UsuarioService';
 import HeaderLeft from '../../views/components/HeaderLeft';
 import ModalCarregando from '../../views/components/ModalCarregando';
 import HeaderRight from '../../views/components/HeaderRight';
+import {
+    BemVindoStackNavigator,
+    Teste,
+    ListarCidadesStackNavigator,
+    ListarEstadosStackNavigator,
+    ListarPermissoesStackNavigator,
+    ListarUsuariosStackNavigator,
+    ListarClientesStackNavigator,
+    ListarComprasStackNavigator,
+    ListarPedidosStackNavigator,
+    ListarResultadosStackNavigator,
+} from './StackNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -18,7 +29,7 @@ const DrawerCustom = (props) => {
     return (
         <DrawerContentScrollView {...props}>
             <DrawerItemList {...props} />
-            <DrawerItem label="Fechar" onPress={() => props.navigation.closeDrawer()} icon={() => <Icon name='close' size={20} color='#007bff' />} />
+            {/* <DrawerItem label="Fechar" onPress={() => props.navigation.closeDrawer()} icon={() => <Icon name='close' size={20} color='#007bff' />} /> */}
             <DrawerItem label="Sair" onPress={() => signOut()} icon={() => <Icon name='sign-out' size={20} color='#007bff' />} />
         </DrawerContentScrollView>
     );
@@ -75,21 +86,22 @@ const DrawerNavigator = () => {
         getEndpoints();
     }, []);
 
-    return (<>
-        <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />}>
-            {true && getScrens('Teste', Teste, 'Teste do APP', 'code')}
-            {true && getScrens('BemVindo', BemVindoStackNavigator, 'Página Inicial', 'home')}
-            {menusDisponiveis && getScrens("ListarCidades", ListarCidadesStackNavigator, 'Lista de Cidades', 'building')}
-            {menusDisponiveis && getScrens("CadastrarCidade", CadastrarCidadeStackNavigator, 'Cadastro de Cidades', 'building')}
-            {/* {menusDisponiveis && <Drawer.Screen name="ListarEmpresas" component={ListarEmpresasStackNavigator} options={{ headerShown: true, title: 'Lista de Empresas',drawerIcon: (focused)=><Icon name='home' size={20} color={focused? '#007bff' : '#6c757d'}/>  , }} />} */}
-            {menusDisponiveis && getScrens("ListarEstados", ListarEstadosStackNavigator, 'Lista de Estados', 'globe')}
-            {/* {menusDisponiveis && <Drawer.Screen name="ListarFormasPagamento" component={ListarFormasPagamentoStackNavigator} options={{ headerShown: true, title: 'Lista de Formas de Pagamento',drawerIcon: (focused)=><Icon name='home' size={20} color={focused? '#007bff' : '#6c757d'}/>  , }} />} */}
-            {/* {menusDisponiveis && <Drawer.Screen name="ListarGrupos" component={ListarGruposStackNavigator} options={{ headerShown: true, title: 'Lista de Grupos',drawerIcon: (focused)=><Icon name='sign-out' size={20} color={focused? '#007bff' : '#6c757d'}/>  , }} />} */}
-            {menusDisponiveis && getScrens("ListarPermissoes", ListarPermissoesStackNavigator, 'Lista de Permissões', 'unlock-alt')}
-            {menusDisponiveis && getScrens("ListarUsuarios", ListarUsuariosStackNavigator, 'Lista de Usuarios', 'users')}
-        </Drawer.Navigator>
-        {carregando && <ModalCarregando pagina='Configurando permissões' />}
-    </>
+    return (
+        <>
+            <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />}>
+                {true && getScrens('BemVindo', BemVindoStackNavigator, 'Página Inicial', 'home')}
+                {true && getScrens('Teste', Teste, 'Teste do APP', 'code')}
+                {menusDisponiveis && getScrens("ListarCidades", ListarCidadesStackNavigator, 'Cidades', 'building')}
+                {menusDisponiveis && getScrens("ListarClientes", ListarClientesStackNavigator, 'Clientes', 'address-card')}
+                {menusDisponiveis && getScrens("ListarCompras", ListarComprasStackNavigator, 'Compras', 'shopping-cart')}
+                {menusDisponiveis && getScrens("ListarEstados", ListarEstadosStackNavigator, 'Estados', 'globe')}
+                {menusDisponiveis && getScrens("ListarPedidos", ListarPedidosStackNavigator, 'Pedidos', 'cart-plus')}
+                {menusDisponiveis && getScrens("ListarPermissoes", ListarPermissoesStackNavigator, 'Permissões', 'unlock-alt')}
+                {menusDisponiveis && getScrens("ListarResultados", ListarResultadosStackNavigator, 'Resultados', 'bar-chart')}
+                {menusDisponiveis && getScrens("ListarUsuarios", ListarUsuariosStackNavigator, 'Usuarios', 'users')}
+            </Drawer.Navigator>
+            {carregando && <ModalCarregando pagina='Configurando permissões' />}
+        </>
     );
 };
 
