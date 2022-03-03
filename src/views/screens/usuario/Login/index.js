@@ -9,7 +9,6 @@ import BotaoEntrar from '../../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../../core/contexts';
 import { authorizationServerLogin } from '../../../../core/api';
 import { salvarTokenLogin, getTokenLogin } from '../../../../services/UsuarioService';
-import Database from '../../../../core/database';
 
 const Login = () => {
 
@@ -20,13 +19,10 @@ const Login = () => {
     const [carregando, setCarregando] = useState(false);
     const [token, setToken] = useState(null);
 
-    const { signIn, signOut } = useContext(AuthorityContext);
+    const { signIn } = useContext(AuthorityContext);
 
     const recuperaTokenSalvo = async () => {
         setCarregando(true);
-        //Provisório
-        //console.log(`Inicializando...`);
-        //await Database.initDB();
         const tokenSalvo = await getTokenLogin();
         setToken(tokenSalvo);
         setCarregando(false);
@@ -51,8 +47,6 @@ const Login = () => {
             }
             //Quando dá erro de comunicação com o servidor e não existe token salvo
             else if (retornoAutenticacao.codigo == 503 && !token) {
-                console.log(token);
-                console.log(retornoAutenticacao.codigo )
                 Alert.alert("Atênção", "Falha ao conectar com o servidor ou este é seu primeiro acesso!");
             }
             //Quando retornar o token
