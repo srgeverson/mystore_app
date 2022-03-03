@@ -46,9 +46,6 @@ export const cadastrar = async (usuario) => {
 export const getTokenLogin = async () => {
     try {
         const usuarioAutenticadoAnteriormente = await UsuarioRepository.selectByTokenExpireData();
-
-        console.log(JSON.stringify(usuarioAutenticadoAnteriormente.rows.item(0).data));
-
         const token = usuarioAutenticadoAnteriormente.rows.item(0).accessToken;
         const expires = usuarioAutenticadoAnteriormente.rows.item(0).expiresIn;
         const expiresMilisegundos = Math.round((//Usando esta função para arredondar os valores em caso utilise uma divisão
@@ -97,9 +94,9 @@ export const recuperarSenha = async (uri) => {
     }
 }
 
-export const limparTokenLogin = async () => {
+export const limparDataAcesso = async () => {
     try {
-        await UsuarioRepository.deleteAll();
+        await UsuarioRepository.updateAllData();
     } catch (error) {
         console.log(`Erro no método getTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }

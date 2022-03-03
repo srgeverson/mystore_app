@@ -37,7 +37,7 @@ class UsuarioRepository {
                 });
         });
     }
-    
+
     insertOrReplace(usuario) {
         return new Promise((resolve, reject) => {
             Database.insert('INSERT OR REPLACE INTO usuarios (accessToken, data, expiresIn, id, jti, nome, tokenType, scope) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
@@ -84,9 +84,9 @@ class UsuarioRepository {
         });
     }
 
-    selectByTokenExpireData(){
+    selectByTokenExpireData() {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM usuarios WHERE (accessToken IS NOT NULL AND expiresIn IS NOT NULL AND data IS NOT NULL);`, [])
+            Database.select(`SELECT * FROM usuarios WHERE (accessToken IS NOT NULL AND expiresIn IS NOT NULL);`, [])
                 .then((success) => {
                     resolve(success);
                 })
@@ -99,6 +99,18 @@ class UsuarioRepository {
     updateAllById(usuario) {
         return new Promise((resolve, reject) => {
             Database.update(`UPDATE usuarios SET nome = ? WHERE (id = ?);`, [usuario.nome, usuario.id])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    updateAllData() {
+        return new Promise((resolve, reject) => {
+            Database.update(`UPDATE usuarios SET data = NULL;`, [])
                 .then((success) => {
                     resolve(success);
                 })
