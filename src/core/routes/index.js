@@ -8,6 +8,8 @@ import Login from '../../views/screens/usuario/Login';
 import PrimeiroAcesso from '../../views/screens/usuario/PrimeiroAcesso';
 import RecuperarSenha from '../../views/screens/usuario/RecuperarSenha';
 
+import ResultadosClientes from '../../views/screens/resultados/Clientes';
+
 const Stack = createStackNavigator();
 
 const Routes = () => {
@@ -53,7 +55,9 @@ const Routes = () => {
             <NavigationContainer>
                 {
                     token ? (
+                        <>
                         <DrawerNavigator />
+                        </>
                     ) : (
                         <Stack.Navigator>
                             <Stack.Screen name="Login" component={Login} options={{ headerShown: false, }} />

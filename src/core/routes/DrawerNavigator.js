@@ -2,25 +2,28 @@ import React, { useContext, useEffect, useState } from 'react';
 // import theme from '../../assets/styles/theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 import { AuthorityContext } from '../contexts';
 import { rootEntryPoint } from '../../services/UsuarioService';
 import HeaderLeft from '../../views/components/HeaderLeft';
 import ModalCarregando from '../../views/components/ModalCarregando';
 import HeaderRight from '../../views/components/HeaderRight';
+import BemVindo from '../../views/screens/mystore/BemVindo';
+import ListarClientes from '../../views/screens/clientes/Listar';
+import ListarCompras from '../../views/screens/compras/Listar';
+import ListarVendas from '../../views/screens/vendas/Listar';
 import {
-    BemVindoStackNavigator,
-    Teste,
-    ListarCidadesStackNavigator,
-    ListarEstadosStackNavigator,
-    ListarPermissoesStackNavigator,
-    ListarUsuariosStackNavigator,
-    ListarClientesStackNavigator,
-    ListarComprasStackNavigator,
-    ListarPedidosStackNavigator,
-    ListarResultadosStackNavigator,
+    // Teste,
+    ResultadosStackNavigator,
 } from './StackNavigator';
 
 const Drawer = createDrawerNavigator();
+//Testando stack com drawer
+const Stack = createStackNavigator();
+
+const screenOptionStyle = {
+    headerBackTitle: "Voltar",
+}
 
 const DrawerCustom = (props) => {
 
@@ -89,16 +92,12 @@ const DrawerNavigator = () => {
     return (
         <>
             <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />}>
-                {true && getScrens('BemVindo', BemVindoStackNavigator, 'Página Inicial', 'home')}
-                {true && getScrens('Teste', Teste, 'Teste do APP', 'code')}
-                {menusDisponiveis && getScrens("ListarCidades", ListarCidadesStackNavigator, 'Cidades', 'building')}
-                {menusDisponiveis && getScrens("ListarClientes", ListarClientesStackNavigator, 'Clientes', 'address-card')}
-                {menusDisponiveis && getScrens("ListarCompras", ListarComprasStackNavigator, 'Compras', 'shopping-cart')}
-                {menusDisponiveis && getScrens("ListarEstados", ListarEstadosStackNavigator, 'Estados', 'globe')}
-                {menusDisponiveis && getScrens("ListarPedidos", ListarPedidosStackNavigator, 'Pedidos', 'cart-plus')}
-                {menusDisponiveis && getScrens("ListarPermissoes", ListarPermissoesStackNavigator, 'Permissões', 'unlock-alt')}
-                {menusDisponiveis && getScrens("ListarResultados", ListarResultadosStackNavigator, 'Resultados', 'bar-chart')}
-                {menusDisponiveis && getScrens("ListarUsuarios", ListarUsuariosStackNavigator, 'Usuarios', 'users')}
+                {true && getScrens('BemVindo', BemVindo, 'Página Inicial', 'home')}
+                {/* {true && getScrens('Teste', Teste, 'Teste do APP', 'code')} */}
+                {true && getScrens("ListarClientes", ListarClientes, 'Clientes', 'address-card')}
+                {true && getScrens("ListarCompras", ListarCompras, 'Compras', 'shopping-cart')}
+                {true && getScrens("ListarVendas", ListarVendas, 'Vendas', 'cart-plus')}
+                {true && getScrens("Resultados", ResultadosStackNavigator, 'Resultados', 'bar-chart')}
             </Drawer.Navigator>
             {carregando && <ModalCarregando pagina='Configurando permissões' />}
         </>

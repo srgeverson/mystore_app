@@ -9,6 +9,7 @@ import {buscaTodosDados} from './src/core/synchronize';
 import Database from './src/core/database';
 
 AppRegistry.registerComponent(appName, () => {
+    //Database.dropDatabase();
     Database.initDB();
     buscaTodosDados();
     return App

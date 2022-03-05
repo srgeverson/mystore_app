@@ -22,6 +22,7 @@ const Login = () => {
     const { signIn } = useContext(AuthorityContext);
 
     const recuperaTokenSalvo = async () => {
+        console.log('Função recuperaTokenSalvo...');
         setCarregando(true);
         const tokenSalvo = await getTokenLogin();
         setToken(tokenSalvo);
@@ -33,6 +34,7 @@ const Login = () => {
     }, [])
 
     const entrar = async () => {
+        console.log('Botão entrar...');
         try {
             setCarregando(true);
             var retornoAutenticacao = null;

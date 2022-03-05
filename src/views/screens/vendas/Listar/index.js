@@ -4,47 +4,47 @@ import { Alert, SafeAreaView, } from 'react-native';
 import { SearchBar, SpeedDial, Text, ListItem } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { buscarPorConterNome, cadastrarOuAtualizar, getResultados } from '../../../../services/ResultadoService';
+import { buscarPorConterNome, cadastrarOuAtualizar, getVendas } from '../../../../services/VendaService';
 import ModalCarregando from '../../../components/ModalCarregando';
 
 const Listar = () => {
 
     const navigation = useNavigation();
 
-    const [nomeResultado, setNomeResultado] = useState(null);
+    const [nomeVenda, setNomeVenda] = useState(null);
 
     const [open, setOpen] = useState(false);
 
-    const [resultados, setResultados] = useState([]);
+    const [pedidos, setVendas] = useState([]);
 
     const [carregando, setCarregando] = useState(false);
 
     const [retorno, setRetorno] = useState([]);
 
-    const pesquisarResultadosAPI = async () => {
+    const pesquisarVendasAPI = async () => {
         try {
             setCarregando(true);
-            var retorno = await getResultados(nomeResultado);
-            if (retorno._embedded.resultados) {
-                setResultados(retorno._embedded.resultados);
-                for (let index = 0; index < retorno._embedded.resultados.length; index++) {
-                    const element = retorno._embedded.resultados[index];
+            var retorno = await getVendas(nomeVenda);
+            if (retorno._embedded.pedidos) {
+                setVendas(retorno._embedded.pedidos);
+                for (let index = 0; index < retorno._embedded.pedidos.length; index++) {
+                    const element = retorno._embedded.pedidos[index];
                     await cadastrarOuAtualizar({ id: element.id, nome: element.nome, estados_id: element.estado.id });
                 }
             }
 
         } catch (error) {
-            console.log(`Ocorreu erro em /src/viwes/resultados/Listar -> ${new Date()} -> erro: ${error}`);
+            console.log(`Ocorreu erro em /src/viwes/pedidos/Listar -> ${new Date()} -> erro: ${error}`);
         } finally {
             setCarregando(false);
         }
     }
 
     useEffect(() => {
-        pesquisarResultadosAPI();
+        pesquisarVendasAPI();
     }, [])
 
-    const pesquisarResultados = async (nome) => {
+    const pesquisarVendas = async (nome) => {
         setCarregando(true);
         try {
             const lista = await buscarPorConterNome(nome);
@@ -55,7 +55,7 @@ const Listar = () => {
             }
             setRetorno(temp);
         } catch (error) {
-            console.log(`Ocorreu no método pesquisarResultados erro em /src/viwes/resultados/Listar -> ${new Date()} -> erro: ${error}`);
+            console.log(`Ocorreu no método pesquisarVendas erro em /src/viwes/pedidos/Listar -> ${new Date()} -> erro: ${error}`);
         } finally {
             setCarregando(false);
         }
@@ -81,8 +81,8 @@ const Listar = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <SearchBar
                 lightTheme={true}
-                placeholder={`Digite o nome da resultado aqui...`}
-                onChangeText={value => pesquisarResultados(value)}
+                placeholder={`Digite o nome da pedido aqui...`}
+                onChangeText={value => pesquisarVendas(value)}
                 value={valor} />
             {
                 retorno.length > 0
@@ -107,9 +107,9 @@ const Listar = () => {
                     color='#007BFF'
                     icon={<Icon name='plus' size={20} color='#FFF' />}
                     title="Cadastrar"
-                    onPress={() => navigation.navigate('CadastrarResultado')} />
+                    onPress={() => navigation.navigate('CadastrarVenda')} />
             </SpeedDial>
-            {carregando && <ModalCarregando pagina='Listar resultados' />}
+            {carregando && <ModalCarregando pagina='Listar pedidos' />}
         </SafeAreaView>
     )
 }
