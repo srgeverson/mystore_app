@@ -8,8 +8,6 @@ import Login from '../../views/screens/usuario/Login';
 import PrimeiroAcesso from '../../views/screens/usuario/PrimeiroAcesso';
 import RecuperarSenha from '../../views/screens/usuario/RecuperarSenha';
 
-import ResultadosClientes from '../../views/screens/resultados/Clientes';
-
 const Stack = createStackNavigator();
 
 const Routes = () => {

@@ -1,10 +1,9 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { SafeAreaView, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const list1 = [
+const opcoesDeResultados = [
     {
         title: 'Clientes',
         icon: 'address-card',
@@ -16,15 +15,18 @@ const list1 = [
         route: 'ResultadosCompras'
     },
     {
+        title: 'Produtos',
+        icon: 'list',
+        route: 'ResultadosProdutos'
+    },
+    {
         title: 'Vendas',
         icon: 'cart-plus',
         route: 'ResultadosVendas'
     },
 ];
 
-const Resultatos = () => {
-
-    const navigation = useNavigation();
+const Resultatos = ({ navigation }) => {
 
     const keyExtractor = (item, index) => index.toString();
 
@@ -45,7 +47,7 @@ const Resultatos = () => {
             <SafeAreaView style={{ flex: 1 }}>
                 <FlatList
                     keyExtractor={keyExtractor}
-                    data={list1}
+                    data={opcoesDeResultados}
                     renderItem={renderItem}
                 />
             </SafeAreaView>

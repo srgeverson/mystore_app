@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 // import theme from '../../assets/styles/theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
 import { AuthorityContext } from '../contexts';
 import { rootEntryPoint } from '../../services/UsuarioService';
 import HeaderLeft from '../../views/components/HeaderLeft';
@@ -12,18 +11,9 @@ import BemVindo from '../../views/screens/mystore/BemVindo';
 import ListarClientes from '../../views/screens/clientes/Listar';
 import ListarCompras from '../../views/screens/compras/Listar';
 import ListarVendas from '../../views/screens/vendas/Listar';
-import {
-    // Teste,
-    ResultadosStackNavigator,
-} from './StackNavigator';
+import { ResultadosStackNavigator } from './StackNavigator';
 
 const Drawer = createDrawerNavigator();
-//Testando stack com drawer
-const Stack = createStackNavigator();
-
-const screenOptionStyle = {
-    headerBackTitle: "Voltar",
-}
 
 const DrawerCustom = (props) => {
 
@@ -72,10 +62,10 @@ const DrawerNavigator = () => {
         }
     }
 
-    const getScrens = (name, component, title, icone) => {
+    const getScrens = (name, component, title, icone, headerShown = true) => {
         return (
             <Drawer.Screen name={name} component={component} options={{
-                headerShown: true, title: title, drawerIcon: (focused) => getIcones(icone, null, focused),
+                headerShown: headerShown, title: title, drawerIcon: (focused) => getIcones(icone, null, focused),
                 headerTitleAlign: 'center',
                 headerTitleStyle: { color: '#FFF' },
                 headerLeft: () => <HeaderLeft />,
@@ -91,13 +81,12 @@ const DrawerNavigator = () => {
 
     return (
         <>
-            <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />}>
+            <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />} initialRouteName='Resultados'>
                 {true && getScrens('BemVindo', BemVindo, 'Página Inicial', 'home')}
-                {/* {true && getScrens('Teste', Teste, 'Teste do APP', 'code')} */}
                 {true && getScrens("ListarClientes", ListarClientes, 'Clientes', 'address-card')}
                 {true && getScrens("ListarCompras", ListarCompras, 'Compras', 'shopping-cart')}
                 {true && getScrens("ListarVendas", ListarVendas, 'Vendas', 'cart-plus')}
-                {true && getScrens("Resultados", ResultadosStackNavigator, 'Resultados', 'bar-chart')}
+                {true && getScrens("Resultados", ResultadosStackNavigator, 'Resultados', 'bar-chart', false)}
             </Drawer.Navigator>
             {carregando && <ModalCarregando pagina='Configurando permissões' />}
         </>
