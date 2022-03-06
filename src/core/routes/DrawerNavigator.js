@@ -81,7 +81,7 @@ const DrawerNavigator = () => {
 
     return (
         <>
-            <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />} initialRouteName='Resultados'>
+            <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />} initialRouteName='BemVindo'>
                 {true && getScrens('BemVindo', BemVindo, 'Página Inicial', 'home')}
                 {true && getScrens("ListarClientes", ListarClientes, 'Clientes', 'address-card')}
                 {true && getScrens("ListarCompras", ListarCompras, 'Compras', 'shopping-cart')}
