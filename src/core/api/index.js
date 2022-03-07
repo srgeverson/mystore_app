@@ -84,7 +84,7 @@ const authorizationServerRecuperarSenha = async () => {
     }
 }
 
-const refreshToken = async ({ refreshToken }) => {
+const refreshToken = async (refreshToken) => {
     try {
         return await axios.create({
             baseURL: Config.MY_URL,

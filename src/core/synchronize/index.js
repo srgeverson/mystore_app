@@ -1,4 +1,4 @@
-import { buscarRefreshToken } from '../../services/UsuarioService';
+import { buscarEAtualizarRefreshToken } from '../../services/UsuarioService';
 
 export const atualizandoDadosLocais = () => {
     setInterval(() => {
@@ -8,11 +8,12 @@ export const atualizandoDadosLocais = () => {
 }
 
 export const atualizandoToken = async (expiresIn) => {
-    const usuario =  await buscarRefreshToken();
-    setInterval(() => {
-        console.log(`Atualizando token -> ${new Date()}...`);
-        console.log(usuario);
-    }, expiresIn);
+    
+    if (expiresIn) {
+        setInterval(() => {
+            buscarEAtualizarRefreshToken();
+        }, expiresIn * 1000);
+    }
 }
 
 export const buscaTodosDados = () => {

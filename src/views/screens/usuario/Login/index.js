@@ -9,6 +9,7 @@ import BotaoEntrar from '../../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../../core/contexts';
 import { authorizationServerLogin } from '../../../../core/api';
 import { salvarTokenLogin, getTokenLogin } from '../../../../services/UsuarioService';
+import {atualizandoToken} from '../../../../core/synchronize';
 
 const Login = () => {
 
@@ -60,8 +61,11 @@ const Login = () => {
                     retornoAutenticacao.token_type,
                     retornoAutenticacao.scope,
                     retornoAutenticacao.nome_completo,
-                    retornoAutenticacao.jti
+                    retornoAutenticacao.jti,
+                    retornoAutenticacao.refresh_token
                     );
+                   //console.log(retornoAutenticacao.refresh_token);
+                //atualizandoToken(retornoAutenticacao.expires_in);
                 signIn();
             } else {
                 Alert.alert("Dados inválidos", "Preencha corretamente e tente novamente!");
