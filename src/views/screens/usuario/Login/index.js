@@ -9,7 +9,7 @@ import BotaoEntrar from '../../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../../core/contexts';
 import { authorizationServerLogin } from '../../../../core/api';
 import { salvarTokenLogin, getTokenLogin } from '../../../../services/UsuarioService';
-import {atualizandoToken} from '../../../../core/synchronize';
+import { atualizandoToken } from '../../../../core/synchronize';
 
 const Login = () => {
 
@@ -56,16 +56,15 @@ const Login = () => {
             else if (retornoAutenticacao.access_token) {
                 await salvarTokenLogin(
                     retornoAutenticacao.usuarios_id,
-                    retornoAutenticacao.access_token, 
+                    retornoAutenticacao.access_token,
                     retornoAutenticacao.expires_in,
                     retornoAutenticacao.token_type,
                     retornoAutenticacao.scope,
                     retornoAutenticacao.nome_completo,
                     retornoAutenticacao.jti,
                     retornoAutenticacao.refresh_token
-                    );
-                   //console.log(retornoAutenticacao.refresh_token);
-                //atualizandoToken(retornoAutenticacao.expires_in);
+                );
+                atualizandoToken(retornoAutenticacao.expires_in);
                 signIn();
             } else {
                 Alert.alert("Dados inválidos", "Preencha corretamente e tente novamente!");

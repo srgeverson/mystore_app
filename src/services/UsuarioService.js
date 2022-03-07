@@ -21,11 +21,7 @@ export const atualizarPorId = async (id) => {
 
 export const atualizarRefreshToken = async ({ id, token }) => {
     try {
-
         const usuario = await refreshToken(token);
-
-        console.log(usuario);
-
         return UsuarioRepository.updateTokenAndRefreshTokenById({ id: usuario.usuarios_id, accessToken: usuario.refresh_token, refreshToken: usuario.refresh_token });
     } catch (error) {
         console.log(`Erro no método atualizarRefreshToken do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
@@ -37,9 +33,6 @@ export const buscarEAtualizarRefreshToken = async () => {
         const usuario = await buscarRefreshToken();
         if (usuario.rows.item(0)) {
             console.log(`Atualizando token -> ${new Date()}...`);
-            console.log(`início Token atual-> ${new Date()}....................................................................`);
-            console.log(usuario.rows.item(0).refreshToken);
-            console.log(`fim Token atual-> ${new Date()}....................................................................`);
             await atualizarRefreshToken({ id: usuario.rows.item(0).id, token: usuario.rows.item(0).refreshToken });
         }
     } catch (error) {
