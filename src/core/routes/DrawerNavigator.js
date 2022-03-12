@@ -7,18 +7,11 @@ import { rootEntryPoint } from '../../services/UsuarioService';
 import HeaderLeft from '../../views/components/HeaderLeft';
 import ModalCarregando from '../../views/components/ModalCarregando';
 import HeaderRight from '../../views/components/HeaderRight';
-import {
-    BemVindoStackNavigator,
-    Teste,
-    ListarCidadesStackNavigator,
-    ListarEstadosStackNavigator,
-    ListarPermissoesStackNavigator,
-    ListarUsuariosStackNavigator,
-    ListarClientesStackNavigator,
-    ListarComprasStackNavigator,
-    ListarPedidosStackNavigator,
-    ListarResultadosStackNavigator,
-} from './StackNavigator';
+import BemVindo from '../../views/screens/mystore/BemVindo';
+import ListarClientes from '../../views/screens/clientes/Listar';
+import ListarCompras from '../../views/screens/compras/Listar';
+import ListarVendas from '../../views/screens/vendas/Listar';
+import { ResultadosStackNavigator } from './StackNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -69,10 +62,10 @@ const DrawerNavigator = () => {
         }
     }
 
-    const getScrens = (name, component, title, icone) => {
+    const getScrens = (name, component, title, icone, headerShown = true) => {
         return (
             <Drawer.Screen name={name} component={component} options={{
-                headerShown: true, title: title, drawerIcon: (focused) => getIcones(icone, null, focused),
+                headerShown: headerShown, title: title, drawerIcon: (focused) => getIcones(icone, null, focused),
                 headerTitleAlign: 'center',
                 headerTitleStyle: { color: '#FFF' },
                 headerLeft: () => <HeaderLeft />,
@@ -88,17 +81,12 @@ const DrawerNavigator = () => {
 
     return (
         <>
-            <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />}>
-                {true && getScrens('BemVindo', BemVindoStackNavigator, 'Página Inicial', 'home')}
-                {true && getScrens('Teste', Teste, 'Teste do APP', 'code')}
-                {menusDisponiveis && getScrens("ListarCidades", ListarCidadesStackNavigator, 'Cidades', 'building')}
-                {menusDisponiveis && getScrens("ListarClientes", ListarClientesStackNavigator, 'Clientes', 'address-card')}
-                {menusDisponiveis && getScrens("ListarCompras", ListarComprasStackNavigator, 'Compras', 'shopping-cart')}
-                {menusDisponiveis && getScrens("ListarEstados", ListarEstadosStackNavigator, 'Estados', 'globe')}
-                {menusDisponiveis && getScrens("ListarPedidos", ListarPedidosStackNavigator, 'Pedidos', 'cart-plus')}
-                {menusDisponiveis && getScrens("ListarPermissoes", ListarPermissoesStackNavigator, 'Permissões', 'unlock-alt')}
-                {menusDisponiveis && getScrens("ListarResultados", ListarResultadosStackNavigator, 'Resultados', 'bar-chart')}
-                {menusDisponiveis && getScrens("ListarUsuarios", ListarUsuariosStackNavigator, 'Usuarios', 'users')}
+            <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />} initialRouteName='BemVindo'>
+                {true && getScrens('BemVindo', BemVindo, 'Página Inicial', 'home')}
+                {true && getScrens("ListarClientes", ListarClientes, 'Clientes', 'address-card')}
+                {true && getScrens("ListarCompras", ListarCompras, 'Compras', 'shopping-cart')}
+                {true && getScrens("ListarVendas", ListarVendas, 'Vendas', 'cart-plus')}
+                {true && getScrens("Resultados", ResultadosStackNavigator, 'Resultados', 'bar-chart', false)}
             </Drawer.Navigator>
             {carregando && <ModalCarregando pagina='Configurando permissões' />}
         </>

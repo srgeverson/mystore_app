@@ -5,6 +5,7 @@ const logoWidth = 200;
 
 export const theme = {
     colors: {
+        principal:'#0B89D4',
         default1: '#59BFFF',
         default2: '#1B8BD1',
         primary: '#007bff',

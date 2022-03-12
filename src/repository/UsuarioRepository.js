@@ -40,7 +40,7 @@ class UsuarioRepository {
 
     insertOrReplace(usuario) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO usuarios (accessToken, data, expiresIn, id, jti, nome, tokenType, scope) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            Database.insert('INSERT OR REPLACE INTO usuarios (accessToken, data, expiresIn, id, jti, nome, refreshToken, scope, tokenType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 [
                     usuario.accessToken ? usuario.accessToken : null,
                     usuario.data ? JSON.stringify(usuario.data) : null,
@@ -48,8 +48,9 @@ class UsuarioRepository {
                     usuario.id ? usuario.id : 0,
                     usuario.jti ? usuario.jti : null,
                     usuario.nome ? usuario.nome : null,
-                    usuario.tokenType ? usuario.tokenType : null,
+                    usuario.refreshToken ? usuario.refreshToken : null,
                     usuario.scope ? usuario.scope : null,
+                    usuario.tokenType ? usuario.tokenType : null,
                 ])
                 .then((success) => {
                     resolve(success);
@@ -75,6 +76,19 @@ class UsuarioRepository {
     selectLikeByNome(nome) {
         return new Promise((resolve, reject) => {
             Database.select(`SELECT * FROM usuarios WHERE (nome LIKE '%${nome}%');`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    selectByRefreshToken() {
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT * FROM usuarios WHERE (refreshToken IS NOT NULL AND expiresIn IS NOT NULL) LIMIT 1;`, [])
+                //Database.select(`SELECT * FROM usuarios LIMIT 1;`, [])
                 .then((success) => {
                     resolve(success);
                 })
@@ -111,6 +125,18 @@ class UsuarioRepository {
     updateAllData() {
         return new Promise((resolve, reject) => {
             Database.update(`UPDATE usuarios SET data = NULL;`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    updateTokenAndRefreshTokenById(usuario) {
+        return new Promise((resolve, reject) => {
+            Database.update(`UPDATE usuarios SET accessToken = ?, refreshToken = ? WHERE (id = ?);`, [usuario.accessToken, usuario.refreshToken, usuario.id])
                 .then((success) => {
                     resolve(success);
                 })

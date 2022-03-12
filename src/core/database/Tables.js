@@ -108,6 +108,11 @@ export const Tables = {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
+        }, 
+        refreshToken: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
         },
         scope: {
             type: Types.TEXT,
