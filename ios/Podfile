@@ -33,4 +33,3 @@ target 'mystore_app' do
 end
 pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
