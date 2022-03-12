@@ -49,14 +49,8 @@ npm install @react-navigation/drawer
 ### Elementos/Componentes do React Native
 $ npm install react-native-elements
 
-### Biblioteca de icones React Native
+### Biblioteca de icones [Configuração](https://github.com/oblador/react-native-vector-icons)
 $ npm install react-native-vector-icons
-
-### Associando o React Native Icons ao projeto
-$ npx react-native link react-native-vector-icons
-
-### Biblioteca de icones Font Awesome [Configuração](https://github.com/FortAwesome/react-native-fontawesome)
-$ npm install --save @fortawesome/fontawesome-free
 
 ### Cliente http
 $ npm install --save axios
