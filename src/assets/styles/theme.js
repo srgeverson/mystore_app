@@ -5,6 +5,9 @@ const logoWidth = 200;
 
 export const theme = {
     colors: {
+        principal:'#0B89D4',
+        default1: '#59BFFF',
+        default2: '#1B8BD1',
         primary: '#007bff',
         secondary: '#6c757d',
         success: '#28a745',
@@ -13,11 +16,14 @@ export const theme = {
         danger: '#dc3545',
         light: '#f8f9fa',
         dark: '#343a40',
+        colorFocus: '#000',
+        colorUnfocus:'#FF0',
     },
     sizes: {
         icon: 15,
         logoWidth: logoWidth,
-        logoHeight: 150
+        logoHeight: 150,
+        sizeDrawer: 20,
     },
     margins: {
         iconTextLeft: 5,
@@ -25,5 +31,5 @@ export const theme = {
     },
     positions: {
         imageLogoLeft: (Dimensions.get('window').width - logoWidth) / 4
-    }
+    },
 }

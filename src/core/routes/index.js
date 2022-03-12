@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DrawerNavigator from './DrawerNavigator';
 import { AuthorityContext } from '../contexts';
-import { getTokenLogin, limparTokenLogin } from '../../services/UsuarioService';
+import { getTokenLogin, limparDataAcesso } from '../../services/UsuarioService';
 import Login from '../../views/screens/usuario/Login';
 import PrimeiroAcesso from '../../views/screens/usuario/PrimeiroAcesso';
 import RecuperarSenha from '../../views/screens/usuario/RecuperarSenha';
@@ -24,7 +24,7 @@ const Routes = () => {
             },
             signOut: () => {
                 try {
-                    limparTokenLogin();
+                    limparDataAcesso();
                     setToken(null);
                 } catch (error) {
                     console.log(`Erro na função signOut -> ${new Date()} -> erro: ${error}`);
@@ -53,7 +53,9 @@ const Routes = () => {
             <NavigationContainer>
                 {
                     token ? (
+                        <>
                         <DrawerNavigator />
+                        </>
                     ) : (
                         <Stack.Navigator>
                             <Stack.Screen name="Login" component={Login} options={{ headerShown: false, }} />

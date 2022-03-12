@@ -40,7 +40,7 @@ const authorizationServerLogin = async (email, senha) => {
                     erro: error.response.data.error,
                     mensagem: error.response.data.error_description,
                 }
-            }else{
+            } else {
                 return {
                     codigo: 503,
                     erro: error.name,
@@ -57,15 +57,15 @@ const authorizationServerRecuperarSenha = async () => {
     try {
         return await axios.create({
             baseURL: Config.MY_URL,
-            headers: { 
-                'Authorization': `Basic ${encode(`${Config.CLIENT_ID_MANAGER}:${Config.CLIENT_SECRET_MANAGER}`)}`, 
-                'Content-Type': 'application/x-www-form-urlencoded' 
+            headers: {
+                'Authorization': `Basic ${encode(`${Config.CLIENT_ID_MANAGER}:${Config.CLIENT_SECRET_MANAGER}`)}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
         }).post(
             '/oauth/token',
             `grant_type=client_credentials`
         ).then((response) => {
-            console.log(`Token de recuperação de senha gerado com sucesso!${response.data}`);
+            console.log(`Token de recuperação de senha gerado com sucesso!`);
             return response.data;
         }).catch((error) => {
             console.log(`Erro ao gerar token de recuperação de senha!`);
@@ -84,4 +84,46 @@ const authorizationServerRecuperarSenha = async () => {
     }
 }
 
-export { authorizationServerLogin, authorizationServerRecuperarSenha, api };
+const refreshToken = async (refreshToken) => {
+    try {
+        return await axios.create({
+            baseURL: Config.MY_URL,
+            headers: {
+                'Authorization': `Basic ${encode(`${Config.CLIENT_ID_APP}:${Config.CLIENT_SECRET_APP}`)}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+        }).post(
+            '/oauth/token',
+            `refresh_token=${refreshToken}&grant_type=refresh_token`,
+        ).then((response) => {
+            console.log(`Token atualizado com sucesso!`);
+            return response.data;
+        }).catch((error) => {
+            console.log(`Erro ao atualizar token!`);
+            if (error.response) {
+                return {
+                    codigo: error.response.status,
+                    erro: error.response.data.error,
+                    mensagem: error.response.data.error_description,
+                }
+            } else {
+                throw error;
+            }
+        });
+    } catch (error) {
+        console.log(`Erro ao atualizar token -> ${new Date()} -> erro: ${error.response}`);
+    }
+}
+
+const testeURLExterna = () => {
+    try {
+        console.log(Config.TEST_URL_INTERNET)
+        return axios.create({
+            baseURL: Config.TEST_URL_INTERNET
+        });
+    } catch (error) {
+        console.log(`Erro ao conectar na URL externa -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export { api, authorizationServerLogin, authorizationServerRecuperarSenha, refreshToken, testeURLExterna };

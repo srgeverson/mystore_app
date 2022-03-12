@@ -1,8 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
+// import theme from '../../assets/styles/theme';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { BemVindoStackNavigator, ListarCidadesStackNavigator, ListarEstadosStackNavigator, ListarPermissoesStackNavigator, ListarUsuariosStackNavigator } from './StackNavigator';
 import { AuthorityContext } from '../contexts';
 import { rootEntryPoint } from '../../services/UsuarioService';
+import HeaderLeft from '../../views/components/HeaderLeft';
+import ModalCarregando from '../../views/components/ModalCarregando';
+import HeaderRight from '../../views/components/HeaderRight';
+import BemVindo from '../../views/screens/mystore/BemVindo';
+import ListarClientes from '../../views/screens/clientes/Listar';
+import ListarCompras from '../../views/screens/compras/Listar';
+import ListarVendas from '../../views/screens/vendas/Listar';
+import { ResultadosStackNavigator } from './StackNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -13,18 +22,57 @@ const DrawerCustom = (props) => {
     return (
         <DrawerContentScrollView {...props}>
             <DrawerItemList {...props} />
-            <DrawerItem label="Sair" onPress={() => signOut()} />
+            {/* <DrawerItem label="Fechar" onPress={() => props.navigation.closeDrawer()} icon={() => <Icon name='close' size={20} color='#007bff' />} /> */}
+            <DrawerItem label="Sair" onPress={() => signOut()} icon={() => <Icon name='sign-out' size={20} color='#007bff' />} />
         </DrawerContentScrollView>
     );
 }
 
 const DrawerNavigator = () => {
+    const [carregando, setCarregando] = useState(false);
 
     const [menusDisponiveis, setMenusDisponiveis] = useState(null);
 
+    const [offline, setOffLine] = useState(true);
+
     const getEndpoints = async () => {
-        const entryPoint = await rootEntryPoint();
-        setMenusDisponiveis(entryPoint);
+        setCarregando(true);
+        try {
+            const entryPoint = await rootEntryPoint();
+            if (entryPoint._links) {
+                setOffLine(false);
+                setMenusDisponiveis(entryPoint._links);
+            } else {
+                setOffLine(true);
+            }
+        } catch (error) {
+            console.log(`Erro no método getEndpoints do arquivo DrawerNavigator -> ${new Date()} -> erro: ${error}`);
+        }
+        finally {
+            setCarregando(false);
+        }
+    }
+
+    const getIcones = (icon, size, focused) => {
+        try {
+            return <Icon name={icon ? icon : 'exclamation-triangle'} size={size ? size : 20} color={focused ? '#007bff' : '#6c757d'} />
+        } catch (error) {
+            console.log(`Erro no método getIcones do arquivo DrawerNavigator -> ${new Date()} -> erro: ${error}`);
+            return <Icon name={icon ? icon : 'exclamation-triangle'} size={size ? size : 20} color={'#dc3545'} />
+        }
+    }
+
+    const getScrens = (name, component, title, icone, headerShown = true) => {
+        return (
+            <Drawer.Screen name={name} component={component} options={{
+                headerShown: headerShown, title: title, drawerIcon: (focused) => getIcones(icone, null, focused),
+                headerTitleAlign: 'center',
+                headerTitleStyle: { color: '#FFF' },
+                headerLeft: () => <HeaderLeft />,
+                headerRight: () => <HeaderRight carregando={carregando} offline={offline} />,
+                headerStyle: { backgroundColor: '#1B8BD1', }
+            }} />
+        );
     }
 
     useEffect(() => {
@@ -32,23 +80,16 @@ const DrawerNavigator = () => {
     }, []);
 
     return (
-        <Drawer.Navigator screenOptions={{
-            drawerStyle: {
-                backgroundColor: '#000',
-                width: 240,
-            },
-            drawerStatusBarAnimation: 'fade'
-        }} drawerContent={props => <DrawerCustom {...props} />}>
-            <Drawer.Screen name="BemVindo" component={BemVindoStackNavigator} options={{ headerShown: true, title: 'MySore' }} />
-            
-            {/* {menusDisponiveis._links.cidades && <Drawer.Screen name="ListarCidades" component={ListarCidadesStackNavigator} options={{ headerShown: true, title: 'Lista de Cidades' }} />}
-            {menusDisponiveis._links.empresas && <Drawer.Screen name="ListarEmpresas" component={ListarEmpresasStackNavigator} options={{ headerShown: true, title: 'Lista de Empresas' }} />}
-            {menusDisponiveis._links.estados && <Drawer.Screen name="ListarEstados" component={ListarEstadosStackNavigator} options={{ headerShown: true, title: 'Lista de Estados' }} />}
-            {menusDisponiveis._links.formas-pagamento && <Drawer.Screen name="ListarFormasPagamento" component={ListarFormasPagamentoStackNavigator} options={{ headerShown: true, title: 'Lista de Formas de Pagamento' }} />}
-            {menusDisponiveis._links.grupos && <Drawer.Screen name="ListarGrupos" component={ListarGruposStackNavigator} options={{ headerShown: true, title: 'Lista de Grupos' }} />}
-            {menusDisponiveis._links.permissoes && <Drawer.Screen name="ListarPermissoes" component={ListarPermissoesStackNavigator} options={{ headerShown: true, title: 'Lista de Permissões' }} />}
-            {menusDisponiveis._links.usuarios && <Drawer.Screen name="ListarUsuarios" component={ListarUsuariosStackNavigator} options={{ headerShown: true, title: 'Lista de Usuarios' }} />} */}
-        </Drawer.Navigator>
+        <>
+            <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />} initialRouteName='BemVindo'>
+                {true && getScrens('BemVindo', BemVindo, 'Página Inicial', 'home')}
+                {true && getScrens("ListarClientes", ListarClientes, 'Clientes', 'address-card')}
+                {true && getScrens("ListarCompras", ListarCompras, 'Compras', 'shopping-cart')}
+                {true && getScrens("ListarVendas", ListarVendas, 'Vendas', 'cart-plus')}
+                {true && getScrens("Resultados", ResultadosStackNavigator, 'Resultados', 'bar-chart', false)}
+            </Drawer.Navigator>
+            {carregando && <ModalCarregando pagina='Configurando permissões' />}
+        </>
     );
 };
 

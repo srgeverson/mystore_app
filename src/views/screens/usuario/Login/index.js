@@ -9,6 +9,7 @@ import BotaoEntrar from '../../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../../core/contexts';
 import { authorizationServerLogin } from '../../../../core/api';
 import { salvarTokenLogin, getTokenLogin } from '../../../../services/UsuarioService';
+import { atualizandoToken } from '../../../../core/synchronize';
 
 const Login = () => {
 
@@ -19,9 +20,10 @@ const Login = () => {
     const [carregando, setCarregando] = useState(false);
     const [token, setToken] = useState(null);
 
-    const { signIn, signOut } = useContext(AuthorityContext);
+    const { signIn } = useContext(AuthorityContext);
 
     const recuperaTokenSalvo = async () => {
+        console.log('Função recuperaTokenSalvo...');
         setCarregando(true);
         const tokenSalvo = await getTokenLogin();
         setToken(tokenSalvo);
@@ -33,6 +35,7 @@ const Login = () => {
     }, [])
 
     const entrar = async () => {
+        console.log('Botão entrar...');
         try {
             setCarregando(true);
             var retornoAutenticacao = null;
@@ -47,13 +50,21 @@ const Login = () => {
             }
             //Quando dá erro de comunicação com o servidor e não existe token salvo
             else if (retornoAutenticacao.codigo == 503 && !token) {
-                console.log(token);
-                console.log(retornoAutenticacao.codigo )
                 Alert.alert("Atênção", "Falha ao conectar com o servidor ou este é seu primeiro acesso!");
             }
             //Quando retornar o token
             else if (retornoAutenticacao.access_token) {
-                await salvarTokenLogin(retornoAutenticacao.access_token, retornoAutenticacao.expires_in);
+                await salvarTokenLogin(
+                    retornoAutenticacao.usuarios_id,
+                    retornoAutenticacao.access_token,
+                    retornoAutenticacao.expires_in,
+                    retornoAutenticacao.token_type,
+                    retornoAutenticacao.scope,
+                    retornoAutenticacao.nome_completo,
+                    retornoAutenticacao.jti,
+                    retornoAutenticacao.refresh_token
+                );
+                atualizandoToken(retornoAutenticacao.expires_in);
                 signIn();
             } else {
                 Alert.alert("Dados inválidos", "Preencha corretamente e tente novamente!");
