@@ -15,7 +15,6 @@ target 'mystore_app' do
 
 
 
-  pod 'react-native-config', :path => '../node_modules/react-native-config'
 
   target 'mystore_appTests' do
     inherit! :complete
