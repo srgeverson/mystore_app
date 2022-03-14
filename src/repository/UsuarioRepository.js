@@ -40,10 +40,11 @@ class UsuarioRepository {
 
     insertOrReplace(usuario) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO usuarios (accessToken, data, expiresIn, id, jti, nome, refreshToken, scope, tokenType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            Database.insert('INSERT OR REPLACE INTO usuarios (accessToken, data, empresa, expiresIn, id, jti, nome, refreshToken, scope, tokenType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 [
                     usuario.accessToken ? usuario.accessToken : null,
                     usuario.data ? JSON.stringify(usuario.data) : null,
+                    usuario.empresa ? usuario.empresa : null,
                     usuario.expiresIn ? usuario.expiresIn : 0,
                     usuario.id ? usuario.id : 0,
                     usuario.jti ? usuario.jti : null,
