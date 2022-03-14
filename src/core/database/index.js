@@ -12,23 +12,24 @@ const database_size = 200000;
 
 class Databese {
 
-  constructor() {
+  constructor(enabledLog) {
     this.type = 'SingletonDefaultExportInstance';
     this.db = null;
+    this.enabledLog = enabledLog;
   }
 
   closeDatabase(db) {
     if (db) {
       db.close()
         .then((okCallback) => {
-          console.log(`Conexão fechada com sucesso! closeDatabase -> ${new Date()} -> okCallback: ${okCallback}`);
+          this.enabledLog == true && console.log(`Conexão fechada com sucesso! closeDatabase -> ${new Date()} -> okCallback: ${okCallback}`);
         })
         .catch((errorCallback) => {
-          console.log(`Erro ao fechar conexão com banco de dados! closeDatabase -> ${new Date()} -> errorCallback: ${errorCallback}`);
+          this.enabledLog == true && console.log(`Erro ao fechar conexão com banco de dados! closeDatabase -> ${new Date()} -> errorCallback: ${errorCallback}`);
           this.errorCB(errorCallback);
         });
     } else {
-      console.log(`Conexão já está fechada! closeDatabase -> ${new Date()} DB: ${JSON.stringify(db)}`);
+      this.enabledLog == true && console.log(`Conexão já está fechada! closeDatabase -> ${new Date()} DB: ${JSON.stringify(db)}`);
     }
   }
 
@@ -50,10 +51,10 @@ class Databese {
       sql,
       [],
       (okCallback) => {
-        console.log(`Tabela ${tableName} criada com sucesso! createTable -> ${new Date()} -> okCallback: ${JSON.stringify(okCallback)}`);
+        this.enabledLog == true && console.log(`Tabela ${tableName} criada com sucesso! createTable -> ${new Date()} -> okCallback: ${JSON.stringify(okCallback)}`);
       },
       (errorCallback) => {
-        console.log(`Não foi possível criar a tabela ${tableName}! createTable -> ${new Date()} -> errorCallback: ${errorCallback}`);
+        this.enabledLog == true && console.log(`Não foi possível criar a tabela ${tableName}! createTable -> ${new Date()} -> errorCallback: ${errorCallback}`);
       },
     );
   }
@@ -73,9 +74,9 @@ class Databese {
               resolve(results);
             });
         }).then((okCallback) => {
-          console.log(`DELETE executado com sucesso! delete -> ${new Date()} -> okCallback: ${okCallback}`);
+          this.enabledLog == true && console.log(`DELETE executado com sucesso! delete -> ${new Date()} -> okCallback: ${okCallback}`);
         }).catch((errorCallback) => {
-          console.log(`Erro ao executar DELETE! delete -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+          this.enabledLog == true && console.log(`Erro ao executar DELETE! delete -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
         });
       });
     });
@@ -93,15 +94,15 @@ class Databese {
           );
         })
         .then(() => {
-          console.log(`Banco de dados apagado com sucesso! dropDatabase -> ${new Date()}`);
+          this.enabledLog == true && console.log(`Banco de dados apagado com sucesso! dropDatabase -> ${new Date()}`);
           resolve();
         })
         .catch((errorCallback) => {
-          console.log(`Não foi possível apagar o banco de dados! dropDatabase -> ${new Date()} -> errorCallback: ${errorCallback}`);
+          this.enabledLog == true && console.log(`Não foi possível apagar o banco de dados! dropDatabase -> ${new Date()} -> errorCallback: ${errorCallback}`);
           reject(errorCallback);
         });
     }).catch((errorCallback) => {
-      console.log(`Erro ao apagar banco de dados! dropDatabase -> ${new Date()} -> erro: ${errorCallback}`);
+      this.enabledLog == true && console.log(`Erro ao apagar banco de dados! dropDatabase -> ${new Date()} -> erro: ${errorCallback}`);
     });
   }
 
@@ -119,29 +120,29 @@ class Databese {
           db = DB;
           db.executeSql('SELECT 1 FROM usuarios LIMIT 1')
             .then((okCallback) => {
-              console.log(`Verificando as tabelas existentes! initDB -> ${new Date()} -> okCallback: ${okCallback}`);
+              this.enabledLog == true && console.log(`Verificando as tabelas existentes! initDB -> ${new Date()} -> okCallback: ${okCallback}`);
             })
             .catch((errorCallback) => {
-              console.log(`Existe tabelas a serem criadas! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
+              this.enabledLog == true && console.log(`Existe tabelas a serem criadas! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
               db.transaction((tx) => {
                 for (const name in schema.Tables) {
                   this.createTable(tx, schema.Tables[name], name);
                 }
               })
                 .then((okCallback) => {
-                  console.log(`Criação das tabelas executado com sucesso! initDB -> ${new Date()} -> okCallback: ${okCallback}`);
+                  this.enabledLog == true && console.log(`Criação das tabelas executado com sucesso! initDB -> ${new Date()} -> okCallback: ${okCallback}`);
                 })
                 .catch((errorCallback) => {
-                  console.log(`Erro na criação das tabelas! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
+                  this.enabledLog == true && console.log(`Erro na criação das tabelas! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
                 });
             });
           resolve(db);
         })
           .catch((errorCallback) => {
-            console.log(`Erro ao inicializar banco de dados! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
+            this.enabledLog == true && console.log(`Erro ao inicializar banco de dados! initDB -> ${new Date()} -> errorCallback: ${errorCallback}`);
           });
       }).catch((error) => {
-        console.log(`Erro ao inicializar banco de dados! initDB -> ${new Date()} -> error: ${error}`);
+        this.enabledLog == true && console.log(`Erro ao inicializar banco de dados! initDB -> ${new Date()} -> error: ${error}`);
       });
     });
   }
@@ -162,9 +163,9 @@ class Databese {
                 resolve(results);
               });
           }).then((okCallback) => {
-            console.log(`Dados salvos com sucesso! insertOrReplace -> ${new Date()} -> okCallback: ${okCallback}`);
+            this.enabledLog == true && console.log(`Dados salvos com sucesso! insertOrReplace -> ${new Date()} -> okCallback: ${okCallback}`);
           }).catch((errorCallback) => {
-            console.log(`Erro ao salvar dados! insertOrReplace -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+            this.enabledLog == true && console.log(`Erro ao salvar dados! insertOrReplace -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
           });
       });
     });
@@ -186,9 +187,9 @@ class Databese {
                 resolve(results);
               });
           }).then((okCallback) => {
-            console.log(`SELECT executado com sucesso! select -> ${new Date()} -> okCallback: ${okCallback}`);
+            this.enabledLog == true && console.log(`SELECT executado com sucesso! select -> ${new Date()} -> okCallback: ${okCallback}`);
           }).catch((errorCallback) => {
-            console.log(`Erro ao executar SELECT! select -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+            this.enabledLog == true && console.log(`Erro ao executar SELECT! select -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
           });
       });
     });
@@ -210,9 +211,9 @@ class Databese {
                 resolve(results);
               });
           }).then((okCallback) => {
-            console.log(`SELECT executado com sucesso! selectAllByParam -> ${new Date()} -> okCallback: ${okCallback}`);
+            this.enabledLog == true && console.log(`SELECT executado com sucesso! selectAllByParam -> ${new Date()} -> okCallback: ${okCallback}`);
           }).catch((errorCallback) => {
-            console.log(`Erro ao executar SELECT! selectAllByParam -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+            this.enabledLog == true && console.log(`Erro ao executar SELECT! selectAllByParam -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
           });
       });
     });
@@ -233,13 +234,13 @@ class Databese {
               resolve(results);
             });
           }).then((okCallback) => {
-            console.log(`Dados atualizados com sucesso! update -> ${new Date()} -> okCallback: ${okCallback}`);
+            this.enabledLog == true && console.log(`Dados atualizados com sucesso! update -> ${new Date()} -> okCallback: ${okCallback}`);
           }).catch((errorCallback) => {
-            console.log(`Erro ao atualizae dados! update -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
+            this.enabledLog == true && console.log(`Erro ao atualizae dados! update -> ${new Date()} -> errorCallback: ${JSON.stringify(errorCallback)}`);
           });
       });
     });
   }
 }
 
-export default new Databese();
+export default new Databese(false);
