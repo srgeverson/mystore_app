@@ -26,9 +26,9 @@ class CidadeRepository {
         });
     }r
 
-    insert(cidade) {
+    insert(cliente) {
         return new Promise((resolve, reject) => {
-            Database.insert(`INSERT INTO clientes VALUES (?, ?, ?);`, [cidade.id, cidade.nome, cidade.estados_id])
+            Database.insert(`INSERT INTO clientes VALUES (?, ?, ?);`, [cliente.id, cliente.nome, cliente.estados_id])
                 .then((success) => {
                     resolve(success);
                 })
@@ -38,13 +38,13 @@ class CidadeRepository {
         });
     }
     
-    insertOrReplace(cidade) {
+    insertOrReplace(cliente) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO clientes (id, nome, estados_id) VALUES (?, ?, ?)',
+            Database.insert('INSERT OR REPLACE INTO clientes (id, apelidoNomeFantazia, enderecoId) VALUES (?, ?, ?)',
                 [
-                    cidade.id ? cidade.id : 0,
-                    cidade.nome ? cidade.nome : null,
-                    cidade.estados_id ? cidade.estados_id : null,
+                    cliente.id ? cliente.id : 0,
+                    cliente.apelidoNomeFantazia ? cliente.apelidoNomeFantazia : null,
+                    cliente.enderecoId ? cliente.enderecoId : null,
                 ])
                 .then((success) => {
                     resolve(success);
@@ -79,9 +79,9 @@ class CidadeRepository {
         });
     }
 
-    updateAllById(cidade) {
+    updateAllById(cliente) {
         return new Promise((resolve, reject) => {
-            Database.update(`UPDATE clientes SET nome = ? WHERE (id = ?);`, [cidade.nome, cidade.id])
+            Database.update(`UPDATE clientes SET nome = ? WHERE (id = ?);`, [cliente.nome, cliente.id])
                 .then((success) => {
                     resolve(success);
                 })

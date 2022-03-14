@@ -1,37 +1,23 @@
 import { buscarEAtualizarRefreshToken } from '../../services/UsuarioService';
+import {sincronizar as sincronizarCidade} from '../../services/CidadeService';
+import {sincronizar as sincronizarCliente} from '../../services/ClienteService';
+import {sincronizar as sincronizarEstado} from '../../services/EstadoService';
 
 export const atualizandoDadosLocais = () => {
     setInterval(() => {
         //Código a ser executado aqui
-        console.log(`Sincronizando dados -> ${new Date()}...`);
+        console.log(`Iniciando a sincronização dos dados -> ${new Date()}...`);
+        sincronizarCidade();
+        sincronizarCliente();
+        sincronizarEstado();
+        console.log(`Finalizando a sincronização dos dados -> ${new Date()}...`);
     }, 60000);
 }
 
 export const atualizandoToken = async (expiresIn) => {
-    
     if (expiresIn) {
         setInterval(() => {
             buscarEAtualizarRefreshToken();
         }, expiresIn * 1000);
     }
-}
-
-export const buscaTodosDados = () => {
-    setInterval(() => {
-        //Código a ser executado aqui
-        console.log(`Sincronizando dados -> ${new Date()}...`);
-    }, 60000);
-}
-
-export const teste = (msg, callback) => {
-    setInterval(() => {
-        console.log(msg);
-        callback();
-    }, 10000);
-}
-
-export const teste1 = (msg) => {
-    setInterval(() => {
-        console.log(msg);
-    }, 10000);
 }
