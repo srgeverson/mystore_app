@@ -62,7 +62,8 @@ const Login = () => {
                     retornoAutenticacao.scope,
                     retornoAutenticacao.nome_completo,
                     retornoAutenticacao.jti,
-                    retornoAutenticacao.refresh_token
+                    retornoAutenticacao.refresh_token,
+                    retornoAutenticacao.empresas[0]
                 );
                 atualizandoToken(retornoAutenticacao.expires_in);
                 signIn();

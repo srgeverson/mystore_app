@@ -182,11 +182,11 @@ export const validarAcesso = async (uri, dados) => {
     }
 }
 
-export const salvarTokenLogin = async (usuarios_id, token, expires_in, token_type, scope, nome_completo, jti, refresh_token) => {
+export const salvarTokenLogin = async (usuarios_id, token, expires_in, token_type, scope, nome_completo, jti, refresh_token, empresa) => {
     try {
         const data = new Date();
         const expiresIn = expires_in;
-        UsuarioRepository.insertOrReplace({ id: usuarios_id, accessToken: token, expiresIn, data, tokenType: token_type, scope, nome: nome_completo, jti, refreshToken: refresh_token });
+        UsuarioRepository.insertOrReplace({ id: usuarios_id, accessToken: token, expiresIn, data, tokenType: token_type, scope, nome: nome_completo, jti, refreshToken: refresh_token, empresa });
     } catch (error) {
         console.log(`Erro no método salvarTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }
