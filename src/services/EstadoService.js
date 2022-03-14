@@ -53,3 +53,13 @@ export const cadastrarOuAtualizar = async (estado) => {
         console.log(`Erro no método cadastrar do arquivo EstadoService -> ${new Date()} -> erro: ${error}`);
     }
 }
+
+export const sincronizar = async () => {
+    try {
+        let retorno = await getEstados();
+        if (retorno._embedded.estados)
+            retorno._embedded.estados.forEach(element => cadastrarOuAtualizar({ id: element.id, nome: element.nome }));
+    } catch (error) {
+        console.log(`Erro no método cadastrar do arquivo sincronizar  -> ${new Date()} -> erro: ${error}`);
+    }
+}
