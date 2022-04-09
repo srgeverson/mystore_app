@@ -28,7 +28,7 @@ class CidadeRepository {
 
     insert(cliente) {
         return new Promise((resolve, reject) => {
-            Database.insert(`INSERT INTO clientes VALUES (?, ?, ?);`, [cliente.id, cliente.nome, cliente.estados_id])
+            Database.insert(`INSERT INTO clientes VALUES (?, ?, ?);`, [cliente.id, cliente.nome, cliente.enderecoId])
                 .then((success) => {
                     resolve(success);
                 })
@@ -40,7 +40,7 @@ class CidadeRepository {
     
     insertOrReplace(cliente) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO clientes (id, apelidoNomeFantazia, enderecoId) VALUES (?, ?, ?)',
+            Database.insert('INSERT OR REPLACE INTO clientes (id, apelidoNomeFantazia, enderecos_id) VALUES (?, ?, ?)',
                 [
                     cliente.id ? cliente.id : 0,
                     cliente.apelidoNomeFantazia ? cliente.apelidoNomeFantazia : null,

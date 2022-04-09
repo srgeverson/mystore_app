@@ -29,9 +29,9 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
-        idEndereco: {
+        enderecos_id: {
             type: Types.INTEGER,
-            primary_key: true,
+            primary_key: false,
             default_value: null,
         },
     }, 

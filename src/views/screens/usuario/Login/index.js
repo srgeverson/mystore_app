@@ -35,25 +35,25 @@ const Login = () => {
     }, [])
 
     const entrar = async () => {
-        console.log('Botão entrar...');
         try {
             setCarregando(true);
             var retornoAutenticacao = null;
+            console.log('Botão entrar...');
             if (!token)
                 retornoAutenticacao = await authorizationServerLogin(email, senha);
-            if (token) {
+            if (token) 
                 signIn();
-            }
+            
             //Quando dá erro de comunicação com o servidor e existe token salvo
-            else if (retornoAutenticacao.codigo == 503 && token) {
+             if (retornoAutenticacao.codigo == 503 && token) 
                 signIn();
-            }
+            
             //Quando dá erro de comunicação com o servidor e não existe token salvo
-            else if (retornoAutenticacao.codigo == 503 && !token) {
+             if (retornoAutenticacao.codigo == 503 && !token) 
                 Alert.alert("Atênção", "Falha ao conectar com o servidor ou este é seu primeiro acesso!");
-            }
+            
             //Quando retornar o token
-            else if (retornoAutenticacao.access_token) {
+            if (retornoAutenticacao.access_token) {
                 await salvarTokenLogin(
                     retornoAutenticacao.usuarios_id,
                     retornoAutenticacao.access_token,
@@ -65,7 +65,7 @@ const Login = () => {
                     retornoAutenticacao.refresh_token,
                     retornoAutenticacao.empresas[0]
                 );
-                atualizandoToken(retornoAutenticacao.expires_in);
+                //atualizandoToken(retornoAutenticacao.expires_in);
                 signIn();
             } else {
                 Alert.alert("Dados inválidos", "Preencha corretamente e tente novamente!");

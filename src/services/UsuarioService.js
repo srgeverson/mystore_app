@@ -72,24 +72,37 @@ export const cadastrar = async (usuario) => {
     }
 }
 
+export const calculaTempoDeAtualizacaoToken = async () => {
+    const usuarioAutenticadoAnteriormente = await UsuarioRepository.selectByTokenExpireData();
+    console.log(usuarioAutenticadoAnteriormente);
+    const expires = usuarioAutenticadoAnteriormente.rows.item(0).expiresIn;
+    const token = usuarioAutenticadoAnteriormente.rows.item(0).accessToken;
+    const expiresMilisegundos = Math.round(((//Usando esta função para arredondar os valores em caso utilise uma divisão
+        expires //Tempo de expiração em segundos
+        - 60 //Subtraindo para compensar a diferença do servidor até o registro do token no local storage
+    ) * 1 //Transformar o calculo valor positivo
+    ) * 1000 //Milisegundos para realizar os calculos da datas
+    );
+
+    const data = usuarioAutenticadoAnteriormente.rows.item(0).data;
+    const dataTokenMilisegundos = new Date(JSON.parse(data)).getTime();
+    const dataExpiresMilisegundos = expiresMilisegundos + dataTokenMilisegundos;
+    const dataAtualMilisegundos = new Date().getTime();
+    const dataRestanteMilisegundos = dataExpiresMilisegundos - dataAtualMilisegundos;
+    console.log(`Vai expirar em ${expires} segundos!`)
+    console.log(`${expires} x 1000 = ${expiresMilisegundos}`)
+    console.log(`${new Date(JSON.parse(data))} em milisegundos = ${dataExpiresMilisegundos}`);
+    console.log(`${dataAtualMilisegundos}`);
+    console.log(dataRestanteMilisegundos);
+    //await limparDataAcesso();
+    return { dataRestanteMilisegundos, token };
+}
+
 export const getTokenLogin = async () => {
     try {
-        const usuarioAutenticadoAnteriormente = await UsuarioRepository.selectByTokenExpireData();
-        const token = usuarioAutenticadoAnteriormente.rows.item(0).accessToken;
-        const expires = usuarioAutenticadoAnteriormente.rows.item(0).expiresIn;
-        const expiresMilisegundos = Math.round((//Usando esta função para arredondar os valores em caso utilise uma divisão
-            expires //Tempo de expiração em segundos
-            - 60 //Subtraindo para compensar a diferença do servidor até o registro do token no local storage
-        ) * 1000 //Milisegundos para realizar os calculos da datas
-        )
-
-        const data = usuarioAutenticadoAnteriormente.rows.item(0).data;
-        const dataTokenMilisegundos = new Date(JSON.parse(data)).getTime();
-        const dataExpiresMilisegundos = expiresMilisegundos + dataTokenMilisegundos;
-        const dataAtualMilisegundos = new Date().getTime();
-        const dataRestanteMilisegundos = dataExpiresMilisegundos - dataAtualMilisegundos;
-        if (token !== null || dataRestanteMilisegundos > 0) {
-            return token;
+        const dataRestanteMilisegundos = await calculaTempoDeAtualizacaoToken();
+        if (dataRestanteMilisegundos > 0) {
+            return dataRestanteMilisegundos.token;
         } else {
             return null;
         }
