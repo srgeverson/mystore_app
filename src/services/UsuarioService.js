@@ -80,7 +80,7 @@ export const calculaTempoDeAtualizacaoToken = async () => {
     const token = usuarioAutenticadoAnteriormente.rows.item(0).accessToken;
     const expiresMilisegundos = Math.round(((//Usando esta função para arredondar os valores em caso utilise uma divisão
         expires //Tempo de expiração em segundos
-        //Subtraindo para compensar a diferença do servidor até o registro do token no local storage
+        - 0 //Subtraindo para compensar a diferença do servidor até o registro do token no local storage
     ) * 1 //Transformar o calculo valor positivo
     ) * 1000 //Milisegundos para realizar os calculos da datas
     );
@@ -97,7 +97,7 @@ export const calculaTempoDeAtualizacaoToken = async () => {
     console.log(`Data atual em milisegundos = ${dataAtualMilisegundos}`);
     console.log(dataRestanteMilisegundos);
     //await limparDataAcesso();
-    return { dataRestanteMilisegundos, token };
+    return { dataRestanteMilisegundos, token, tempoDeSincronizacaoDoToken: expiresMilisegundos };
 }
 
 export const getTokenLogin = async () => {

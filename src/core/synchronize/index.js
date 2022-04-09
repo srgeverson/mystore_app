@@ -23,6 +23,8 @@ export const atualizandoToken = async () => {
         setInterval(() => {
             console.log(`Atualizando token ${new Date()}`);
             console.log(`Tempo token local ${expira}`);
+            if ((expira < dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken))
+                expira = dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken
             buscarEAtualizarRefreshToken();
         }, expira);
     }
