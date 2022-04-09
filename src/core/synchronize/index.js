@@ -17,15 +17,13 @@ export const atualizandoDadosLocais = async () => {
 
 export const atualizandoToken = async () => {
     var dadosTempoDeAtualizacaoToken = await calculaTempoDeAtualizacaoToken();
-    console.log(`Dados de atualizacao do token = ${JSON.stringify(dadosTempoDeAtualizacaoToken)}`);
+    //console.log(`Dados de atualizacao do token = ${JSON.stringify(dadosTempoDeAtualizacaoToken)}`);
     let expira = dadosTempoDeAtualizacaoToken.dataRestanteMilisegundos;
     if (expira > 0) {
         setInterval(() => {
             console.log(`Atualizando token ${new Date()}`);
-            console.log(`Tempo token local ${expira}`);
-            if ((expira < dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken))
-                expira = dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken
+            //console.log(`Tempo token local ${expira}`);
             buscarEAtualizarRefreshToken();
-        }, expira);
+        }, dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken);
     }
 }

@@ -25,7 +25,7 @@ const Login = () => {
     const recuperaTokenSalvo = async () => {
         setCarregando(true);
         const tokenSalvo = await getTokenLogin();
-        console.log(`recuperaTokenSalvo = ${tokenSalvo}`);
+        //console.log(`recuperaTokenSalvo = ${tokenSalvo}`);
         setToken(tokenSalvo);
         setCarregando(false);
     }
