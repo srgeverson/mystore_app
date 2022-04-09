@@ -1,7 +1,7 @@
 import SQLite from 'react-native-sqlite-storage';
 
-SQLite.DEBUG(true);
 SQLite.enablePromise(true);
+SQLite.DEBUG(false);
 
 import * as schema from './Tables';
 
@@ -243,4 +243,4 @@ class Databese {
   }
 }
 
-export default new Databese(false);
+export default new Databese(true);

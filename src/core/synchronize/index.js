@@ -1,8 +1,8 @@
 import { buscarEAtualizarRefreshToken } from '../../services/UsuarioService';
-import {sincronizar as sincronizarCidade} from '../../services/CidadeService';
-import {sincronizar as sincronizarCliente} from '../../services/ClienteService';
-import {sincronizar as sincronizarEstado} from '../../services/EstadoService';
-import {calculaTempoDeAtualizacaoToken} from '../../services/UsuarioService';
+import { sincronizar as sincronizarCidade } from '../../services/CidadeService';
+import { sincronizar as sincronizarCliente } from '../../services/ClienteService';
+import { sincronizar as sincronizarEstado } from '../../services/EstadoService';
+import { calculaTempoDeAtualizacaoToken } from '../../services/UsuarioService';
 
 export const atualizandoDadosLocais = async () => {
     setInterval(() => {
@@ -16,10 +16,14 @@ export const atualizandoDadosLocais = async () => {
 }
 
 export const atualizandoToken = async () => {
-    var teste = await calculaTempoDeAtualizacaoToken();
-    if (teste.dataRestanteMilisegundos > 0) {
+    var dadosTempoDeAtualizacaoToken = await calculaTempoDeAtualizacaoToken();
+    console.log(`Dados de atualizacao do token = ${JSON.stringify(dadosTempoDeAtualizacaoToken)}`);
+    let expira = dadosTempoDeAtualizacaoToken.dataRestanteMilisegundos;
+    if (expira > 0) {
         setInterval(() => {
+            console.log(`Atualizando token ${new Date()}`);
+            console.log(`Tempo token local ${expira}`);
             buscarEAtualizarRefreshToken();
-        }, expiresIn);
+        }, expira);
     }
 }

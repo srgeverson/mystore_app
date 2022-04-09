@@ -19,10 +19,10 @@ export const atualizarPorId = async (id) => {
     }
 }
 
-export const atualizarRefreshToken = async ({ id, token }) => {
+export const atualizarRefreshToken = async ({ id, data, token }) => {
     try {
         const usuario = await refreshToken(token);
-        return UsuarioRepository.updateTokenAndRefreshTokenById({ id: usuario.usuarios_id, accessToken: usuario.refresh_token, refreshToken: usuario.refresh_token });
+        return UsuarioRepository.updateTokenAndRefreshTokenById({ id, accessToken: usuario.refresh_token, data, refreshToken: usuario.refresh_token });
     } catch (error) {
         console.log(`Erro no método atualizarRefreshToken do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }
@@ -32,8 +32,9 @@ export const buscarEAtualizarRefreshToken = async () => {
     try {
         const usuario = await buscarRefreshToken();
         if (usuario.rows.item(0)) {
-            console.log(`Atualizando token -> ${new Date()}...`);
-            await atualizarRefreshToken({ id: usuario.rows.item(0).id, token: usuario.rows.item(0).refreshToken });
+            let data = new Date();
+            console.log(`Atualizando token -> ${data}...`);
+            await atualizarRefreshToken({ id: usuario.rows.item(0).id, data: data, token: usuario.rows.item(0).refreshToken });
         }
     } catch (error) {
         console.log(`Erro no método buscarEAtualizarRefreshToken do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
@@ -79,7 +80,7 @@ export const calculaTempoDeAtualizacaoToken = async () => {
     const token = usuarioAutenticadoAnteriormente.rows.item(0).accessToken;
     const expiresMilisegundos = Math.round(((//Usando esta função para arredondar os valores em caso utilise uma divisão
         expires //Tempo de expiração em segundos
-        - 60 //Subtraindo para compensar a diferença do servidor até o registro do token no local storage
+        //Subtraindo para compensar a diferença do servidor até o registro do token no local storage
     ) * 1 //Transformar o calculo valor positivo
     ) * 1000 //Milisegundos para realizar os calculos da datas
     );
@@ -89,10 +90,11 @@ export const calculaTempoDeAtualizacaoToken = async () => {
     const dataExpiresMilisegundos = expiresMilisegundos + dataTokenMilisegundos;
     const dataAtualMilisegundos = new Date().getTime();
     const dataRestanteMilisegundos = dataExpiresMilisegundos - dataAtualMilisegundos;
-    console.log(`Vai expirar em ${expires} segundos!`)
-    console.log(`${expires} x 1000 = ${expiresMilisegundos}`)
-    console.log(`${new Date(JSON.parse(data))} em milisegundos = ${dataExpiresMilisegundos}`);
-    console.log(`${dataAtualMilisegundos}`);
+    console.log(`Tempo de expiração do token segundos = ${expires}`)
+    console.log(`Tempo de expiração do token milisegundos = ${expiresMilisegundos}`)
+    console.log(`Data do token em milisegundos = ${dataTokenMilisegundos}`);
+    console.log(`Data de expiração do token em milisegundos = ${dataExpiresMilisegundos}`);
+    console.log(`Data atual em milisegundos = ${dataAtualMilisegundos}`);
     console.log(dataRestanteMilisegundos);
     //await limparDataAcesso();
     return { dataRestanteMilisegundos, token };
@@ -101,7 +103,7 @@ export const calculaTempoDeAtualizacaoToken = async () => {
 export const getTokenLogin = async () => {
     try {
         const dataRestanteMilisegundos = await calculaTempoDeAtualizacaoToken();
-        if (dataRestanteMilisegundos > 0) {
+        if (dataRestanteMilisegundos.dataRestanteMilisegundos > 0) {
             return dataRestanteMilisegundos.token;
         } else {
             return null;

@@ -23,9 +23,9 @@ const Login = () => {
     const { signIn } = useContext(AuthorityContext);
 
     const recuperaTokenSalvo = async () => {
-        console.log('Função recuperaTokenSalvo...');
         setCarregando(true);
         const tokenSalvo = await getTokenLogin();
+        console.log(`recuperaTokenSalvo = ${tokenSalvo}`);
         setToken(tokenSalvo);
         setCarregando(false);
     }

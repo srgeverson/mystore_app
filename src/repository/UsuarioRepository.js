@@ -137,7 +137,13 @@ class UsuarioRepository {
 
     updateTokenAndRefreshTokenById(usuario) {
         return new Promise((resolve, reject) => {
-            Database.update(`UPDATE usuarios SET accessToken = ?, refreshToken = ? WHERE (id = ?);`, [usuario.accessToken, usuario.refreshToken, usuario.id])
+            Database.update(`UPDATE usuarios SET accessToken = ?, data = ?, refreshToken = ? WHERE (id = ?);`, 
+                [
+                    usuario.accessToken,
+                    usuario.data ? JSON.stringify(usuario.data) : null,
+                    usuario.refreshToken,
+                    usuario.id
+                ])
                 .then((success) => {
                     resolve(success);
                 })
