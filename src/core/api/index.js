@@ -99,7 +99,7 @@ const refreshToken = async (refreshToken) => {
             console.log(`Token atualizado com sucesso!`);
             return response.data;
         }).catch((error) => {
-            console.log(`Erro ao atualizar token!`);
+            console.log(`Erro ao atualizar token! ${JSON.stringify(error.message)}`);
             if (error.response) {
                 return {
                     codigo: error.response.status,

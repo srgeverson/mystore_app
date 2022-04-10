@@ -99,6 +99,11 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
+        email: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
         expiresIn: {
             type: Types.LONG,
             primary_key: false,
@@ -125,6 +130,11 @@ export const Tables = {
             default_value: null,
         },
         scope: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        senha: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,

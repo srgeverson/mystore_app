@@ -20,10 +20,26 @@ export const atualizandoToken = async () => {
     //console.log(`Dados de atualizacao do token = ${JSON.stringify(dadosTempoDeAtualizacaoToken)}`);
     let expira = dadosTempoDeAtualizacaoToken.dataRestanteMilisegundos;
     if (expira > 0) {
-        setInterval(() => {
-            console.log(`Atualizando token ${new Date()}`);
-            //console.log(`Tempo token local ${expira}`);
+        //console.log(`Token será atualizado em ${expira} milisegundos ${new Date()}`);
+        setTimeout(() => {
+            //console.log(`Atualizando token primeira vez ${new Date()}`);
             buscarEAtualizarRefreshToken();
-        }, dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken);
+            setInterval(() => {
+                //console.log(`Atualizando token ${new Date()}`);
+                //console.log(`Tempo token local ${expira}`);
+                buscarEAtualizarRefreshToken();
+            }, dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken);
+        }, expira)
+    }
+}
+export const atualizandoTokenPrimeiraVez = async () => {
+    var dadosTempoDeAtualizacaoToken = await calculaTempoDeAtualizacaoToken();
+    let expira = dadosTempoDeAtualizacaoToken.dataRestanteMilisegundos;
+    if (expira > 0) {
+        //console.log(`Token será atualizado em ${expira} milisegundos ${new Date()}`);
+        setTimeout(() => {
+            //console.log(`Atualizando token primeira vez ${new Date()}`);
+            buscarEAtualizarRefreshToken();
+        }, expira)
     }
 }

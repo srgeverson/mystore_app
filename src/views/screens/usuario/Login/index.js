@@ -8,15 +8,14 @@ import styles from './styles';
 import BotaoEntrar from '../../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../../core/contexts';
 import { authorizationServerLogin } from '../../../../core/api';
-import { salvarTokenLogin, getTokenLogin } from '../../../../services/UsuarioService';
-import { atualizandoToken } from '../../../../core/synchronize';
+import { salvarTokenLogin, getTokenLogin, getLoginSalvo } from '../../../../services/UsuarioService';
 
 const Login = () => {
 
     const navigation = useNavigation();
 
-    const [email, setEmail] = useState('paulistensetecnologia@gmail.com');
-    const [senha, setSenha] = useState('123456');
+    const [email, setEmail] = useState(null);
+    const [senha, setSenha] = useState(null);
     const [carregando, setCarregando] = useState(false);
     const [token, setToken] = useState(null);
 
@@ -24,9 +23,17 @@ const Login = () => {
 
     const recuperaTokenSalvo = async () => {
         setCarregando(true);
-        const tokenSalvo = await getTokenLogin();
+        //const tokenSalvo = await getTokenLogin();
+        const loginSalvo = await getLoginSalvo();
+        if (loginSalvo) {
+            setToken(loginSalvo.token);
+            setEmail(loginSalvo.email);
+            setSenha(loginSalvo.senha);
+        }
+        //setEmail(`geversonjosedesouza@hotmail.com`);
+        //setSenha(`123456`);
         //console.log(`recuperaTokenSalvo = ${tokenSalvo}`);
-        setToken(tokenSalvo);
+        //rsetToken(tokenSalvo);
         setCarregando(false);
     }
 
@@ -41,17 +48,17 @@ const Login = () => {
             console.log('Botão entrar...');
             if (!token)
                 retornoAutenticacao = await authorizationServerLogin(email, senha);
-            if (token) 
+            if (token)
                 signIn();
-            
+
             //Quando dá erro de comunicação com o servidor e existe token salvo
-             if (retornoAutenticacao.codigo == 503 && token) 
+            if (retornoAutenticacao.codigo == 503 && token)
                 signIn();
-            
+
             //Quando dá erro de comunicação com o servidor e não existe token salvo
-             if (retornoAutenticacao.codigo == 503 && !token) 
+            if (retornoAutenticacao.codigo == 503 && !token)
                 Alert.alert("Atênção", "Falha ao conectar com o servidor ou este é seu primeiro acesso!");
-            
+
             //Quando retornar o token
             if (retornoAutenticacao.access_token) {
                 await salvarTokenLogin(
@@ -63,9 +70,10 @@ const Login = () => {
                     retornoAutenticacao.nome_completo,
                     retornoAutenticacao.jti,
                     retornoAutenticacao.refresh_token,
-                    retornoAutenticacao.empresas[0]
+                    retornoAutenticacao.empresas[0],
+                    email,
+                    senha
                 );
-                //atualizandoToken(retornoAutenticacao.expires_in);
                 signIn();
             } else {
                 Alert.alert("Dados inválidos", "Preencha corretamente e tente novamente!");

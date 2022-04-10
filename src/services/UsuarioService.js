@@ -77,6 +77,8 @@ export const calculaTempoDeAtualizacaoToken = async () => {
     const usuarioSelectByTokenExpireData = await UsuarioRepository.selectByTokenExpireData();
     const usuarioAutenticadoAnteriormente = usuarioSelectByTokenExpireData.rows.item(0);
     let token = null;
+    let email = null;
+    let senha = null;
     let data = null;
     let expires = 0;
     let expiresMilisegundos = 0;
@@ -84,14 +86,15 @@ export const calculaTempoDeAtualizacaoToken = async () => {
     let dataExpiresMilisegundos = 0;
     let dataAtualMilisegundos = 0;
     let dataRestanteMilisegundos = 0;
+    //console.log(usuarioAutenticadoAnteriormente);
     if (usuarioAutenticadoAnteriormente) {
         expires = usuarioAutenticadoAnteriormente.expiresIn;
         token = usuarioAutenticadoAnteriormente.accessToken;
-        expiresMilisegundos = Math.round(((//Usando esta função para arredondar os valores em caso utilise uma divisão
+        expiresMilisegundos = Math.round((((//Usando esta função para arredondar os valores em caso utilise uma divisão
             expires //Tempo de expiração em segundos
-            - 0 //Subtraindo para compensar a diferença do servidor até o registro do token no local storage
         ) * 1 //Transformar o calculo valor positivo
         ) * 1000 //Milisegundos para realizar os calculos da datas
+        ) - 1000 //Subtraindo para compensar a diferença do servidor até o registro do token no banco local
         );
 
         data = usuarioAutenticadoAnteriormente.data;
@@ -99,7 +102,6 @@ export const calculaTempoDeAtualizacaoToken = async () => {
         dataExpiresMilisegundos = expiresMilisegundos + dataTokenMilisegundos;
         dataAtualMilisegundos = new Date().getTime();
         dataRestanteMilisegundos = dataExpiresMilisegundos - dataAtualMilisegundos;
-        //console.log(usuarioAutenticadoAnteriormente);
         //console.log(`Tempo de expiração do token segundos = ${expires}`)
         //console.log(`Tempo de expiração do token milisegundos = ${expiresMilisegundos}`)
         //console.log(`Data do token em milisegundos = ${dataTokenMilisegundos}`);
@@ -108,7 +110,7 @@ export const calculaTempoDeAtualizacaoToken = async () => {
         //console.log(dataRestanteMilisegundos);
         //await limparDataAcesso();
     }
-    return { dataRestanteMilisegundos, token, tempoDeSincronizacaoDoToken: expiresMilisegundos };
+    return { dataRestanteMilisegundos, token, tempoDeSincronizacaoDoToken: expiresMilisegundos, email, senha };
 }
 
 export const getTokenLogin = async () => {
@@ -154,6 +156,19 @@ export const limparDataAcesso = async () => {
         await UsuarioRepository.updateAllData();
     } catch (error) {
         console.log(`Erro no método getTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const getLoginSalvo = async () => {
+    try {
+        const dataRestanteMilisegundos = await calculaTempoDeAtualizacaoToken();
+        return {
+            token: dataRestanteMilisegundos.dataRestanteMilisegundos > 0 ? dataRestanteMilisegundos.token : null,
+            email: dataRestanteMilisegundos.email,
+            senha: dataRestanteMilisegundos.senha
+        }
+    } catch (error) {
+        console.log(`Erro no método getLoginSalvo do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }
 }
 
@@ -208,11 +223,11 @@ export const validarAcesso = async (uri, dados) => {
     }
 }
 
-export const salvarTokenLogin = async (usuarios_id, token, expires_in, token_type, scope, nome_completo, jti, refresh_token, empresa) => {
+export const salvarTokenLogin = async (usuarios_id, token, expires_in, token_type, scope, nome_completo, jti, refresh_token, empresa, email, senha) => {
     try {
         const data = new Date();
         const expiresIn = expires_in;
-        UsuarioRepository.insertOrReplace({ id: usuarios_id, accessToken: token, expiresIn, data, tokenType: token_type, scope, nome: nome_completo, jti, refreshToken: refresh_token, empresa });
+        UsuarioRepository.insertOrReplace({ id: usuarios_id, accessToken: token, expiresIn, email, data, tokenType: token_type, scope, senha, nome: nome_completo, jti, refreshToken: refresh_token, empresa });
     } catch (error) {
         console.log(`Erro no método salvarTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }

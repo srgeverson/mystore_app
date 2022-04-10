@@ -40,10 +40,11 @@ class UsuarioRepository {
 
     insertOrReplace(usuario) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO usuarios (accessToken, data, empresa, expiresIn, id, jti, nome, refreshToken, scope, tokenType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            Database.insert('INSERT OR REPLACE INTO usuarios (accessToken, data, email, empresa, expiresIn, id, jti, nome, refreshToken, scope, senha, tokenType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 [
                     usuario.accessToken ? usuario.accessToken : null,
                     usuario.data ? JSON.stringify(usuario.data) : null,
+                    usuario.email ? usuario.email : null,
                     usuario.empresa ? usuario.empresa : null,
                     usuario.expiresIn ? usuario.expiresIn : 0,
                     usuario.id ? usuario.id : 0,
@@ -51,6 +52,7 @@ class UsuarioRepository {
                     usuario.nome ? usuario.nome : null,
                     usuario.refreshToken ? usuario.refreshToken : null,
                     usuario.scope ? usuario.scope : null,
+                    usuario.senha ? usuario.senha : null,
                     usuario.tokenType ? usuario.tokenType : null,
                 ])
                 .then((success) => {
@@ -85,7 +87,17 @@ class UsuarioRepository {
                 });
         });
     }
-
+    selectLastLogin() {
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT email, senha FROM usuarios WHERE (accessToken IS NOT NULL AND expiresIn IS NOT NULL);`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
     selectByRefreshToken() {
         return new Promise((resolve, reject) => {
             Database.select(`SELECT * FROM usuarios WHERE (refreshToken IS NOT NULL AND expiresIn IS NOT NULL) LIMIT 1;`, [])
