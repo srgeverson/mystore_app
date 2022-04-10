@@ -86,8 +86,10 @@ export const calculaTempoDeAtualizacaoToken = async () => {
     let dataExpiresMilisegundos = 0;
     let dataAtualMilisegundos = 0;
     let dataRestanteMilisegundos = 0;
-    //console.log(usuarioAutenticadoAnteriormente);
+    // console.log(usuarioAutenticadoAnteriormente);
     if (usuarioAutenticadoAnteriormente) {
+        email = usuarioAutenticadoAnteriormente.email;
+        senha = usuarioAutenticadoAnteriormente.senha;
         expires = usuarioAutenticadoAnteriormente.expiresIn;
         token = usuarioAutenticadoAnteriormente.accessToken;
         expiresMilisegundos = Math.round((((//Usando esta função para arredondar os valores em caso utilise uma divisão

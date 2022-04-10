@@ -17,6 +17,13 @@ export const atualizandoDadosLocais = async () => {
 
 export const atualizandoToken = async () => {
     var dadosTempoDeAtualizacaoToken = await calculaTempoDeAtualizacaoToken();
+    let atualizarEm = dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken;
+    if (atualizarEm > 0)
+        setInterval(() => buscarEAtualizarRefreshToken(), atualizarEm);
+}
+
+export const atualizandoTokenOLD = async () => {
+    var dadosTempoDeAtualizacaoToken = await calculaTempoDeAtualizacaoToken();
     //console.log(`Dados de atualizacao do token = ${JSON.stringify(dadosTempoDeAtualizacaoToken)}`);
     let expira = dadosTempoDeAtualizacaoToken.dataRestanteMilisegundos;
     if (expira > 0) {
@@ -32,13 +39,12 @@ export const atualizandoToken = async () => {
         }, expira)
     }
 }
+
 export const atualizandoTokenPrimeiraVez = async () => {
     var dadosTempoDeAtualizacaoToken = await calculaTempoDeAtualizacaoToken();
     let expira = dadosTempoDeAtualizacaoToken.dataRestanteMilisegundos;
     if (expira > 0) {
-        //console.log(`Token será atualizado em ${expira} milisegundos ${new Date()}`);
         setTimeout(() => {
-            //console.log(`Atualizando token primeira vez ${new Date()}`);
             buscarEAtualizarRefreshToken();
         }, expira)
     }

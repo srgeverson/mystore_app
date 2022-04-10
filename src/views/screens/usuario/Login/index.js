@@ -8,7 +8,7 @@ import styles from './styles';
 import BotaoEntrar from '../../../components/BotaoEntrar';
 import { AuthorityContext } from '../../../../core/contexts';
 import { authorizationServerLogin } from '../../../../core/api';
-import { salvarTokenLogin, getTokenLogin, getLoginSalvo } from '../../../../services/UsuarioService';
+import { salvarTokenLogin, getLoginSalvo } from '../../../../services/UsuarioService';
 
 const Login = () => {
 
@@ -23,17 +23,12 @@ const Login = () => {
 
     const recuperaTokenSalvo = async () => {
         setCarregando(true);
-        //const tokenSalvo = await getTokenLogin();
         const loginSalvo = await getLoginSalvo();
         if (loginSalvo) {
             setToken(loginSalvo.token);
             setEmail(loginSalvo.email);
             setSenha(loginSalvo.senha);
         }
-        //setEmail(`geversonjosedesouza@hotmail.com`);
-        //setSenha(`123456`);
-        //console.log(`recuperaTokenSalvo = ${tokenSalvo}`);
-        //rsetToken(tokenSalvo);
         setCarregando(false);
     }
 

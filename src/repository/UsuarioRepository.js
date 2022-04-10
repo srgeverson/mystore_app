@@ -137,7 +137,7 @@ class UsuarioRepository {
 
     updateAllData() {
         return new Promise((resolve, reject) => {
-            Database.update(`UPDATE usuarios SET data = NULL, accessToken = NULL;`, [])
+            Database.update(`UPDATE usuarios SET data = NULL;`, [])
                 .then((success) => {
                     resolve(success);
                 })
