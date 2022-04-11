@@ -67,6 +67,18 @@ class CidadeRepository {
         });
     }
 
+    updateAllById(cidade) {
+        return new Promise((resolve, reject) => {
+            Database.update(`UPDATE cidades SET nome = ? WHERE (id = ?);`, [cidade.nome, cidade.id])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+    
     selectLikeByNome(nome) {
         return new Promise((resolve, reject) => {
             Database.select(`SELECT * FROM cidades WHERE (nome LIKE '%${nome}%');`, [])
@@ -79,17 +91,6 @@ class CidadeRepository {
         });
     }
 
-    updateAllById(cidade) {
-        return new Promise((resolve, reject) => {
-            Database.update(`UPDATE cidades SET nome = ? WHERE (id = ?);`, [cidade.nome, cidade.id])
-                .then((success) => {
-                    resolve(success);
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        });
-    }
 }
 
 export default new CidadeRepository();

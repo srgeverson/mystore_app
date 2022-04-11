@@ -11,6 +11,7 @@ import BemVindo from '../../views/screens/mystore/BemVindo';
 import ListarClientes from '../../views/screens/clientes/Listar';
 import ListarCompras from '../../views/screens/compras/Listar';
 import ListarVendas from '../../views/screens/vendas/Listar';
+import PerfilUsuario from '../../views/screens/usuario/Perfil';
 import { ResultadosStackNavigator } from './StackNavigator';
 
 const Drawer = createDrawerNavigator();
@@ -40,6 +41,7 @@ const DrawerNavigator = () => {
         try {
             const entryPoint = await rootEntryPoint();
             if (entryPoint._links) {
+                //console.log(entryPoint._links)
                 setOffLine(false);
                 setMenusDisponiveis(entryPoint._links);
             } else {
@@ -82,11 +84,12 @@ const DrawerNavigator = () => {
     return (
         <>
             <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />} initialRouteName='BemVindo'>
-                {true && getScrens('BemVindo', BemVindo, 'Página Inicial', 'home')}
+                {/* {true && getScrens('BemVindo', BemVindo, 'Página Inicial', 'home')} */}
                 {true && getScrens("ListarClientes", ListarClientes, 'Clientes', 'address-card')}
-                {true && getScrens("ListarCompras", ListarCompras, 'Compras', 'shopping-cart')}
-                {true && getScrens("ListarVendas", ListarVendas, 'Vendas', 'cart-plus')}
-                {true && getScrens("Resultados", ResultadosStackNavigator, 'Resultados', 'bar-chart', false)}
+                {true && getScrens("PerfilUsuario", PerfilUsuario, 'Dados Pessoais', 'user-circle')}
+                {/* {menusDisponiveis.compras && getScrens("ListarCompras", ListarCompras, 'Compras', 'shopping-cart')} */}
+                {/* {menusDisponiveis.pedidos && getScrens("ListarVendas", ListarVendas, 'Vendas', 'cart-plus')} */}
+                {/* {menusDisponiveis.estatisticas && getScrens("Resultados", ResultadosStackNavigator, 'Resultados', 'bar-chart', false)} */}
             </Drawer.Navigator>
             {carregando && <ModalCarregando pagina='Configurando permissões' />}
         </>

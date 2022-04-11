@@ -40,11 +40,32 @@ class CidadeRepository {
     
     insertOrReplace(cliente) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO clientes (id, apelidoNomeFantazia, enderecos_id) VALUES (?, ?, ?)',
+            Database.insert(`INSERT OR REPLACE INTO clientes (
+                id,
+                apelido_nome_fantazia,
+                nome_razao_social,
+                cpf_cnpj,
+                email,
+                telefone,
+                celular,
+                data_cadastro,
+                ativo,
+                enderecos_id,
+                empresas_id,
+                versao
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
-                    cliente.id ? cliente.id : 0,
+                    cliente.id ? cliente.id : null,
                     cliente.apelidoNomeFantazia ? cliente.apelidoNomeFantazia : null,
-                    cliente.enderecoId ? cliente.enderecoId : null,
+                    cliente.nomeRazaoSocial ? cliente.nomeRazaoSocial : null,
+                    cliente.cpfCnpj ? cliente.cpfCnpj : null,
+                    cliente.email ? cliente.email : null,
+                    cliente.telefone ? cliente.telefone : null,
+                    cliente.celular ? cliente.celular : null,
+                    cliente.dataCadastro ? cliente.dataCadastro : null,
+                    cliente.ativo ? cliente.ativo : null,
+                    cliente.enderecosId ? cliente.enderecoId : null,
+                    cliente.empresasId ? cliente.empresasId : null,
                 ])
                 .then((success) => {
                     resolve(success);
@@ -69,7 +90,7 @@ class CidadeRepository {
 
     selectLikeByNome(nome) {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM clientes WHERE (nome LIKE '%${nome}%');`, [])
+            Database.select(`SELECT * FROM clientes WHERE (apelido_nome_fantazia LIKE '%${nome}%');`, [])
                 .then((success) => {
                     resolve(success);
                 })

@@ -24,12 +24,62 @@ export const Tables = {
             primary_key: true,
             default_value: null,
         },
-        apelidoNomeFantazia: {
+        apelido_nome_fantazia: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        nome_razao_social: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        cpf_cnpj: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        email: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        telefone: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        celular: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        data_cadastro: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        ativo: {
+            type: Types.BOOLEAN,
+            primary_key: false,
+            default_value: null,
+        },
+        email: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
         },
         enderecos_id: {
+            type: Types.INTEGER,
+            primary_key: false,
+            default_value: null,
+        },
+        empresas_id: {
+            type: Types.INTEGER,
+            primary_key: false,
+            default_value: null,
+        },
+        versao: {
             type: Types.INTEGER,
             primary_key: false,
             default_value: null,
@@ -95,7 +145,7 @@ export const Tables = {
             default_value: null,
         },
         empresa: {
-            type: Types.TEXT,
+            type: Types.INTEGER,
             primary_key: false,
             default_value: null,
         },

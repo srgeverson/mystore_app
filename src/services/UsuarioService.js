@@ -86,10 +86,12 @@ export const calculaTempoDeAtualizacaoToken = async () => {
     let dataExpiresMilisegundos = 0;
     let dataAtualMilisegundos = 0;
     let dataRestanteMilisegundos = 0;
+    let idEmpresa = 0;
     // console.log(usuarioAutenticadoAnteriormente);
     if (usuarioAutenticadoAnteriormente) {
         email = usuarioAutenticadoAnteriormente.email;
         senha = usuarioAutenticadoAnteriormente.senha;
+        idEmpresa = usuarioAutenticadoAnteriormente.empresa;
         expires = usuarioAutenticadoAnteriormente.expiresIn;
         token = usuarioAutenticadoAnteriormente.accessToken;
         expiresMilisegundos = Math.round((((//Usando esta função para arredondar os valores em caso utilise uma divisão
@@ -112,7 +114,33 @@ export const calculaTempoDeAtualizacaoToken = async () => {
         //console.log(dataRestanteMilisegundos);
         //await limparDataAcesso();
     }
-    return { dataRestanteMilisegundos, token, tempoDeSincronizacaoDoToken: expiresMilisegundos, email, senha };
+    return { dataRestanteMilisegundos, token, tempoDeSincronizacaoDoToken: expiresMilisegundos, email, senha, idEmpresa };
+}
+
+export const getEmpresaUsuarioLogado = async (idEmpresa) => {
+    const token = await getTokenLogin();
+    try {
+        return await api(token)
+            .get(`/v${versao}/empresas/${idEmpresa}`)
+            .then((respose) => {
+                if (respose.data !== null) {
+                    return respose.data;
+                }
+            }).catch((error) => {
+                console.log(`Erro na requisição da empresa do usuário!`);
+                if (error.response) {
+                    return {
+                        codigo: error.response.status,
+                        erro: error.response.data.error,
+                        mensagem: error.response.data.error_description,
+                    }
+                } else {
+                    throw error;
+                }
+            });
+    } catch (error) {
+        console.log(`Erro no método getEmpresaUsuarioLogado do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
 }
 
 export const getTokenLogin = async () => {
@@ -123,6 +151,16 @@ export const getTokenLogin = async () => {
         } else {
             return null;
         }
+    } catch (error) {
+        console.log(`Erro no método getTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const getUsuarioLogado = async () => {
+    try {
+        const usuarioLogado = await UsuarioRepository.selectByTokenExpireData();
+        const empresa = await getEmpresaUsuarioLogado(usuarioLogado.rows.item(0).empresa);
+        return { ...usuarioLogado.rows.item(0), nomeApelido: empresa ? empresa.nome : null };
     } catch (error) {
         console.log(`Erro no método getTokenLogin do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);
     }
@@ -167,7 +205,8 @@ export const getLoginSalvo = async () => {
         return {
             token: dataRestanteMilisegundos.dataRestanteMilisegundos > 0 ? dataRestanteMilisegundos.token : null,
             email: dataRestanteMilisegundos.email,
-            senha: dataRestanteMilisegundos.senha
+            senha: dataRestanteMilisegundos.senha,
+            empresa: dataRestanteMilisegundos.idEmpresa
         }
     } catch (error) {
         console.log(`Erro no método getLoginSalvo do arquivo UsuarioService -> ${new Date()} -> erro: ${error}`);

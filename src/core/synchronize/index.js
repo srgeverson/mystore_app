@@ -8,18 +8,24 @@ export const atualizandoDadosLocais = async () => {
     setInterval(() => {
         //Código a ser executado aqui
         console.log(`Iniciando a sincronização dos dados -> ${new Date()}...`);
-        sincronizarCidade();
+        //sincronizarCidade();
         sincronizarCliente();
-        sincronizarEstado();
+        //sincronizarEstado();
         console.log(`Finalizando a sincronização dos dados -> ${new Date()}...`);
     }, 60000);
 }
 
 export const atualizandoToken = async () => {
     var dadosTempoDeAtualizacaoToken = await calculaTempoDeAtualizacaoToken();
-    let atualizarEm = dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken;
-    if (atualizarEm > 0)
-        setInterval(() => buscarEAtualizarRefreshToken(), atualizarEm);
+    let expira = dadosTempoDeAtualizacaoToken.dataRestanteMilisegundos;
+    if (expira > 0) {
+        setTimeout(() => {
+            buscarEAtualizarRefreshToken();
+            setInterval(() => {
+                buscarEAtualizarRefreshToken();
+            }, dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken);
+        }, expira);
+    }
 }
 
 export const atualizandoTokenOLD = async () => {
@@ -36,7 +42,7 @@ export const atualizandoTokenOLD = async () => {
                 //console.log(`Tempo token local ${expira}`);
                 buscarEAtualizarRefreshToken();
             }, dadosTempoDeAtualizacaoToken.tempoDeSincronizacaoDoToken);
-        }, expira)
+        }, expira);
     }
 }
 
