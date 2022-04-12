@@ -1,12 +1,12 @@
 import React from 'react';
 import { Dialog } from '@rneui/themed';
 
-const Selecionar = () => {
+const Selecionar = (props) => {
     return (
         <>
             <Dialog
-                isVisible={visible6}
-                onBackdropPress={toggleDialog6}
+                isVisible={props.isVisible}
+                onBackdropPress={props.onBackdropPress}
             >
                 <Dialog.Title title="Selecione UF" />
                 {/* {userlist.map((l, i) => (

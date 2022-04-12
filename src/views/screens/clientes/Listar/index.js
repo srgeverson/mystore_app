@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Alert, SafeAreaView, } from 'react-native';
-import { SearchBar, SpeedDial, Text, ListItem } from 'react-native-elements';
+import { SearchBar, SpeedDial, Text, ListItem, Button } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { buscarPorConterNome} from '../../../../services/ClienteService';
+import { buscarPorConterNome } from '../../../../services/ClienteService';
 import ModalCarregando from '../../../components/ModalCarregando';
+import Selecionar from '../../estados/Selecionar';
 
 const Listar = () => {
 
@@ -16,6 +17,10 @@ const Listar = () => {
     const [carregando, setCarregando] = useState(false);
 
     const [retorno, setRetorno] = useState([]);
+
+    const [valor, setValor] = useState(null);
+
+    const [modalEstados, setModalEstados] = useState(false);
 
     const pesquisarClientes = async (nome) => {
         setCarregando(true);
@@ -48,11 +53,12 @@ const Listar = () => {
         </ListItem>
     );
 
-    const [valor, setValor] = useState(null);
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <SearchBar
+            {/* <Selecionar isVisible={modalEstados}
+                onBackdropPress={() => setModalEstados(!modalEstados)} />
+                */}
+            <SearchBar 
                 lightTheme={true}
                 placeholder={`Digite o nome da Cliente aqui...`}
                 onChangeText={value => pesquisarClientes(value)}
@@ -68,7 +74,16 @@ const Listar = () => {
                     :
                     <Text>Listagem vazia...</Text>
             }
-
+            <Button
+                title="Estados"
+                onPress={() => 
+                    {
+                        let teste = !modalEstados;
+                        setModalEstados(teste);
+                        console.log(teste);
+                    }
+                }
+            />
             <SpeedDial
                 color='#007BFF'
                 isOpen={open}
