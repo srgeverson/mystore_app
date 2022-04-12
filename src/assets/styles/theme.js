@@ -24,6 +24,7 @@ export const theme = {
         logoWidth: logoWidth,
         logoHeight: 150,
         sizeDrawer: 20,
+        search: 50,
     },
     margins: {
         iconTextLeft: 5,

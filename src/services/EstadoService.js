@@ -1,10 +1,8 @@
 import { api } from '../core/api';
 import EstadoRepository from '../repository/EstadoRepository';
-import { getTokenLogin } from './UsuarioService';
 const versao = '1';
 
-export const getEstados = async () => {
-    const token = await getTokenLogin();
+export const getEstados = async (token) => {
     try {
         return await api(token)
             .get(`/v${versao}/estados`)
@@ -13,7 +11,7 @@ export const getEstados = async () => {
                     return respose.data;
                 }
             }).catch((error) => {
-                console.log(`Erro na requisição da API andpoint getEstados!`);
+                console.log(`Erro na requisição da API andpoint getEstados! Erro: ${error.message}`);
                 if (error.response) {
                     return {
                         codigo: error.response.status,
@@ -54,10 +52,10 @@ export const cadastrarOuAtualizar = async (estado) => {
     }
 }
 
-export const sincronizar = async () => {
+export const sincronizar = async (token) => {
     try {
-        let retorno = await getEstados();
-        if (retorno._embedded.estados)
+        let retorno = await getEstados(token);
+        if (retorno._embedded)
             retorno._embedded.estados.forEach(element => cadastrarOuAtualizar({ id: element.id, nome: element.nome }));
     } catch (error) {
         console.log(`Erro no método cadastrar do arquivo sincronizar  -> ${new Date()} -> erro: ${error}`);

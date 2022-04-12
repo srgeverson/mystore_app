@@ -1,19 +1,17 @@
 import { api } from '../core/api';
 import ClienteRepository from '../repository/ClienteRepository';
-import { getLoginSalvo, getTokenLogin } from './UsuarioService';
 const versao = '1';
 
-export const getClientes = async () => {
-    const loginSalvo = await getLoginSalvo();
+export const getClientes = async (token, idEmpresa) => {
     try {
-        return await api(loginSalvo.token)
-            .get(`/v${versao}/empresas/${loginSalvo.empresa}/clientes`)
+        return await api(token)
+            .get(`/v${versao}/empresas/${idEmpresa}/clientes`)
             .then((respose) => {
                 if (respose.data !== null) {
                     return respose.data;
                 }
             }).catch((error) => {
-                console.log(`Erro na requisição da API andpoint getClientes!`);
+                console.log(`Erro na requisição da API andpoint getClientes! Erro: ${error.message}`);
                 if (error.response) {
                     return {
                         codigo: error.response.status,
@@ -53,10 +51,10 @@ export const cadastrarOuAtualizar = async (cliente) => {
     }
 }
 
-export const sincronizar = async () => {
+export const sincronizar = async (token, empresa) => {
     try {
         //Implementar a consulta do id da empresa aqui
-        let retorno = await getClientes();
+        let retorno = await getClientes(token, empresa);
         if (retorno._embedded) {
             //console.log(retorno._embedded.clientes)
             retorno._embedded.clientes.forEach(element => cadastrarOuAtualizar({

@@ -1,16 +1,17 @@
-import { buscarEAtualizarRefreshToken } from '../../services/UsuarioService';
+import { buscarEAtualizarRefreshToken, getLoginSalvo } from '../../services/UsuarioService';
 import { sincronizar as sincronizarCidade } from '../../services/CidadeService';
 import { sincronizar as sincronizarCliente } from '../../services/ClienteService';
 import { sincronizar as sincronizarEstado } from '../../services/EstadoService';
 import { calculaTempoDeAtualizacaoToken } from '../../services/UsuarioService';
 
 export const atualizandoDadosLocais = async () => {
+    const { empresa, token } = await getLoginSalvo();
     setInterval(() => {
         //Código a ser executado aqui
         console.log(`Iniciando a sincronização dos dados -> ${new Date()}...`);
-        //sincronizarCidade();
-        sincronizarCliente();
-        //sincronizarEstado();
+        sincronizarCidade(token);
+        sincronizarCliente(token, empresa);
+        sincronizarEstado(token);
         console.log(`Finalizando a sincronização dos dados -> ${new Date()}...`);
     }, 60000);
 }

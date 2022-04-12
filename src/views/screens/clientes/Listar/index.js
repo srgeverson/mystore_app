@@ -55,9 +55,9 @@ const Listar = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            {/* <Selecionar isVisible={modalEstados}
+            <Selecionar isVisible={modalEstados}
                 onBackdropPress={() => setModalEstados(!modalEstados)} />
-                */}
+               
             <SearchBar 
                 lightTheme={true}
                 placeholder={`Digite o nome da Cliente aqui...`}
