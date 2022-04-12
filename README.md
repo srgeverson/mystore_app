@@ -46,8 +46,10 @@ $ npm install @react-navigation/stack
 ### Navegação drawer
 npm install @react-navigation/drawer
 
-### Elementos/Componentes do React Native
-$ npm install react-native-elements
+
+### Elementos/Componentes do React Native [Configuração](https://github.com/react-native-elements/react-native-elements)
+$ npm install --save @rneui/themed @rneui/base
+$ npm install --save react-native-elements
 
 ### Biblioteca de icones [Configuração](https://github.com/oblador/react-native-vector-icons)
 $ npm install react-native-vector-icons
@@ -83,7 +85,7 @@ $ "scripts": {
 	"android-prod": "ENVFILE=.env.prod react-native run-android"
 },
 
-### Biblioteca de gráficos
+### Biblioteca de gráficos. REMOVIDO TEMPORÁRIAMENTE!!!!!!!!!!!!!!!
 $ npm install --save react-native-svg-charts
 
 ```
