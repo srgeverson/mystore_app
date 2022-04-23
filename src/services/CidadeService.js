@@ -28,9 +28,9 @@ export const getCidades = async (token) => {
     }
 }
 
-export const buscarPorConterNome = async (nome) => {
+export const buscarPorConterNome = async (nome, estadoId) => {
     try {
-        return CidadeRepository.selectLikeByNome(nome);
+        return CidadeRepository.selectLikeByNomeAndEstadoId(nome, estadoId);
     } catch (error) {
         console.log(`Erro no método buscarPorConterNome do arquivo CidadesService -> ${new Date()} -> erro: ${error}`);
     }
