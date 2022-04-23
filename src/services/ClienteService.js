@@ -53,10 +53,8 @@ export const cadastrarOuAtualizar = async (cliente) => {
 
 export const sincronizar = async (token, empresa) => {
     try {
-        //Implementar a consulta do id da empresa aqui
         let retorno = await getClientes(token, empresa);
         if (retorno._embedded) {
-            //console.log(retorno._embedded.clientes)
             retorno._embedded.clientes.forEach(element => cadastrarOuAtualizar({
                 id: element.id,
                 apelidoNomeFantazia: element.apelidoNomeFantazia,
