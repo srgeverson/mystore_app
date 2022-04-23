@@ -8,11 +8,10 @@ import HeaderLeft from '../../views/components/HeaderLeft';
 import ModalCarregando from '../../views/components/ModalCarregando';
 import HeaderRight from '../../views/components/HeaderRight';
 import BemVindo from '../../views/screens/mystore/BemVindo';
-import ListarClientes from '../../views/screens/clientes/Listar';
 import ListarCompras from '../../views/screens/compras/Listar';
 import ListarVendas from '../../views/screens/vendas/Listar';
 import PerfilUsuario from '../../views/screens/usuario/Perfil';
-import { ResultadosStackNavigator } from './StackNavigator';
+import { ClientesStackNavigator, ResultadosStackNavigator } from './StackNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -85,7 +84,7 @@ const DrawerNavigator = () => {
         <>
             <Drawer.Navigator drawerContent={props => <DrawerCustom {...props} />} initialRouteName='BemVindo'>
                 {/* {true && getScrens('BemVindo', BemVindo, 'Página Inicial', 'home')} */}
-                {true && getScrens("ListarClientes", ListarClientes, 'Clientes', 'address-card')}
+                {true && getScrens("ListarClientes", ClientesStackNavigator, 'Clientes', 'address-card')}
                 {true && getScrens("PerfilUsuario", PerfilUsuario, 'Dados Pessoais', 'user-circle')}
                 {/* {menusDisponiveis.compras && getScrens("ListarCompras", ListarCompras, 'Compras', 'shopping-cart')} */}
                 {/* {menusDisponiveis.pedidos && getScrens("ListarVendas", ListarVendas, 'Vendas', 'cart-plus')} */}

@@ -1,23 +1,32 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-// import { Button } from 'react-native-elements';
-// import Icon from 'react-native-vector-icons/FontAwesome';
-// import { useNavigation } from '@react-navigation/native';
+//Gráficos
 import Resultados from '../../views/screens/resultados';
 import Clientes from '../../views/screens/resultados/Clientes';
 import Compras from '../../views/screens/resultados/Compras';
 import Produtos from '../../views/screens/resultados/Produtos';
 import Vendas from '../../views/screens/resultados/Vendas';
+//CRUD Cliente
+import ListarClientes from '../../views/screens/clientes/Listar';
+import ClientesCadastro from '../../views/screens/clientes/Cadastro';
 
 const Stack = createStackNavigator();
 
+const ClientesStackNavigator = () => {
+
+    return (
+        <>
+            <Stack.Navigator>
+                <Stack.Screen name="ListarClientes" component={ListarClientes} options={{ headerShown: false, title: 'Clientes' }} />
+                <Stack.Screen name="ClientesCadastro" component={ClientesCadastro} options={{ headerShown: false, title: 'Cadastro de Clientes' }} />
+            </Stack.Navigator>
+        </>
+    );
+};
 
 const ResultadosStackNavigator = () => {
 
-    //const navigation = useNavigation();
-
     const screenOptionStyle = {
-        //headerLeft: () => <Button icon={<Icon onPress={() => navigation.navigate('BemVindo')} name="home" size={20} color='#FFF' />} />,
         headerStyle: {
             backgroundColor: "#0B89D4",
         },
@@ -40,4 +49,4 @@ const ResultadosStackNavigator = () => {
     );
 };
 
-export { ResultadosStackNavigator };
+export { ClientesStackNavigator, ResultadosStackNavigator };
