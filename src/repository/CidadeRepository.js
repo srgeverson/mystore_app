@@ -79,9 +79,9 @@ class CidadeRepository {
         });
     }
     
-    selectLikeByNome(nome) {
+    selectLikeByNomeAndEstadoId(nome, estadoId) {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM cidades WHERE (nome LIKE '%${nome}%');`, [])
+            Database.select(`SELECT * FROM cidades WHERE (nome LIKE '%${nome}%' AND estados_id = ${estadoId});`, [])
                 .then((success) => {
                     resolve(success);
                 })
