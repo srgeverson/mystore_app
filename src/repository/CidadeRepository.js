@@ -40,12 +40,15 @@ class CidadeRepository {
     
     insertOrReplace(cidade) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO cidades (id, nome, versao, estados_id) VALUES (?, ?, ?, ?)',
+            Database.insert('INSERT OR REPLACE INTO cidades (ativo, critica, id, id_local, estados_id, nome, versao) VALUES (?, ?, ?, ?, ?, ?, ?)',
                 [
-                    cidade.id ? cidade.id : 0,
+                    cidade.ativo ? cidade.ativo : false,
+                    cidade.critica ? cidade.critica : null,
+                    cidade.id ? cidade.id : null,
+                    cidade.id_local ? cidade.id_local : cidade.id,
+                    cidade.estados_id ? cidade.estados_id : null,
                     cidade.nome ? cidade.nome : null,
                     cidade.versao ? cidade.versao : 0,
-                    cidade.estados_id ? cidade.estados_id : null,
                 ])
                 .then((success) => {
                     resolve(success);
@@ -67,6 +70,30 @@ class CidadeRepository {
                 });
         });
     }
+    
+    selectLikeByNomeAndEstadoId(nome, estadoId) {
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT * FROM cidades WHERE (ativo = true AND nome LIKE '%${nome}%' AND estados_id = ${estadoId});`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    selectUltimaVersao() {
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT MAX(versao) AS versao FROM clientes;`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
 
     updateAllById(cidade) {
         return new Promise((resolve, reject) => {
@@ -79,31 +106,6 @@ class CidadeRepository {
                 });
         });
     }
-    
-    selectLikeByNomeAndEstadoId(nome, estadoId) {
-        return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM cidades WHERE (nome LIKE '%${nome}%' AND estados_id = ${estadoId});`, [])
-                .then((success) => {
-                    resolve(success);
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        });
-    }
-
-    selectUltimaVersao() {
-        return new Promise((resolve, reject) => {
-            Database.select(`SELECT MAX(versao) AS versao FROM cidades;`, [])
-                .then((success) => {
-                    resolve(success);
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        });
-    }
-
 }
 
 export default new CidadeRepository();

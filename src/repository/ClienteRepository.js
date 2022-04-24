@@ -42,31 +42,35 @@ class CidadeRepository {
         console.log(cliente)
         return new Promise((resolve, reject) => {
             Database.insert(`INSERT OR REPLACE INTO clientes (
-                id,
                 apelido_nome_fantazia,
-                nome_razao_social,
-                cpf_cnpj,
-                email,
-                telefone,
-                celular,
-                data_cadastro,
                 ativo,
-                enderecos_id,
+                celular,
+                cpf_cnpj,
+                critica,
+                data_cadastro,
+                email,
                 empresas_id,
+                enderecos_id,
+                id,
+                id_local,
+                nome_razao_social,
+                telefone,
                 versao
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
-                    cliente.id ? cliente.id : null,
                     cliente.apelidoNomeFantazia ? cliente.apelidoNomeFantazia : null,
-                    cliente.nomeRazaoSocial ? cliente.nomeRazaoSocial : null,
-                    cliente.cpfCnpj ? cliente.cpfCnpj : null,
-                    cliente.email ? cliente.email : null,
-                    cliente.telefone ? cliente.telefone : null,
+                    cliente.ativo ? cliente.ativo : false,
                     cliente.celular ? cliente.celular : null,
+                    cliente.cpfCnpj ? cliente.cpfCnpj : null,
+                    cliente.critica ? cliente.critica : null,
                     cliente.dataCadastro ? cliente.dataCadastro : null,
-                    cliente.ativo ? cliente.ativo : null,
-                    cliente.enderecosId ? cliente.enderecoId : null,
+                    cliente.email ? cliente.email : null,
                     cliente.empresasId ? cliente.empresasId : null,
+                    cliente.enderecosId ? cliente.enderecoId : null,
+                    cliente.id ? cliente.id : null,
+                    cliente.id_local ? cliente.id_local : cliente.id,
+                    cliente.nomeRazaoSocial ? cliente.nomeRazaoSocial : null,
+                    cliente.telefone ? cliente.telefone : null,
                     cliente.versao ? cliente.versao : null,
                 ])
                 .then((success) => {
@@ -92,7 +96,19 @@ class CidadeRepository {
 
     selectLikeByNome(nome) {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM clientes WHERE (apelido_nome_fantazia LIKE '%${nome}%');`, [])
+            Database.select(`SELECT * FROM clientes WHERE (ativo = true AND apelido_nome_fantazia LIKE '%${nome}%');`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    selectUltimaVersao() {
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT MAX(versao) AS versao FROM clientes;`, [])
                 .then((success) => {
                     resolve(success);
                 })
@@ -105,18 +121,6 @@ class CidadeRepository {
     updateAllById(cliente) {
         return new Promise((resolve, reject) => {
             Database.update(`UPDATE clientes SET nome = ? WHERE (id = ?);`, [cliente.nome, cliente.id])
-                .then((success) => {
-                    resolve(success);
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        });
-    }
-
-    selectUltimaVersao() {
-        return new Promise((resolve, reject) => {
-            Database.select(`SELECT  MAX(versao) AS versao FROM clientes;`, [])
                 .then((success) => {
                     resolve(success);
                 })

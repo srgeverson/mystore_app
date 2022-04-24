@@ -40,10 +40,14 @@ class EstadoRepository {
     
     insertOrReplace(estado) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO estados (id, nome, versao) VALUES (?, ?, ?)',
+            Database.insert('INSERT OR REPLACE INTO estados (ativo, critica, id, id_local, nome, uf, versao) VALUES (?, ?, ?, ?, ?, ?, ?)',
                 [
-                    estado.id ? estado.id : 0,
+                    estado.ativo ? estado.ativo : false,
+                    estado.critica ? estado.critica : null,
+                    estado.id ? estado.id : null,
+                    estado.id_local ? estado.id_local : estado.id,
                     estado.nome ? estado.nome : null,
+                    estado.uf ? estado.uf : null,
                     estado.versao ? estado.versao : 0,
                 ])
                 .then((success) => {
@@ -69,19 +73,7 @@ class EstadoRepository {
 
     selectLikeByNome(nome) {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM estados WHERE (nome LIKE '%${nome}%');`, [])
-                .then((success) => {
-                    resolve(success);
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        });
-    }
-
-    updateAllById(estado) {
-        return new Promise((resolve, reject) => {
-            Database.update(`UPDATE estados SET nome = ? WHERE (id = ?);`, [estado.nome, estado.id])
+            Database.select(`SELECT * FROM estados WHERE (ativo = true AND nome LIKE '%${nome}%');`, [])
                 .then((success) => {
                     resolve(success);
                 })
@@ -94,6 +86,18 @@ class EstadoRepository {
     selectUltimaVersao() {
         return new Promise((resolve, reject) => {
             Database.select(`SELECT  MAX(versao) AS versao FROM estados;`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    updateAllById(estado) {
+        return new Promise((resolve, reject) => {
+            Database.update(`UPDATE estados SET nome = ? WHERE (id = ?);`, [estado.nome, estado.id])
                 .then((success) => {
                     resolve(success);
                 })

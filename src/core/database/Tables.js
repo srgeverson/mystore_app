@@ -2,12 +2,12 @@ import { Types } from "./Types";
 
 export const Tables = {
     cidades: {
-        id: {
-            type: Types.INTEGER,
-            primary_key: true,
+        ativo: {
+            type: Types.BOOLEAN,
+            primary_key: false,
             default_value: null,
         },
-        nome: {
+        critica: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
@@ -17,13 +17,6 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
-        versao: {
-            type: Types.INTEGER,
-            primary_key: false,
-            default_value: null,
-        },
-    },
-    clientes: {
         id: {
             type: Types.INTEGER,
             primary_key: true,
@@ -34,37 +27,19 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
+        nome: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        versao: {
+            type: Types.INTEGER,
+            primary_key: false,
+            default_value: null,
+        },
+    },
+    clientes: {
         apelido_nome_fantazia: {
-            type: Types.TEXT,
-            primary_key: false,
-            default_value: null,
-        },
-        nome_razao_social: {
-            type: Types.TEXT,
-            primary_key: false,
-            default_value: null,
-        },
-        cpf_cnpj: {
-            type: Types.TEXT,
-            primary_key: false,
-            default_value: null,
-        },
-        email: {
-            type: Types.TEXT,
-            primary_key: false,
-            default_value: null,
-        },
-        telefone: {
-            type: Types.TEXT,
-            primary_key: false,
-            default_value: null,
-        },
-        celular: {
-            type: Types.TEXT,
-            primary_key: false,
-            default_value: null,
-        },
-        data_cadastro: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
@@ -74,8 +49,33 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
+        celular: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        cpf_cnpj: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        critica: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        data_cadastro: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
         email: {
             type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        empresas_id: {
+            type: Types.INTEGER,
             primary_key: false,
             default_value: null,
         },
@@ -84,8 +84,23 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
-        empresas_id: {
+        id: {
             type: Types.INTEGER,
+            primary_key: true,
+            default_value: null,
+        },
+        id_local: {
+            type: Types.INTEGER,
+            primary_key: false,
+            default_value: null,
+        },
+        nome_razao_social: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        telefone: {
+            type: Types.TEXT,
             primary_key: false,
             default_value: null,
         },
@@ -103,12 +118,32 @@ export const Tables = {
         },
     },
     estados: {
+        ativo: {
+            type: Types.BOOLEAN,
+            primary_key: false,
+            default_value: null,
+        },
+        critica: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
         id: {
             type: Types.INTEGER,
             primary_key: true,
             default_value: null,
         },
+        id_local: {
+            type: Types.INTEGER,
+            primary_key: false,
+            default_value: null,
+        },
         nome: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        uf: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
