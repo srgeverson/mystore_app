@@ -40,10 +40,11 @@ class CidadeRepository {
     
     insertOrReplace(cidade) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO cidades (id, nome, estados_id) VALUES (?, ?, ?)',
+            Database.insert('INSERT OR REPLACE INTO cidades (id, nome, versao, estados_id) VALUES (?, ?, ?, ?)',
                 [
                     cidade.id ? cidade.id : 0,
                     cidade.nome ? cidade.nome : null,
+                    cidade.versao ? cidade.versao : 0,
                     cidade.estados_id ? cidade.estados_id : null,
                 ])
                 .then((success) => {
@@ -82,6 +83,18 @@ class CidadeRepository {
     selectLikeByNomeAndEstadoId(nome, estadoId) {
         return new Promise((resolve, reject) => {
             Database.select(`SELECT * FROM cidades WHERE (nome LIKE '%${nome}%' AND estados_id = ${estadoId});`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    selectUltimaVersao() {
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT MAX(versao) AS versao FROM cidades;`, [])
                 .then((success) => {
                     resolve(success);
                 })

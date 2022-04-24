@@ -24,7 +24,7 @@ class CidadeRepository {
                     reject(error);
                 });
         });
-    }r
+    }
 
     insert(cliente) {
         return new Promise((resolve, reject) => {
@@ -39,6 +39,7 @@ class CidadeRepository {
     }
     
     insertOrReplace(cliente) {
+        console.log(cliente)
         return new Promise((resolve, reject) => {
             Database.insert(`INSERT OR REPLACE INTO clientes (
                 id,
@@ -66,6 +67,7 @@ class CidadeRepository {
                     cliente.ativo ? cliente.ativo : null,
                     cliente.enderecosId ? cliente.enderecoId : null,
                     cliente.empresasId ? cliente.empresasId : null,
+                    cliente.versao ? cliente.versao : null,
                 ])
                 .then((success) => {
                     resolve(success);
@@ -103,6 +105,18 @@ class CidadeRepository {
     updateAllById(cliente) {
         return new Promise((resolve, reject) => {
             Database.update(`UPDATE clientes SET nome = ? WHERE (id = ?);`, [cliente.nome, cliente.id])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    selectUltimaVersao() {
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT  MAX(versao) AS versao FROM clientes;`, [])
                 .then((success) => {
                     resolve(success);
                 })

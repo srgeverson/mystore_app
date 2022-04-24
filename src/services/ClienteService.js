@@ -1,11 +1,14 @@
 import { api } from '../core/api';
 import ClienteRepository from '../repository/ClienteRepository';
-const versao = '1';
 
 export const getClientes = async (token, idEmpresa) => {
     try {
+        const ultimaVersao = await ClienteRepository.selectUltimaVersao();
+        let ultVersao = -1;
+        if (ultimaVersao.rows)
+            ultVersao = ultimaVersao.rows.item(0).versao;
         return await api(token)
-            .get(`/v${versao}/empresas/${idEmpresa}/clientes`)
+            .get(`/v1/empresas/${idEmpresa}/clientes/versao?ultimaVersao=${ultVersao}`)
             .then((respose) => {
                 if (respose.data !== null) {
                     return respose.data;
@@ -55,18 +58,21 @@ export const sincronizar = async (token, empresa) => {
     try {
         let retorno = await getClientes(token, empresa);
         if (retorno._embedded) {
-            retorno._embedded.clientes.forEach(element => cadastrarOuAtualizar({
-                id: element.id,
-                apelidoNomeFantazia: element.apelidoNomeFantazia,
-                nomeRazaoSocial: element.nomeRazaoSocial,
-                cpfCnpj: element.cpfCnpj,
-                email: element.email,
-                telefone: element.telefone,
-                celular: element.celular,
-                dataCadastro: element.dataCadastro,
-                ativo: element.ativo,
-                enderecosId: element.endereco ? element.endereco.id : null,
-            }));
+            retorno._embedded.clientes.forEach(element => {
+                cadastrarOuAtualizar({
+                    id: element.id,
+                    apelidoNomeFantazia: element.apelidoNomeFantazia,
+                    nomeRazaoSocial: element.nomeRazaoSocial,
+                    cpfCnpj: element.cpfCnpj,
+                    email: element.email,
+                    telefone: element.telefone,
+                    celular: element.celular,
+                    dataCadastro: element.dataCadastro,
+                    ativo: element.ativo,
+                    enderecosId: element.endereco ? element.endereco.id : null,
+                    versao: element.versao > -1 ? element.versao : null,
+                });
+            });
         }
     } catch (error) {
         console.log(`Erro no método sincronizar do arquivo ClienteService  -> ${new Date()} -> erro: ${error}`);

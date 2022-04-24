@@ -40,10 +40,11 @@ class EstadoRepository {
     
     insertOrReplace(estado) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO estados (id, nome) VALUES (?, ?)',
+            Database.insert('INSERT OR REPLACE INTO estados (id, nome, versao) VALUES (?, ?, ?)',
                 [
                     estado.id ? estado.id : 0,
                     estado.nome ? estado.nome : null,
+                    estado.versao ? estado.versao : 0,
                 ])
                 .then((success) => {
                     resolve(success);
@@ -81,6 +82,18 @@ class EstadoRepository {
     updateAllById(estado) {
         return new Promise((resolve, reject) => {
             Database.update(`UPDATE estados SET nome = ? WHERE (id = ?);`, [estado.nome, estado.id])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    selectUltimaVersao() {
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT  MAX(versao) AS versao FROM estados;`, [])
                 .then((success) => {
                     resolve(success);
                 })

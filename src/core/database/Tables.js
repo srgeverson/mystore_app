@@ -17,11 +17,21 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
+        versao: {
+            type: Types.INTEGER,
+            primary_key: false,
+            default_value: null,
+        },
     },
     clientes: {
         id: {
             type: Types.INTEGER,
             primary_key: true,
+            default_value: null,
+        },
+        id_local: {
+            type: Types.INTEGER,
+            primary_key: false,
             default_value: null,
         },
         apelido_nome_fantazia: {
@@ -100,6 +110,11 @@ export const Tables = {
         },
         nome: {
             type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        versao: {
+            type: Types.INTEGER,
             primary_key: false,
             default_value: null,
         },

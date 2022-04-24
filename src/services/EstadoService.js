@@ -1,11 +1,14 @@
 import { api } from '../core/api';
 import EstadoRepository from '../repository/EstadoRepository';
-const versao = '1';
 
 export const getEstados = async (token) => {
     try {
+        const ultimaVersao = await EstadoRepository.selectUltimaVersao();
+        let ultVersao = -1;
+        if (ultimaVersao.rows)
+            ultVersao = ultimaVersao.rows.item(0).versao;
         return await api(token)
-            .get(`/v${versao}/estados`)
+            .get(`/v1/estados/versao/${ultVersao}`)
             .then((respose) => {
                 if (respose.data !== null) {
                     return respose.data;
@@ -43,7 +46,6 @@ export const cadastrar = async (estado) => {
     }
 }
 
-
 export const cadastrarOuAtualizar = async (estado) => {
     try {
         return EstadoRepository.insertOrReplace(estado);
@@ -56,7 +58,7 @@ export const sincronizar = async (token) => {
     try {
         let retorno = await getEstados(token);
         if (retorno._embedded)
-            retorno._embedded.estados.forEach(element => cadastrarOuAtualizar({ id: element.id, nome: element.nome }));
+            retorno._embedded.estados.forEach(element => cadastrarOuAtualizar({ id: element.id, nome: element.nome, versao: element.versao }));
     } catch (error) {
         console.log(`Erro no método cadastrar do arquivo sincronizar  -> ${new Date()} -> erro: ${error}`);
     }
