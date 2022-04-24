@@ -1,16 +1,15 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Alert, SafeAreaView, } from 'react-native';
 import { SearchBar, SpeedDial, Text, ListItem, Button } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import CidadeRepository from '../../../../repository/CidadeRepository';
+import ClienteRepository from '../../../../repository/ClienteRepository';
+import EstadoRepository from '../../../../repository/EstadoRepository';
 import { buscarPorConterNome } from '../../../../services/ClienteService';
 import ModalCarregando from '../../../components/ModalCarregando';
-import Selecionar from '../../estados/Selecionar';
 
-const Listar = () => {
-
-    const navigation = useNavigation();
+const Listar = ({navigation}) => {
 
     const [open, setOpen] = useState(false);
 
@@ -20,18 +19,14 @@ const Listar = () => {
 
     const [valor, setValor] = useState(null);
 
-    const [modalEstados, setModalEstados] = useState(false);
-
     const pesquisarClientes = async (nome) => {
         setCarregando(true);
         try {
-            const lista = await buscarPorConterNome(nome);
-            console.log(`Pesquisando...${JSON.stringify(lista)}`);
-            var temp = [];
-            for (let i = 0; i < lista.rows.length; ++i) {
-                temp.push(lista.rows.item(i));
+            if (nome) {
+                const lista = await buscarPorConterNome(nome);
+                console.log(`Pesquisando...${JSON.stringify(lista)}`);
+                setRetorno(lista.rows.raw());
             }
-            setRetorno(temp);
         } catch (error) {
             console.log(`Ocorreu no método pesquisarClientes erro em /src/viwes/clientes/Listar -> ${new Date()} -> erro: ${error}`);
         } finally {
@@ -43,9 +38,7 @@ const Listar = () => {
 
     const renderItem = ({ item }) => (
         <ListItem key={item.id} style={{ height: 50 }}
-            bottomDivider onPress={() => {
-                Alert.alert('Clique', `Objeto ${JSON.stringify(item)} foi clicada!`)
-            }}>
+            bottomDivider onPress={() => navigation.navigate('ClientesCadastro', { id: item.id })}>
             <ListItem.Content>
                 <ListItem.Title>{`Código: ${item.id}  - Nome : ${item.apelido_nome_fantazia}`}</ListItem.Title>
                 <ListItem.Subtitle>{`Ativado: ${item.ativo ? 'Sim' : 'Não'}`}</ListItem.Subtitle>
@@ -54,10 +47,8 @@ const Listar = () => {
     );
 
     return (
+        <>
         <SafeAreaView style={{ flex: 1 }}>
-            <Selecionar isVisible={modalEstados}
-                onBackdropPress={() => setModalEstados(!modalEstados)} />
-               
             <SearchBar 
                 lightTheme={true}
                 placeholder={`Digite o nome da Cliente aqui...`}
@@ -74,16 +65,6 @@ const Listar = () => {
                     :
                     <Text>Listagem vazia...</Text>
             }
-            <Button
-                title="Estados"
-                onPress={() => 
-                    {
-                        let teste = !modalEstados;
-                        setModalEstados(teste);
-                        console.log(teste);
-                    }
-                }
-            />
             <SpeedDial
                 color='#007BFF'
                 isOpen={open}
@@ -91,14 +72,31 @@ const Listar = () => {
                 openIcon={<Icon name='close' size={20} color='#FFF' onPress={() => setOpen(!open)} />}
                 onOpen={() => setOpen(!open)}
                 onClose={() => setOpen(!open)}>
-                <SpeedDial.Action
-                    color='#007BFF'
-                    icon={<Icon name='plus' size={20} color='#FFF' />}
-                    title="Cadastrar"
-                    onPress={() => navigation.navigate('CadastrarCliente')} />
+                    <SpeedDial.Action
+                        color='#007BFF'
+                        icon={<Icon name='plus' size={20} color='#FFF' />}
+                        title="Cadastrar"
+                        onPress={() => navigation.navigate('ClientesCadastro')} />
+                    <SpeedDial.Action
+                        color='#007BFF'
+                        icon={<Icon name='edit' size={20} color='#FFF' />}
+                        title="Teste"
+                        onPress={() => { 
+                         teste=async()=>{
+                            // const teste= await ClienteRepository.selectUltimaVersao();
+                            const teste= await CidadeRepository.selectUltimaVersao();
+                            //const teste= await EstadoRepository.selectAll();
+                            
+                            if (teste.rows && teste.rows.item(0).versao != null)
+                                console.log(teste.rows.item(0).versao);
+                           }
+                           // navigation.navigate('ClientesCadastro', { id: 0 })
+                           teste();
+                         }} />
             </SpeedDial>
             {carregando && <ModalCarregando pagina='Listar clientes' />}
         </SafeAreaView>
+        </>
     )
 }
 

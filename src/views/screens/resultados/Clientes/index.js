@@ -1,11 +1,11 @@
 import React from "react";
 import { SafeAreaView,ScrollView } from "react-native";
 import styles from "./style";
-import Pie from '../../../components/PieChart';
-import Line from '../../../components/LineChart';
-import LineX from '../../../components/LineChartAxisX';
-import LineY from '../../../components/LineChartAxisY';
-import Bar from '../../../components/BarChart';
+// import Pie from '../../../components/PieChart';
+// import Line from '../../../components/LineChart';
+// import LineX from '../../../components/LineChartAxisX';
+// import LineY from '../../../components/LineChartAxisY';
+// import Bar from '../../../components/BarChart';
 
 const Clientes = () => {
   const data0 = [
@@ -55,11 +55,11 @@ const Clientes = () => {
     <>
       <SafeAreaView style={styles.container}>
         <ScrollView>
-          <Pie dados={data0}/>
+          {/* <Pie dados={data0}/>
           <Line dados={data1}/>
           <LineX dados={data1}/>
           <LineY dados={data1}/>
-          <Bar dados={data2}/>
+          <Bar dados={data2}/> */}
         </ScrollView>
       </SafeAreaView>
     </>
