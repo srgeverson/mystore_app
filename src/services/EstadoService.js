@@ -5,8 +5,9 @@ export const getEstados = async (token) => {
     try {
         const ultimaVersao = await EstadoRepository.selectUltimaVersao();
         let ultVersao = -1;
-        if (ultimaVersao.rows)
+        if (ultimaVersao.rows && ultimaVersao.rows.item(0).versao != null)
             ultVersao = ultimaVersao.rows.item(0).versao;
+
         return await api(token)
             .get(`/v1/estados/versao/${ultVersao}`)
             .then((respose) => {
@@ -56,9 +57,9 @@ export const cadastrarOuAtualizar = async (estado) => {
 
 export const sincronizar = async (token) => {
     try {
-        let retorno = await getEstados(token);
-        if (retorno._embedded)
-            retorno._embedded.estados.forEach(element => cadastrarOuAtualizar({ id: element.id, nome: element.nome, versao: element.versao }));
+        let estado = await getEstados(token);
+        if (estado._embedded)
+            estado._embedded.estados.forEach(element => cadastrarOuAtualizar({ id: element.id, nome: element.nome, versao: element.versao }));
     } catch (error) {
         console.log(`Erro no método cadastrar do arquivo sincronizar  -> ${new Date()} -> erro: ${error}`);
     }

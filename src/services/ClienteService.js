@@ -5,8 +5,9 @@ export const getClientes = async (token, idEmpresa) => {
     try {
         const ultimaVersao = await ClienteRepository.selectUltimaVersao();
         let ultVersao = -1;
-        if (ultimaVersao.rows)
+        if (ultimaVersao.rows && ultimaVersao.rows.item(0).versao != null)
             ultVersao = ultimaVersao.rows.item(0).versao;
+            
         return await api(token)
             .get(`/v1/empresas/${idEmpresa}/clientes/versao?ultimaVersao=${ultVersao}`)
             .then((respose) => {
@@ -56,9 +57,9 @@ export const cadastrarOuAtualizar = async (cliente) => {
 
 export const sincronizar = async (token, empresa) => {
     try {
-        let retorno = await getClientes(token, empresa);
-        if (retorno._embedded) {
-            retorno._embedded.clientes.forEach(element => {
+        let cliente = await getClientes(token, empresa);
+        if (cliente._embedded) {
+            cliente._embedded.clientes.forEach(element => {
                 cadastrarOuAtualizar({
                     id: element.id,
                     apelidoNomeFantazia: element.apelidoNomeFantazia,

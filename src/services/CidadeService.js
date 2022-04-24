@@ -57,9 +57,9 @@ export const cadastrarOuAtualizar = async (cidade) => {
 
 export const sincronizar = async (token) => {
     try {
-        let retorno = await getCidades(token);
-        if (retorno._embedded)
-            retorno._embedded.cidades.forEach(element => cadastrarOuAtualizar({ id: element.id, nome: element.nome, versao: element.versao, estados_id: element.estado.id }));
+        let cidade = await getCidades(token);
+        if (cidade._embedded)
+            cidade._embedded.cidades.forEach(element => cadastrarOuAtualizar({ id: element.id, nome: element.nome, versao: element.versao, estados_id: element.estado.id }));
     } catch (error) {
         console.log(`Erro no método cadastrar do arquivo sincronizar  -> ${new Date()} -> erro: ${error}`);
     }
