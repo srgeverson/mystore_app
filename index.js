@@ -7,7 +7,7 @@ import Database from './src/core/database';
 AppRegistry.registerComponent(appName, () => {
     //Database.dropDatabase();
     Database.initDB();
-    atualizandoDadosLocais();
+    //atualizandoDadosLocais();
     atualizandoToken();
     return App
 });

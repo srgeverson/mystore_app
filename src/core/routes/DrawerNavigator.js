@@ -12,6 +12,7 @@ import ListarCompras from '../../views/screens/compras/Listar';
 import ListarVendas from '../../views/screens/vendas/Listar';
 import PerfilUsuario from '../../views/screens/usuario/Perfil';
 import { ClientesStackNavigator, ResultadosStackNavigator } from './StackNavigator';
+import { atualizandoDadosLocaisHeaderRight } from '../synchronize';
 
 const Drawer = createDrawerNavigator();
 
@@ -30,6 +31,7 @@ const DrawerCustom = (props) => {
 
 const DrawerNavigator = () => {
     const [carregando, setCarregando] = useState(false);
+    const [atualizandoDados, setAtualizandoDados] = useState(false);
 
     const [menusDisponiveis, setMenusDisponiveis] = useState(null);
 
@@ -40,12 +42,14 @@ const DrawerNavigator = () => {
         try {
             const entryPoint = await rootEntryPoint();
             if (entryPoint._links) {
-                //console.log(entryPoint._links)
+                //console.log(entryPoint._links)a
                 setOffLine(false);
                 setMenusDisponiveis(entryPoint._links);
             } else {
                 setOffLine(true);
             }
+            atualizandoDadosLocaisHeaderRight(setAtualizandoDados);
+
         } catch (error) {
             console.log(`Erro no método getEndpoints do arquivo DrawerNavigator -> ${new Date()} -> erro: ${error}`);
         }
@@ -70,7 +74,7 @@ const DrawerNavigator = () => {
                 headerTitleAlign: 'center',
                 headerTitleStyle: { color: '#FFF' },
                 headerLeft: () => <HeaderLeft />,
-                headerRight: () => <HeaderRight carregando={carregando} offline={offline} />,
+                headerRight: () => <HeaderRight carregando={carregando || atualizandoDados} offline={offline} />,
                 headerStyle: { backgroundColor: '#1B8BD1', }
             }} />
         );

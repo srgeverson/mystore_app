@@ -13,7 +13,6 @@ export const atualizandoDadosLocais = async () => {
         await sincronizarEstado(token)
         console.log(`Finalizando a sincronização dos dados -> ${new Date()}...`);
     }, 60000);
-
 }
 
 export const atualizandoToken = async () => {
@@ -55,4 +54,17 @@ export const atualizandoTokenPrimeiraVez = async () => {
             buscarEAtualizarRefreshToken();
         }, expira)
     }
+}
+
+export const atualizandoDadosLocaisHeaderRight = async (atualizandoDados) => {
+    const { empresa, token } = await getLoginSalvo();
+    setInterval(async () => {
+        atualizandoDados(true);
+        console.log(`Iniciando a sincronização dos dados -> ${new Date()}...`);
+        await sincronizarCidade(token);
+        await sincronizarCliente(token, empresa),
+        await sincronizarEstado(token)
+        console.log(`Finalizando a sincronização dos dados -> ${new Date()}...`);
+        atualizandoDados(false);
+    }, 60000);
 }
