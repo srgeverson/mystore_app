@@ -48,7 +48,7 @@ class EstadoRepository {
                     estado.id_local ? estado.id_local : estado.id,
                     estado.nome ? estado.nome : null,
                     estado.uf ? estado.uf : null,
-                    estado.versao ? estado.versao : 0,
+                    estado.versao ? estado.versao : null,
                 ])
                 .then((success) => {
                     resolve(success);

@@ -5,7 +5,7 @@ export const getEstados = async (token) => {
     try {
         const ultimaVersao = await EstadoRepository.selectUltimaVersao();
         let ultVersao = -1;
-        if (ultimaVersao.rows && ultimaVersao.rows.item(0).versao != null)
+        if (ultimaVersao.rows)
             ultVersao = ultimaVersao.rows.item(0).versao;
 
         return await api(token)
@@ -33,7 +33,7 @@ export const getEstados = async (token) => {
 
 export const buscarPorConterNome = async (nome) => {
     try {
-        return EstadoRepository.selectLikeByNome(nome);
+        return await EstadoRepository.selectLikeByNome(nome);
     } catch (error) {
         console.log(`Erro no método buscarPorConterNome do arquivo EstadoService -> ${new Date()} -> erro: ${error}`);
     }
@@ -59,7 +59,9 @@ export const sincronizar = async (token) => {
     try {
         let estado = await getEstados(token);
         if (estado._embedded)
-            estado._embedded.estados.forEach(element => cadastrarOuAtualizar({ id: element.id, nome: element.nome, versao: element.versao }));
+            estado._embedded.estados.forEach(async (element) => {
+                await cadastrarOuAtualizar({ id: element.id, nome: element.nome, versao: element.versao, ativo: element.ativo })
+            });
     } catch (error) {
         console.log(`Erro no método cadastrar do arquivo sincronizar  -> ${new Date()} -> erro: ${error}`);
     }
