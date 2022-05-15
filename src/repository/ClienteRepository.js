@@ -59,7 +59,7 @@ class CidadeRepository {
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     cliente.apelidoNomeFantazia ? cliente.apelidoNomeFantazia : null,
-                    cliente.ativo ? cliente.ativo : false,
+                    cliente.ativo ? cliente.ativo : null,
                     cliente.celular ? cliente.celular : null,
                     cliente.cpfCnpj ? cliente.cpfCnpj : null,
                     cliente.critica ? cliente.critica : null,

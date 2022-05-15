@@ -10,7 +10,7 @@ export const atualizandoDadosLocais = async () => {
         console.log(`Iniciando a sincronização dos dados -> ${new Date()}...`);
         await sincronizarCidade(token);
         await sincronizarCliente(token, empresa),
-        await sincronizarEstado(token)
+            await sincronizarEstado(token)
         console.log(`Finalizando a sincronização dos dados -> ${new Date()}...`);
     }, 60000);
 }
@@ -62,8 +62,8 @@ export const atualizandoDadosLocaisHeaderRight = async (atualizandoDados) => {
         atualizandoDados(true);
         console.log(`Iniciando a sincronização dos dados -> ${new Date()}...`);
         await sincronizarCidade(token);
-       //await sincronizarCliente(token, empresa),
-        await sincronizarEstado(token)
+        await sincronizarCliente(token, empresa);
+        await sincronizarEstado(token);
         console.log(`Finalizando a sincronização dos dados -> ${new Date()}...`);
         atualizandoDados(false);
     }, 60000);

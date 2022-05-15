@@ -59,8 +59,8 @@ export const sincronizar = async (token, empresa) => {
     try {
         let cliente = await getClientes(token, empresa);
         if (cliente._embedded) {
-            cliente._embedded.clientes.forEach(element => {
-                cadastrarOuAtualizar({
+            cliente._embedded.clientes.forEach(async (element) => {
+                await cadastrarOuAtualizar({
                     id: element.id,
                     apelidoNomeFantazia: element.apelidoNomeFantazia,
                     nomeRazaoSocial: element.nomeRazaoSocial,
@@ -71,7 +71,7 @@ export const sincronizar = async (token, empresa) => {
                     dataCadastro: element.dataCadastro,
                     ativo: element.ativo,
                     enderecosId: element.endereco ? element.endereco.id : null,
-                    versao: element.versao > -1 ? element.versao : null,
+                    versao: element.versao,
                 });
             });
         }
