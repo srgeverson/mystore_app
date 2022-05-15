@@ -48,7 +48,7 @@ class CidadeRepository {
                     cidade.id_local ? cidade.id_local : cidade.id,
                     cidade.estados_id ? cidade.estados_id : null,
                     cidade.nome ? cidade.nome : null,
-                    cidade.versao ? cidade.versao : 0,
+                    cidade.versao ? cidade.versao : null,
                 ])
                 .then((success) => {
                     resolve(success);
@@ -85,7 +85,7 @@ class CidadeRepository {
 
     selectUltimaVersao() {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT MAX(versao) AS versao FROM clientes;`, [])
+            Database.select(`SELECT MAX(versao) AS versao FROM cidades;`, [])
                 .then((success) => {
                     resolve(success);
                 })
