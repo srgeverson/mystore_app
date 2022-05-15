@@ -61,7 +61,7 @@ export const atualizandoDadosLocaisHeaderRight = async (atualizandoDados) => {
     setInterval(async () => {
         atualizandoDados(true);
         console.log(`Iniciando a sincronização dos dados -> ${new Date()}...`);
-        //rawait sincronizarCidade(token);
+        await sincronizarCidade(token);
        //await sincronizarCliente(token, empresa),
         await sincronizarEstado(token)
         console.log(`Finalizando a sincronização dos dados -> ${new Date()}...`);

@@ -3,8 +3,9 @@ import CidadeRepository from '../repository/CidadeRepository';
 
 export const getCidades = async (token) => {
     try {
-        let ultVersao = 0;
         const ultimaVersao = await CidadeRepository.selectUltimaVersao();
+        let ultVersao = -1;
+        console.log(ultimaVersao.rows.item(0))
         if (ultimaVersao.rows && ultimaVersao.rows.item(0).versao != null)
             ultVersao = ultimaVersao.rows.item(0).versao;
 
@@ -59,7 +60,11 @@ export const sincronizar = async (token) => {
     try {
         let cidade = await getCidades(token);
         if (cidade._embedded)
-            cidade._embedded.cidades.forEach(element => cadastrarOuAtualizar({ id: element.id, nome: element.nome, versao: element.versao, estados_id: element.estado.id }));
+            cidade._embedded.cidades.forEach(async (element) => {
+                await cadastrarOuAtualizar({
+                    id: element.id, nome: element.nome, versao: element.versao, estados_id: element.estado.id, ativo: element.ativo
+                })
+            });
     } catch (error) {
         console.log(`Erro no método cadastrar do arquivo sincronizar  -> ${new Date()} -> erro: ${error}`);
     }

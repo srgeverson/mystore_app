@@ -5,7 +5,7 @@ export const getEstados = async (token) => {
     try {
         const ultimaVersao = await EstadoRepository.selectUltimaVersao();
         let ultVersao = -1;
-        if (ultimaVersao.rows)
+        if (ultimaVersao.rows && ultimaVersao.rows.item(0).versao != null)
             ultVersao = ultimaVersao.rows.item(0).versao;
 
         return await api(token)
