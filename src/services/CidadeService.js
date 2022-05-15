@@ -5,7 +5,6 @@ export const getCidades = async (token) => {
     try {
         const ultimaVersao = await CidadeRepository.selectUltimaVersao();
         let ultVersao = -1;
-        console.log(ultimaVersao.rows.item(0))
         if (ultimaVersao.rows && ultimaVersao.rows.item(0).versao != null)
             ultVersao = ultimaVersao.rows.item(0).versao;
 
