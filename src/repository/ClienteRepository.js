@@ -28,8 +28,37 @@ class CidadeRepository {
 
     insert(cliente) {
         return new Promise((resolve, reject) => {
-            Database.insert(`INSERT INTO clientes VALUES (?, ?, ?);`, [cliente.id, cliente.nome, cliente.enderecoId])
-                .then((success) => {
+            Database.insert(`INSERT INTO clientes (
+                apelido_nome_fantazia,
+                ativo,
+                celular,
+                cpf_cnpj,
+                critica,
+                data_cadastro,
+                email,
+                empresas_id,
+                enderecos_id,
+                id_local,
+                nome_razao_social,
+                telefone,
+                versao
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    cliente.apelidoNomeFantazia ? cliente.apelidoNomeFantazia : null,
+                    cliente.ativo ? cliente.ativo : null,
+                    cliente.celular ? cliente.celular : null,
+                    cliente.cpfCnpj ? cliente.cpfCnpj : null,
+                    cliente.critica ? cliente.critica : null,
+                    cliente.dataCadastro ? cliente.dataCadastro : null,
+                    cliente.email ? cliente.email : null,
+                    cliente.empresasId ? cliente.empresasId : null,
+                    cliente.enderecosId ? cliente.enderecoId : null,
+                    //cliente.id ? cliente.id : null,
+                    cliente.id_local ? cliente.id_local : cliente.id,
+                    cliente.nomeRazaoSocial ? cliente.nomeRazaoSocial : null,
+                    cliente.telefone ? cliente.telefone : null,
+                    cliente.versao ? cliente.versao : null,
+                ])     .then((success) => {
                     resolve(success);
                 })
                 .catch((error) => {
@@ -96,7 +125,7 @@ class CidadeRepository {
 
     selectLikeByNome(nome) {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM clientes WHERE (ativo = true AND apelido_nome_fantazia LIKE '%${nome}%');`, [])
+            Database.select(`SELECT * FROM clientes WHERE (apelido_nome_fantazia LIKE '%${nome}%');`, [])
                 .then((success) => {
                     resolve(success);
                 })

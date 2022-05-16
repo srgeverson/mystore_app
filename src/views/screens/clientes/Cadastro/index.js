@@ -1,32 +1,34 @@
 import React, { useState } from 'react';
 import { Alert, SafeAreaView, ScrollView, View } from 'react-native';
-import { Button, Dialog, Divider, FlatList, Input, ListItem, SearchBar, Text } from 'react-native-elements';
+import { Dialog, Divider, Input, ListItem, SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { buscarPorConterNome as buscarPorConterNomeEstado } from '../../../../services/EstadoService';
+import { cadastrar } from '../../../../services/ClienteService';
 import { buscarPorConterNome as buscarPorConterNomeCidade } from '../../../../services/CidadeService';
+import { buscarPorConterNome as buscarPorConterNomeEstado } from '../../../../services/EstadoService';
 import BotaoCancelar from '../../../components/BotaoCancelar';
 import BotaoAlterar from '../../../components/BotaoAlterar';
+import { createGuid } from '../../../components/Utils';
 
 const Cadastro = ({ route, navigation }) => {
   const [carregando, setCarregando] = useState(false);
   const [idCliente] = useState(null);
-  const [nomeRazaoSocial, setNomeRazaoSocial] = useState(null);
-  const [apelidoNomeFantazia, setApelidoNomeFantazia] = useState(null);
-  const [cpfCnpj, setCpfCnpj] = useState(null);
-  const [celular, setCelular] = useState(null);
-  const [telefone, setTelefone] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [logradouro, setLogradouro] = useState(null);
-  const [numero, setNnumero] = useState(null);
-  const [complemento, setComplemento] = useState(null);
-  const [bairro, setBairro] = useState(null);
-  const [cep, setCep] = useState(null);
-  const [estadoId, setEstadoId] = useState(null);
-  const [estado, setEstado] = useState(null);
+  const [nomeRazaoSocial, setNomeRazaoSocial] = useState('null');
+  const [apelidoNomeFantazia, setApelidoNomeFantazia] = useState('null');
+  const [cpfCnpj, setCpfCnpj] = useState('null');
+  const [celular, setCelular] = useState('null');
+  const [telefone, setTelefone] = useState('null');
+  const [email, setEmail] = useState('null');
+  const [logradouro, setLogradouro] = useState('null');
+  const [numero, setNnumero] = useState('null');
+  const [complemento, setComplemento] = useState('null');
+  const [bairro, setBairro] = useState('null');
+  const [cep, setCep] = useState('null');
+  const [estadoId, setEstadoId] = useState('null');
+  const [estado, setEstado] = useState('null');
   const [estados, setEstados] = useState([]);
   const [modalEstados, setModalEstados] = useState(false);
-  const [cidadeId, setCidadeId] = useState(null);
-  const [cidade, setCidade] = useState(null);
+  const [cidadeId, setCidadeId] = useState('null');
+  const [cidade, setCidade] = useState('null');
   const [modalCidades, setModalCidades] = useState(false);
   const [cidades, setCidades] = useState([]);
 
@@ -55,10 +57,27 @@ const Cadastro = ({ route, navigation }) => {
   }
 
   const salvarCliente = () => {
-    console.log('Salvando cliente em 1s...' + JSON.stringify({
-      idCliente,
-      nomeRazaoSocial, apelidoNomeFantazia,cpfCnpj, cidade: { id: cidadeId }
-    }));
+    const guid = createGuid();
+    let cliente = {
+      idCliente: guid,
+      nomeRazaoSocial,
+      apelidoNomeFantazia,
+      cpfCnpj,
+      celular,
+      telefone,
+      email,
+      endereco: {
+        idEndereco: guid,
+        logradouro,
+        numero,
+        complemento,
+        bairro,
+        cep,
+        cidade: { id: cidadeId }
+      }
+    };
+    cadastrar(cliente);
+    console.log('Salvando cliente em 1s...' + JSON.stringify(cliente));
   }
 
   return (
@@ -242,7 +261,26 @@ const Cadastro = ({ route, navigation }) => {
         {/* end cidades */}
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', margin: 10 }}>
           <BotaoCancelar carregando={carregando} titulo='Cancelar' pressionado={() => navigation.goBack()} desabilitado={false} />
-          <BotaoAlterar carregando={carregando} titulo={route.params ? 'Alterar' : 'Salvar'} pressionado={salvarCliente} desabilitado={false} />
+          <BotaoAlterar carregando={carregando} titulo={route.params ? 'Alterar' : 'Salvar'} pressionado={salvarCliente} desabilitado={
+             //idCliente: guid,
+            !nomeRazaoSocial ||
+            !apelidoNomeFantazia ||
+            !cpfCnpj ||
+            !celular ||
+            !telefone ||
+            !email ||
+            // endereco: {
+            //      idEndereco: guid,
+            !logradouro ||
+            !numero ||
+            !complemento ||
+            !bairro ||
+            !cep ||
+            //cidade: { id: 
+            !cidade
+            //}
+            //  }
+          } />
         </View>
       </ScrollView>
     </SafeAreaView>
