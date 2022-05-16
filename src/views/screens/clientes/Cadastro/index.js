@@ -59,7 +59,7 @@ const Cadastro = ({ route, navigation }) => {
   const salvarCliente = () => {
     const guid = createGuid();
     let cliente = {
-      idCliente: guid,
+      idLocal: guid,
       nomeRazaoSocial,
       apelidoNomeFantazia,
       cpfCnpj,

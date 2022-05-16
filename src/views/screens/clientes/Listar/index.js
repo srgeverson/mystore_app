@@ -3,7 +3,9 @@ import { SafeAreaView, } from 'react-native';
 import { SearchBar, SpeedDial, Text, ListItem, Avatar } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { buscarPorConterNome } from '../../../../services/ClienteService';
+import ClienteRepository from '../../../../repository/ClienteRepository';
+import { atualizarTudoPorIdLocal, buscarPorConterApelidoOuNome, buscarPorConterNome, buscarPorId, buscarPorItensNaoSinconizados, buscarPorItensNaoSincronizados, postClientes } from '../../../../services/ClienteService';
+import { getLoginSalvo } from '../../../../services/UsuarioService';
 import ModalCarregando from '../../../components/ModalCarregando';
 import { extractorFirstLeterNames, keyExtractor } from '../../../components/Utils';
 
@@ -21,7 +23,7 @@ const Listar = ({ navigation }) => {
         setCarregando(true);
         try {
             if (nome) {
-                const lista = await buscarPorConterNome(nome);
+                const lista = await buscarPorConterApelidoOuNome(nome);
                 setRetorno(lista.rows.raw());
             }
         } catch (error) {
@@ -33,7 +35,29 @@ const Listar = ({ navigation }) => {
 
     const renderItem = ({ item }) => (
         <ListItem
-            onPress={() => navigation.navigate('ClientesCadastro', { id: item.id })}>
+            onPress={async () => {
+                // navigation.navigate('ClientesCadastro', { id: item.id })
+                //bc694d59-46e7-41f6-8016-0f28171d4f25
+                // let teste = await buscarPorId(2);
+
+                let clienteTep = {
+                    apelidoNomeFantazia: null,
+                    ativo: null,
+                    celular: null,
+                    cpfCnpj: null,
+                    critica: null,
+                    dataCadastro: null,
+                    email: null,
+                    empresasId: null,
+                    enderecosId: null,
+                    id: 1543,//1542,
+                    idLocal: JSON.stringify("bc694d59-46e7-41f6-8016-0f28171d4f25"),
+                    nomeRazaoSocial: 'Razao Teste1 UPDATE',
+                    telefone: null,
+                    versao: null
+                };
+             // await atualizarTudoPorIdLocal(clienteTep);
+            }}>
             <Avatar rounded title={extractorFirstLeterNames(item.apelido_nome_fantazia)}
                 containerStyle={{ backgroundColor: '#00a7f7' }}
             />
@@ -92,6 +116,14 @@ const Listar = ({ navigation }) => {
 
                                 // if (teste.rows && teste.rows.item(0).versao != null)
                                 //     console.log(teste.rows.item(0).versao);
+                                // let teste1= await ClienteRepository.selectAll();
+                                // console.log(teste1.rows.raw());
+                                let teste = await buscarPorItensNaoSincronizados();
+                                console.log(teste.rows.item(0));
+                                
+                                const { empresa, token } = await getLoginSalvo();
+                                let teste1 = await postClientes(token, empresa, teste.rows.item(0));
+                                console.log(teste1);
                             }
                             // navigation.navigate('ClientesCadastro', { id: 0 })
                             teste();
