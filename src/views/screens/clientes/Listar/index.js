@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { Alert, SafeAreaView, } from 'react-native';
-import { SearchBar, SpeedDial, Text, ListItem, Button } from 'react-native-elements';
+import { SafeAreaView, } from 'react-native';
+import { SearchBar, SpeedDial, Text, ListItem, Avatar } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import CidadeRepository from '../../../../repository/CidadeRepository';
-import ClienteRepository from '../../../../repository/ClienteRepository';
-import EstadoRepository from '../../../../repository/EstadoRepository';
 import { buscarPorConterNome } from '../../../../services/ClienteService';
 import ModalCarregando from '../../../components/ModalCarregando';
+import { extractorFirstLeterNames, keyExtractor } from '../../../components/Utils';
 
-const Listar = ({navigation}) => {
+const Listar = ({ navigation }) => {
 
     const [open, setOpen] = useState(false);
 
@@ -24,7 +22,6 @@ const Listar = ({navigation}) => {
         try {
             if (nome) {
                 const lista = await buscarPorConterNome(nome);
-                console.log(`Pesquisando...${JSON.stringify(lista)}`);
                 setRetorno(lista.rows.raw());
             }
         } catch (error) {
@@ -34,44 +31,50 @@ const Listar = ({navigation}) => {
         }
     }
 
-    const keyExtractor = (item, index) => index.toString();
-
     const renderItem = ({ item }) => (
-        <ListItem key={item.id} style={{ height: 50 }}
-            bottomDivider onPress={() => navigation.navigate('ClientesCadastro', { id: item.id })}>
+        <ListItem
+            onPress={() => navigation.navigate('ClientesCadastro', { id: item.id })}>
+            <Avatar rounded title={extractorFirstLeterNames(item.apelido_nome_fantazia)}
+                containerStyle={{ backgroundColor: '#00a7f7' }}
+            />
             <ListItem.Content>
-                <ListItem.Title>{`Código: ${item.id}  - Nome : ${item.apelido_nome_fantazia}`}</ListItem.Title>
-                <ListItem.Subtitle>{`Ativado: ${item.ativo ? 'Sim' : 'Não'}`}</ListItem.Subtitle>
+                <ListItem.Title >
+                    {`${item.apelido_nome_fantazia}`}
+                </ListItem.Title>
+                <ListItem.Subtitle >
+                    {`${item.nome_razao_social}`}
+                </ListItem.Subtitle>
             </ListItem.Content>
+            <ListItem.Chevron color="white" />
         </ListItem>
     );
 
     return (
         <>
-        <SafeAreaView style={{ flex: 1 }}>
-            <SearchBar 
-                lightTheme={true}
-                placeholder={`Digite o nome da Cliente aqui...`}
-                onChangeText={value => pesquisarClientes(value)}
-                value={valor} />
-            {
-                retorno.length > 0
-                    ?
-                    <FlatList
-                        keyExtractor={keyExtractor}
-                        data={retorno}
-                        renderItem={renderItem}
-                    />
-                    :
-                    <Text>Listagem vazia...</Text>
-            }
-            <SpeedDial
-                color='#007BFF'
-                isOpen={open}
-                icon={<Icon name='ellipsis-v' size={20} color='#FFF' onPress={() => setOpen(!open)} />}
-                openIcon={<Icon name='close' size={20} color='#FFF' onPress={() => setOpen(!open)} />}
-                onOpen={() => setOpen(!open)}
-                onClose={() => setOpen(!open)}>
+            <SafeAreaView style={{ flex: 1 }}>
+                <SearchBar
+                    lightTheme={true}
+                    placeholder={`Digite o nome da Cliente aqui...`}
+                    onChangeText={value => pesquisarClientes(value)}
+                    value={valor} />
+                {
+                    retorno.length > 0
+                        ?
+                        <FlatList
+                            keyExtractor={keyExtractor}
+                            data={retorno}
+                            renderItem={renderItem}
+                        />
+                        :
+                        <Text>Listagem vazia...</Text>
+                }
+                <SpeedDial
+                    color='#007BFF'
+                    isOpen={open}
+                    icon={<Icon name='ellipsis-v' size={20} color='#FFF' onPress={() => setOpen(!open)} />}
+                    openIcon={<Icon name='close' size={20} color='#FFF' onPress={() => setOpen(!open)} />}
+                    onOpen={() => setOpen(!open)}
+                    onClose={() => setOpen(!open)}>
                     <SpeedDial.Action
                         color='#007BFF'
                         icon={<Icon name='plus' size={20} color='#FFF' />}
@@ -81,21 +84,21 @@ const Listar = ({navigation}) => {
                         color='#007BFF'
                         icon={<Icon name='edit' size={20} color='#FFF' />}
                         title="Teste"
-                        onPress={() => { 
-                         teste=async()=>{
-                            // const teste= await ClienteRepository.selectUltimaVersao();
-                            const teste= await CidadeRepository.selectUltimaVersao();
-                            //const teste= await EstadoRepository.selectAll();
-                            
-                            if (teste.rows && teste.rows.item(0).versao != null)
-                                console.log(teste.rows.item(0).versao);
-                           }
-                           // navigation.navigate('ClientesCadastro', { id: 0 })
-                           teste();
-                         }} />
-            </SpeedDial>
-            {carregando && <ModalCarregando pagina='Listar clientes' />}
-        </SafeAreaView>
+                        onPress={() => {
+                            teste = async () => {
+                                // const teste= await ClienteRepository.selectUltimaVersao();
+                                //const teste= await CidadeRepository.selectUltimaVersao();
+                                //const teste= await EstadoRepository.selectAll();
+
+                                // if (teste.rows && teste.rows.item(0).versao != null)
+                                //     console.log(teste.rows.item(0).versao);
+                            }
+                            // navigation.navigate('ClientesCadastro', { id: 0 })
+                            teste();
+                        }} />
+                </SpeedDial>
+                {carregando && <ModalCarregando pagina='Listar clientes' />}
+            </SafeAreaView>
         </>
     )
 }
