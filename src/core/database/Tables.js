@@ -90,7 +90,7 @@ export const Tables = {
             default_value: null,
         },
         id_local: {
-            type: Types.INTEGER,
+            type: Types.TEXT,
             primary_key: false,
             default_value: null,
         },
