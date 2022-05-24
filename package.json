@@ -11,11 +11,7 @@
     "generate-apk-windows": "cd android && gradlew assembleRelease",
     "generate-apk-linux": "cd android && ./gradlew assembleRelease",
     "show-apk-windows": "explorer android\\app\\build\\outputs\\bundle\\release",
-    "show-apk-linux": "nautilus android/app/build/outputs/bundle/release",
-    "android-development": "ENVFILE=.env.development react-native run-android",
-    "android-production": "ENVFILE=.env.production react-native run-android",
-    "ios-development": "ENVFILE=.env.development react-native run-ios",
-    "ios-production": "ENVFILE=.env.production react-native run-ios"
+    "show-apk-linux": "nautilus android/app/build/outputs/bundle/release"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",

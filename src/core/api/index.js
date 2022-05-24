@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { encode } from 'base-64';
-import Config from 'react-native-config';
+import { pass, pass_manager, url, user, user_manager } from '../config';
 
 const api = (token) => {
     try {
         return axios.create({
-            baseURL: Config.MY_URL,
+            baseURL: url,
             headers: {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -19,10 +19,10 @@ const api = (token) => {
 const authorizationServerLogin = async (email, senha) => {
     try {
         return await axios.create({
-            baseURL: Config.MY_URL,
+            baseURL: url,
             headers: {
                 'Accept': 'application/json',
-                'Authorization': `Basic ${encode(`${Config.CLIENT_ID_APP}:${Config.CLIENT_SECRET_APP}`)}`,
+                'Authorization': `Basic ${encode(`${user}:${pass}`)}`,
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
         }).post(
@@ -33,7 +33,7 @@ const authorizationServerLogin = async (email, senha) => {
             return response.data;
         }).catch((error) => {
             console.log(`Não foi possível gerar o token de acesso!`);
-            console.log(JSON.stringify(Config.MY_URL))
+            console.log(JSON.stringify(url))
             if (error.response) {
                 return {
                     codigo: error.response.status,
@@ -56,9 +56,9 @@ const authorizationServerLogin = async (email, senha) => {
 const authorizationServerRecuperarSenha = async () => {
     try {
         return await axios.create({
-            baseURL: Config.MY_URL,
+            baseURL: url,
             headers: {
-                'Authorization': `Basic ${encode(`${Config.CLIENT_ID_MANAGER}:${Config.CLIENT_SECRET_MANAGER}`)}`,
+                'Authorization': `Basic ${encode(`${user_manager}:${pass_manager}`)}`,
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
         }).post(
@@ -87,9 +87,9 @@ const authorizationServerRecuperarSenha = async () => {
 const refreshToken = async (refreshToken) => {
     try {
         return await axios.create({
-            baseURL: Config.MY_URL,
+            baseURL: url,
             headers: {
-                'Authorization': `Basic ${encode(`${Config.CLIENT_ID_APP}:${Config.CLIENT_SECRET_APP}`)}`,
+                'Authorization': `Basic ${encode(`${user}:${pass}`)}`,
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
         }).post(
@@ -117,9 +117,9 @@ const refreshToken = async (refreshToken) => {
 
 const testeURLExterna = () => {
     try {
-        console.log(Config.TEST_URL_INTERNET)
+        console.log('https://api.github.com')
         return axios.create({
-            baseURL: Config.TEST_URL_INTERNET
+            baseURL: 'https://api.github.com'
         });
     } catch (error) {
         console.log(`Erro ao conectar na URL externa -> ${new Date()} -> erro: ${error}`);
