@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, SafeAreaView, ScrollView, View } from 'react-native';
 import { Dialog, Divider, Input, ListItem, SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { cadastrar } from '../../../../services/ClienteService';
+import { atualizarTudoPorIdLocal, buscarPorIdLocal, cadastrar } from '../../../../services/ClienteService';
 import { buscarPorConterNome as buscarPorConterNomeCidade } from '../../../../services/CidadeService';
 import { buscarPorConterNome as buscarPorConterNomeEstado } from '../../../../services/EstadoService';
 import BotaoCancelar from '../../../components/BotaoCancelar';
@@ -11,24 +11,26 @@ import { createGuid } from '../../../components/Utils';
 
 const Cadastro = ({ route, navigation }) => {
   const [carregando, setCarregando] = useState(false);
-  const [idCliente] = useState(null);
-  const [nomeRazaoSocial, setNomeRazaoSocial] = useState('null');
-  const [apelidoNomeFantazia, setApelidoNomeFantazia] = useState('null');
-  const [cpfCnpj, setCpfCnpj] = useState('null');
-  const [celular, setCelular] = useState('null');
-  const [telefone, setTelefone] = useState('null');
-  const [email, setEmail] = useState('null');
-  const [logradouro, setLogradouro] = useState('null');
-  const [numero, setNnumero] = useState('null');
-  const [complemento, setComplemento] = useState('null');
-  const [bairro, setBairro] = useState('null');
-  const [cep, setCep] = useState('null');
-  const [estadoId, setEstadoId] = useState('null');
-  const [estado, setEstado] = useState('null');
+  const [idCliente, setIdCliente] = useState(null);
+  //const [cliente, setCliente] = useState(null);
+  const [idLocal, setIdLocal] = useState(null);
+  const [nomeRazaoSocial, setNomeRazaoSocial] = useState(null);
+  const [apelidoNomeFantazia, setApelidoNomeFantazia] = useState(null);
+  const [cpfCnpj, setCpfCnpj] = useState(null);
+  const [celular, setCelular] = useState(null);
+  const [telefone, setTelefone] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [logradouro, setLogradouro] = useState(null);
+  const [numero, setNumero] = useState(null);
+  const [complemento, setComplemento] = useState(null);
+  const [bairro, setBairro] = useState(null);
+  const [cep, setCep] = useState(null);
+  const [estadoId, setEstadoId] = useState(null);
+  const [estado, setEstado] = useState(null);
   const [estados, setEstados] = useState([]);
   const [modalEstados, setModalEstados] = useState(false);
-  const [cidadeId, setCidadeId] = useState('null');
-  const [cidade, setCidade] = useState('null');
+  const [cidadeId, setCidadeId] = useState(null);
+  const [cidade, setCidade] = useState(null);
   const [modalCidades, setModalCidades] = useState(false);
   const [cidades, setCidades] = useState([]);
 
@@ -58,8 +60,8 @@ const Cadastro = ({ route, navigation }) => {
 
   const salvarCliente = () => {
     const guid = createGuid();
-    let cliente = {
-      idLocal: guid,
+    let clienteTMP = {
+      idLocal: idLocal ? idLocal : guid,
       nomeRazaoSocial,
       apelidoNomeFantazia,
       cpfCnpj,
@@ -67,7 +69,7 @@ const Cadastro = ({ route, navigation }) => {
       telefone,
       email,
       endereco: {
-        idEndereco: guid,
+        idEndereco: idLocal ? idLocal : guid,
         logradouro,
         numero,
         complemento,
@@ -76,15 +78,58 @@ const Cadastro = ({ route, navigation }) => {
         cidade: { id: cidadeId }
       }
     };
-    cadastrar(cliente);
-    console.log('Salvando cliente em 1s...' + JSON.stringify(cliente));
+    if (idLocal)
+      atualizarTudoPorIdLocal(clienteTMP);
+    else
+      cadastrar(clienteTMP);
+  }
+
+  useEffect(() => {
+    if (route.params && route.params.idLocal) {
+      setIdLocal(route.params.idLocal);
+      pesquisarClientePorIdLocal(route.params.idLocal);
+    }
+    if (route.params && route.params.id)
+      setIdCliente(route.params.id);
+  }, [])
+
+
+  const pesquisarClientePorIdLocal = async (idLocal) => {
+    setCarregando(true);
+    try {
+      const lista = await buscarPorIdLocal(idLocal);
+      const clienteDBLocal = lista.rows.item(0);
+
+      console.log(clienteDBLocal);
+      if (clienteDBLocal) {
+        setIdCliente(clienteDBLocal.id);
+        setIdLocal(clienteDBLocal.idLocal);
+        setNomeRazaoSocial(clienteDBLocal.nomeRazaoSocial);
+        setApelidoNomeFantazia(clienteDBLocal.apelidoNomeFantazia);
+        setCpfCnpj(clienteDBLocal.cpfCnpj);
+        setCelular(clienteDBLocal.celular);
+        setTelefone(clienteDBLocal.telefone);
+        setEmail(clienteDBLocal.email);
+        setLogradouro(clienteDBLocal.logradouro);
+        setNumero(clienteDBLocal.numero);
+        setComplemento(clienteDBLocal.complemento);
+        setBairro(clienteDBLocal.bairro);
+        setCep(clienteDBLocal.cep);
+        setEstadoId(clienteDBLocal.estadoId);
+        setCidadeId(clienteDBLocal.cidadeId);
+      }
+    } catch (error) {
+      console.log(`Ocorreu no método pesquisarClientePorIdLocal erro em /src/viwes/cidades/Cadastro -> ${new Date()} -> erro: ${error}`);
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
     <SafeAreaView style={{ flex: 1, margin: 10 }}>
       <ScrollView>
-        {route.params && <Input label='Código do Cliente' editable={false} value={route.params.id.toString()} />}
-
+        {route.params && route.params.id ? <Input label='Código do Cliente' editable={false} value={route.params.id.toString()} /> : false && route.params && route.params.idLocal && Alert.alert('Dados Sincronizando', 'Os dados deste cliente não foram sincronizado com o servidor!')}
+        {/* {console.log(cliente)} */}
         <Input
           errorMessage={!nomeRazaoSocial && 'Nome/Razão Social é obrigatório.'}
           label='Nome/Razão Social'
@@ -146,8 +191,8 @@ const Cadastro = ({ route, navigation }) => {
         <Input
           errorMessage={!numero && 'Número é obrigatório.'}
           label='Número'
-          rightIcon={<Icon name='close' size={20} onPress={() => setNnumero(null)} />}
-          onChangeText={value => setNnumero(value)}
+          rightIcon={<Icon name='close' size={20} onPress={() => setNumero(null)} />}
+          onChangeText={value => setNumero(value)}
           //placeholder='Enter Name'
           value={numero}
         />
@@ -262,7 +307,7 @@ const Cadastro = ({ route, navigation }) => {
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', margin: 10 }}>
           <BotaoCancelar carregando={carregando} titulo='Cancelar' pressionado={() => navigation.goBack()} desabilitado={false} />
           <BotaoAlterar carregando={carregando} titulo={route.params ? 'Alterar' : 'Salvar'} pressionado={salvarCliente} desabilitado={
-             //idCliente: guid,
+            //idCliente: guid,
             !nomeRazaoSocial ||
             !apelidoNomeFantazia ||
             !cpfCnpj ||

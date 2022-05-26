@@ -36,9 +36,13 @@ const Listar = ({ navigation }) => {
     const renderItem = ({ item }) => (
         <ListItem
             onPress={async () => {
-                // navigation.navigate('ClientesCadastro', { id: item.id })
+                navigation.navigate('ClientesCadastro', {
+                    id: item.versao ? item.id : null,
+                    idLocal: item.versao ? item.id : item.idLocal
+                })
                 //bc694d59-46e7-41f6-8016-0f28171d4f25
                 // let teste = await buscarPorId(2);
+                console.log(item)
 
                 let clienteTep = {
                     apelidoNomeFantazia: null,
@@ -58,15 +62,15 @@ const Listar = ({ navigation }) => {
                 };
              // await atualizarTudoPorIdLocal(clienteTep);
             }}>
-            <Avatar rounded title={extractorFirstLeterNames(item.apelido_nome_fantazia)}
+            <Avatar rounded title={extractorFirstLeterNames(item.apelidoNomeFantazia)}
                 containerStyle={{ backgroundColor: '#00a7f7' }}
             />
             <ListItem.Content>
                 <ListItem.Title >
-                    {`${item.apelido_nome_fantazia}`}
+                    {`${item.apelidoNomeFantazia}`}
                 </ListItem.Title>
                 <ListItem.Subtitle >
-                    {`${item.nome_razao_social}`}
+                    {`${item.nomeRazaoSocial}`}
                 </ListItem.Subtitle>
             </ListItem.Content>
             <ListItem.Chevron color="white" />
