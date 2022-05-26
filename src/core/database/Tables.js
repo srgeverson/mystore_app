@@ -39,7 +39,7 @@ export const Tables = {
         },
     },
     clientes: {
-        apelido_nome_fantazia: {
+        apelidoNomeFantazia: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
@@ -54,7 +54,7 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
-        cpf_cnpj: {
+        cpfCnpj: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
@@ -64,7 +64,7 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
-        data_cadastro: {
+        dataCadastro: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
@@ -74,12 +74,12 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
-        empresas_id: {
+        empresasId: {
             type: Types.INTEGER,
             primary_key: false,
             default_value: null,
         },
-        enderecos_id: {
+        enderecosId: {
             type: Types.INTEGER,
             primary_key: false,
             default_value: null,
@@ -89,12 +89,12 @@ export const Tables = {
             primary_key: true,
             default_value: null,
         },
-        id_local: {
+        idLocal: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
         },
-        nome_razao_social: {
+        nomeRazaoSocial: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
