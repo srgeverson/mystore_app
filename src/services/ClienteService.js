@@ -71,6 +71,14 @@ export const buscarPorId = async (id) => {
     }
 }
 
+export const buscarPorIdLocal = async (idLocal) => {
+    try {
+        return ClienteRepository.selectByIdLocal(idLocal);
+    } catch (error) {
+        console.log(`Erro no método buscarPorConterNome do arquivo ClientesService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
 export const buscarPorItensNaoSincronizados = async () => {
     try {
         return ClienteRepository.selectByVersaoIsNull();
@@ -94,7 +102,6 @@ export const cadastrarOuAtualizar = async (cliente) => {
         console.log(`Erro no método cadastrar do arquivo ClientesService -> ${new Date()} -> erro: ${error}`);
     }
 }
-
 
 export const postClientes = async (token, idEmpresa, cliente) => {
     try {
