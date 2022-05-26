@@ -29,18 +29,18 @@ class CidadeRepository {
     insert(cliente) {
         return new Promise((resolve, reject) => {
             Database.insert(`INSERT INTO clientes (
-                apelido_nome_fantazia,
+                apelidoNomeFantazia,
                 ativo,
                 celular,
-                cpf_cnpj,
+                cpfCnpj,
                 critica,
-                data_cadastro,
+                dataCadastro,
                 email,
-                empresas_id,
-                enderecos_id,
+                empresasId,
+                enderecosId,
                 id,
-                id_local,
-                nome_razao_social,
+                idLocal,
+                nomeRazaoSocial,
                 telefone,
                 versao
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -72,18 +72,18 @@ class CidadeRepository {
         console.log(cliente)
         return new Promise((resolve, reject) => {
             Database.insert(`INSERT OR REPLACE INTO clientes (
-                apelido_nome_fantazia,
+                apelidoNomeFantazia,
                 ativo,
                 celular,
-                cpf_cnpj,
+                cpfCnpj,
                 critica,
-                data_cadastro,
+                dataCadastro,
                 email,
-                empresas_id,
-                enderecos_id,
+                empresasId,
+                enderecosId,
                 id,
-                id_local,
-                nome_razao_social,
+                idLocal,
+                nomeRazaoSocial,
                 telefone,
                 versao
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -98,7 +98,7 @@ class CidadeRepository {
                     cliente.empresasId ? cliente.empresasId : null,
                     cliente.enderecosId ? cliente.enderecoId : null,
                     cliente.id ? cliente.id : null,
-                    cliente.id_local ? cliente.id_local : cliente.id,
+                    cliente.idLocal ? cliente.idLocal : cliente.id,
                     cliente.nomeRazaoSocial ? cliente.nomeRazaoSocial : null,
                     cliente.telefone ? cliente.telefone : null,
                     cliente.versao ? cliente.versao : null,
@@ -135,10 +135,22 @@ class CidadeRepository {
                 });
         });
     }
+    
+    selectByIdLocal(id) {
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT * FROM clientes WHERE (id = '${id}');`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
 
     selectByIdLocal(idLocal) {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM clientes WHERE (id_local = '${idLocal}');`, [])
+            Database.select(`SELECT * FROM clientes WHERE (idLocal = '${idLocal}');`, [])
                 .then((success) => {
                     resolve(success);
                 })
@@ -162,7 +174,7 @@ class CidadeRepository {
 
     selectLikeByNome(nome) {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM clientes WHERE (apelido_nome_fantazia LIKE '%${nome}%');`, [])
+            Database.select(`SELECT * FROM clientes WHERE (apelidoNomeFantazia LIKE '%${nome}%');`, [])
                 .then((success) => {
                     resolve(success);
                 })
@@ -174,7 +186,7 @@ class CidadeRepository {
 
     selectLikeByApelidoOrNome(nome) {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM clientes WHERE (apelido_nome_fantazia LIKE '%${nome}%' OR nome_razao_social LIKE '%${nome}%');`, [])
+            Database.select(`SELECT * FROM clientes WHERE (apelidoNomeFantazia LIKE '%${nome}%' OR nomeRazaoSocial LIKE '%${nome}%');`, [])
                 .then((success) => {
                     resolve(success);
                 })
@@ -210,26 +222,29 @@ class CidadeRepository {
 
     updateAllByIdLocal(cliente) {
         console.log(cliente);
+        let sql = '';
+        sql += 'UPDATE ';
+        sql += 'clientes ';
+        sql += 'SET ';
+        sql += 'apelidoNomeFantazia = ?, ';
+        sql += 'ativo = ?, ';
+        sql += 'celular = ?, ';
+        sql += 'cpfCnpj = ?, ';
+        sql += 'critica = ?, ';
+        sql += 'dataCadastro = ?, ';
+        sql += 'email = ?, ';
+        sql += 'empresasId = ?, ';
+        sql += 'enderecosId = ?, ';
+        //sql += 'id = ?, ';
+        sql += 'idLocal = ?, ';
+        sql += 'nomeRazaoSocial = ?, ';
+        sql += 'telefone = ?, ';
+        sql += 'versao = ? ';
+        sql += `WHERE (idLocal = '${cliente.idLocal}');`;
+        console.log(sql);
         return new Promise((resolve, reject) => {
-            Database.update(`
-                            UPDATE 
-                                clientes 
-                            SET 
-                                apelido_nome_fantazia = ?,
-                                ativo= ?,
-                                celular= ?,
-                                cpf_cnpj= ?,
-                                critica= ?,
-                                data_cadastro= ?,
-                                email= ?,
-                                empresas_id= ?,
-                                enderecos_id= ?,
-                                id= ?,
-                                id_local= ?,
-                                nome_razao_social= ?,
-                                telefone= ?,
-                                versao = ?
-                            WHERE (id_local = ${cliente.idLocal});`, 
+            Database.update(
+                sql,
             [
                 cliente.apelidoNomeFantazia ? cliente.apelidoNomeFantazia : null,
                 cliente.ativo ? cliente.ativo : null,
@@ -240,8 +255,8 @@ class CidadeRepository {
                 cliente.email ? cliente.email : null,
                 cliente.empresasId ? cliente.empresasId : null,
                 cliente.enderecosId ? cliente.enderecoId : null,
-                cliente.id,
-                cliente.id,
+                //cliente.id,
+                cliente.idLocal,
                 cliente.nomeRazaoSocial ? cliente.nomeRazaoSocial : null,
                 cliente.telefone ? cliente.telefone : null,
                 cliente.versao ? cliente.versao : null
