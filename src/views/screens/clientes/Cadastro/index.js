@@ -12,6 +12,7 @@ import CampoTexto from '../../../components/CampoTexto';
 import CampoTelefone from '../../../components/CampoTelefone';
 import CampoCelular from '../../../components/CampoCelular';
 import CampoCEP from '../../../components/CampoCEP';
+import CampoCpfOuCnpj from '../../../components/CampoCpfOuCnpj';
 
 const Cadastro = ({ route, navigation }) => {
   const [carregando, setCarregando] = useState(false);
@@ -148,7 +149,7 @@ const Cadastro = ({ route, navigation }) => {
           valor={apelidoNomeFantazia}
           setValor={setApelidoNomeFantazia} />
 
-        <CampoTexto
+        <CampoCpfOuCnpj
           //mensagemDeErro='CPF/CNPJ é obrigatório.'
           //nomeDoCampo='CPF/CNPJ'
           descricaoDoCampo='CPF/CNPJ'
