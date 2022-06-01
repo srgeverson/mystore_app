@@ -11,6 +11,7 @@ import { createGuid } from '../../../../core/Utils';
 import CampoTexto from '../../../components/CampoTexto';
 import CampoTelefone from '../../../components/CampoTelefone';
 import CampoCelular from '../../../components/CampoCelular';
+import CampoCEP from '../../../components/CampoCEP';
 
 const Cadastro = ({ route, navigation }) => {
   const [carregando, setCarregando] = useState(false);
@@ -204,7 +205,7 @@ const Cadastro = ({ route, navigation }) => {
           valor={bairro}
           setValor={setBairro} />
 
-        <CampoTexto
+        <CampoCEP
           //mensagemDeErro='CEP é obrigatório.'
           //nomeDoCampo='CEP'
           descricaoDoCampo='CEP'
