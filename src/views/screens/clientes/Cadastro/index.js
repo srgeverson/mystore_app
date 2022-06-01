@@ -10,6 +10,7 @@ import BotaoAlterar from '../../../components/BotaoAlterar';
 import { createGuid } from '../../../../core/Utils';
 import CampoTexto from '../../../components/CampoTexto';
 import CampoTelefone from '../../../components/CampoTelefone';
+import CampoCelular from '../../../components/CampoCelular';
 
 const Cadastro = ({ route, navigation }) => {
   const [carregando, setCarregando] = useState(false);
@@ -153,7 +154,7 @@ const Cadastro = ({ route, navigation }) => {
           valor={cpfCnpj}
           setValor={setCpfCnpj} />
 
-        <CampoTexto
+        <CampoCelular
           //mensagemDeErro='Celular é obrigatório.'
           //nomeDoCampo='Celular'
           descricaoDoCampo='Celular'
