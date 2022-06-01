@@ -14,12 +14,7 @@ const CampoCEP = ({ descricaoDoCampo, indice, mensagemDeErro, nomeDoCampo, valor
             }}
                 key={indice && createGuid()}
                 value={valor}
-                onChangeText={value => {
-                    if (value)
-                        setValor(cepMask(value));
-                    else
-                        setValor(null);
-                }}
+                onChangeText={value => value ? setValor(cepMask(value)) : setValor(null)}
                 placeholder={descricaoDoCampo}
                 keyboardType='number-pad'
             />

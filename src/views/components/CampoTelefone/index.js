@@ -14,12 +14,7 @@ const CampoTelefone = ({ descricaoDoCampo, indice, mensagemDeErro, nomeDoCampo, 
             }}
                 key={indice && createGuid()}
                 value={valor}
-                onChangeText={value => {
-                    if (value)
-                        setValor(telefoneMask(value));
-                    else
-                        setValor(null);
-                }}
+                onChangeText={value => value ? setValor(telefoneMask(value)) : setValor(null)}
                 placeholder={descricaoDoCampo}
                 keyboardType='number-pad'
             />
