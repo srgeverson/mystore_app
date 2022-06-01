@@ -3,11 +3,9 @@ import { SafeAreaView, } from 'react-native';
 import { SearchBar, SpeedDial, Text, ListItem, Avatar } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import ClienteRepository from '../../../../repository/ClienteRepository';
-import { atualizarTudoPorIdLocal, buscarPorConterApelidoOuNome, buscarPorConterNome, buscarPorId, buscarPorItensNaoSinconizados, buscarPorItensNaoSincronizados, postClientes } from '../../../../services/ClienteService';
-import { getLoginSalvo } from '../../../../services/UsuarioService';
+import { buscarPorConterApelidoOuNome } from '../../../../services/ClienteService';
 import ModalCarregando from '../../../components/ModalCarregando';
-import { extractorFirstLeterNames, keyExtractor } from '../../../components/Utils';
+import { extractorFirstLeterNames, keyExtractor } from '../../../../core/Utils';
 
 const Listar = ({ navigation }) => {
 
@@ -17,7 +15,7 @@ const Listar = ({ navigation }) => {
 
     const [retorno, setRetorno] = useState([]);
 
-    const [valor, setValor] = useState(null);
+    const [valor] = useState(null);
 
     const pesquisarClientes = async (nome) => {
         setCarregando(true);
@@ -39,28 +37,7 @@ const Listar = ({ navigation }) => {
                 navigation.navigate('ClientesCadastro', {
                     id: item.versao ? item.id : null,
                     idLocal: item.versao ? item.id : item.idLocal
-                })
-                //bc694d59-46e7-41f6-8016-0f28171d4f25
-                // let teste = await buscarPorId(2);
-                console.log(item)
-
-                let clienteTep = {
-                    apelidoNomeFantazia: null,
-                    ativo: null,
-                    celular: null,
-                    cpfCnpj: null,
-                    critica: null,
-                    dataCadastro: null,
-                    email: null,
-                    empresasId: null,
-                    enderecosId: null,
-                    id: 1543,//1542,
-                    idLocal: JSON.stringify("bc694d59-46e7-41f6-8016-0f28171d4f25"),
-                    nomeRazaoSocial: 'Razao Teste1 UPDATE',
-                    telefone: null,
-                    versao: null
-                };
-             // await atualizarTudoPorIdLocal(clienteTep);
+                });
             }}>
             <Avatar rounded title={extractorFirstLeterNames(item.apelidoNomeFantazia)}
                 containerStyle={{ backgroundColor: '#00a7f7' }}
@@ -108,31 +85,8 @@ const Listar = ({ navigation }) => {
                         icon={<Icon name='plus' size={20} color='#FFF' />}
                         title="Cadastrar"
                         onPress={() => navigation.navigate('ClientesCadastro')} />
-                    <SpeedDial.Action
-                        color='#007BFF'
-                        icon={<Icon name='edit' size={20} color='#FFF' />}
-                        title="Teste"
-                        onPress={() => {
-                            teste = async () => {
-                                // const teste= await ClienteRepository.selectUltimaVersao();
-                                //const teste= await CidadeRepository.selectUltimaVersao();
-                                //const teste= await EstadoRepository.selectAll();
-
-                                // if (teste.rows && teste.rows.item(0).versao != null)
-                                //     console.log(teste.rows.item(0).versao);
-                                // let teste1= await ClienteRepository.selectAll();
-                                // console.log(teste1.rows.raw());
-                                let teste = await buscarPorItensNaoSincronizados();
-                                console.log(teste.rows.item(0));
-                                
-                                const { empresa, token } = await getLoginSalvo();
-                                let teste1 = await postClientes(token, empresa, teste.rows.item(0));
-                                console.log(teste1);
-                            }
-                            // navigation.navigate('ClientesCadastro', { id: 0 })
-                            teste();
-                        }} />
                 </SpeedDial>
+
                 {carregando && <ModalCarregando pagina='Listar clientes' />}
             </SafeAreaView>
         </>
