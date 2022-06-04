@@ -5,7 +5,7 @@ const logoWidth = 200;
 
 export const theme = {
     colors: {
-        principal:'#0B89D4',
+        principal: '#0B89D4',
         default1: '#59BFFF',
         default2: '#1B8BD1',
         primary: '#007bff',
@@ -17,7 +17,7 @@ export const theme = {
         light: '#f8f9fa',
         dark: '#343a40',
         colorFocus: '#000',
-        colorUnfocus:'#FF0',
+        colorUnfocus: '#FF0',
     },
     sizes: {
         icon: 15,
@@ -33,4 +33,8 @@ export const theme = {
     positions: {
         imageLogoLeft: (Dimensions.get('window').width - logoWidth) / 4
     },
+    containners: {
+        formCrudDefault: { flex: 1, margin: 10 },
+        buttonsCancelConfir: { flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', margin: 10 }
+    }
 }
