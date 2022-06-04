@@ -1,98 +1,66 @@
 import React, { useState } from 'react';
 import { Dialog } from '@rneui/themed';
-import { ListItem, SearchBar, Text } from 'react-native-elements';
+import { ListItem, SearchBar } from 'react-native-elements';
 import { buscarPorConterNome } from '../../../../services/EstadoService';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from '../../../../assets/styles/theme';
-import { ActivityIndicator } from 'react-native';
+import { ScrollView } from 'react-native';
 
-const Selecionar = (props) => {
-    const [open, setOpen] = useState(false);
+const Selecionar = ({ setModal, setEstado, modalEstados }) => {
 
     const [carregando, setCarregando] = useState(false);
 
-    const [retorno, setRetorno] = useState([]);
+    const [estados, setEstados] = useState([]);
 
-    const [valor, setValor] = useState(null);
+    const [nomeEstado] = useState(null);
 
-    const pesquisarEstados =async (nome) => {
-        setCarregando(true);
+    const pesquisarEstados = async (nome) => {
         try {
+            setCarregando(true);
             const lista = await buscarPorConterNome(nome);
-            console.log(`Pesquisando...${JSON.stringify(lista)}`);
-            var temp = [];
-            for (let i = 0; i < lista.rows.length; ++i) {
-                temp.push(lista.rows.item(i));
-            }
-            setRetorno(temp);
+            setEstados(lista.rows.raw());
         } catch (error) {
-            console.log(`Ocorreu no método pesquisarClientes erro em /src/viwes/clientes/Listar -> ${new Date()} -> erro: ${error}`);
+            console.log(`Ocorreu no método pesquisarEstados erro em /src/viwes/estados/Selecionar -> ${new Date()} -> erro: ${error}`);
         } finally {
             setCarregando(false);
         }
     }
-    const keyExtractor = (item, index) => index.toString();
 
-    const renderItem = ({ item }) => (
-        <ListItem key={item.id} style={{ height: 50 }}
-            bottomDivider onPress={() => {
-                Alert.alert('Clique', `Objeto ${JSON.stringify(item)} foi clicada!`)
-            }}>
-            <ListItem.Content>
-                <ListItem.Title>{`Código: ${item.id}  - Nome : ${item.nome}`}</ListItem.Title>
-                <ListItem.Subtitle>{`Ativado: ${item.ativo ? 'Sim' : 'Não'}`}</ListItem.Subtitle>
-            </ListItem.Content>
-        </ListItem>
-    );
-
-        return (
-            <>
-                <Dialog
-                    isVisible={props.isVisible}
-                    onBackdropPress={props.onBackdropPress}
-                >
-                    <Dialog.Title title="Selecione UF" />
-                    <SearchBar
-                        lightTheme={true}
-                        placeholder={`Digite o nome do estado`}
-                        onChangeText={value => pesquisarEstados(value)}
-                        value={valor}
-                    />
+    return (
+        <>
+            <Dialog overlayStyle={{ marginTop: 100 }} isVisible={modalEstados} onBackdropPress={() => setModal(!modalEstados)}>
+                <Dialog.Title title='Estados' />
+                <SearchBar
+                    lightTheme={true}
+                    placeholder={`Digite o nome do estado`}
+                    onChangeText={value => pesquisarEstados(value)}
+                    value={nomeEstado}
+                    searchIcon={carregando && <Icon
+                        name="check"
+                        size={theme.sizes.icon}
+                        color={theme.colors.light}
+                        style={{ marginRight: theme.margins.iconTextRight }} />}
+                />
+                <ScrollView>
                     {
-                        carregando
-                            ?
-                            <ActivityIndicator size={theme.sizes.search} color={theme.colors.info} />
-                            :
-                            retorno.length > 0
-                                ?
-                                <FlatList
-                                    keyExtractor={keyExtractor}
-                                    data={retorno}
-                                    renderItem={renderItem}
-                                />
-                                :
-                                <Text>Listagem vazia...</Text>
+                        estados.map((estado, i) => (
+                            <ListItem
+                                key={estado.id.toString()}
+                                bottomDivider
+                                onPress={() => {
+                                    setEstado({ id: estado.id, nome: estado.nome });
+                                    setModal(false);
+                                }}>
+                                <ListItem.Content>
+                                    <ListItem.Title>{`${estado.nome}`}</ListItem.Title>
+                                </ListItem.Content>
+                            </ListItem>
+                        ))
                     }
-                    {/* {userlist.map((l, i) => (
-                    <ListItem
-                        key={i}
-                        containerStyle={{
-                            marginHorizontal: -10,
-                            borderRadius: 8,
-                        }}
-                        onPress={toggleDialog6}
-                    >
-                        <Avatar rounded source={{ uri: l.avatar_url }} />
-                        <ListItem.Content>
-                            <ListItem.Title style={{ fontWeight: '700' }}>
-                                {l.name}
-                            </ListItem.Title>
-                            <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
-                        </ListItem.Content>
-                    </ListItem>
-                ))} */}
-                </Dialog>
-            </>
-        )
+                </ScrollView>
+            </Dialog>
+        </>
+    )
 }
 
 export default Selecionar;

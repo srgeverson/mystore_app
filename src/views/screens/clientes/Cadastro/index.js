@@ -13,6 +13,7 @@ import CampoTelefone from '../../../components/CampoTelefone';
 import CampoCelular from '../../../components/CampoCelular';
 import CampoCEP from '../../../components/CampoCEP';
 import CampoCpfOuCnpj from '../../../components/CampoCpfOuCnpj';
+import Selecionar from '../../estados/Selecionar';
 
 const Cadastro = ({ route, navigation }) => {
   const [carregando, setCarregando] = useState(false);
@@ -32,24 +33,11 @@ const Cadastro = ({ route, navigation }) => {
   const [cep, setCep] = useState(null);
   const [estadoId, setEstadoId] = useState(null);
   const [estado, setEstado] = useState(null);
-  const [estados, setEstados] = useState([]);
   const [modalEstados, setModalEstados] = useState(false);
   const [cidadeId, setCidadeId] = useState(null);
   const [cidade, setCidade] = useState(null);
   const [modalCidades, setModalCidades] = useState(false);
   const [cidades, setCidades] = useState([]);
-
-  const pesquisarEstados = async (nome) => {
-    setCarregando(true);
-    try {
-      const lista = await buscarPorConterNomeEstado(nome);
-      setEstados(lista.rows.raw());
-    } catch (error) {
-      console.log(`Ocorreu no método pesquisarEstados erro em /src/viwes/estados/Listar -> ${new Date()} -> erro: ${error}`);
-    } finally {
-      setCarregando(false);
-    }
-  }
 
   const pesquisarCidades = async (nome) => {
     setCarregando(true);
@@ -135,6 +123,21 @@ const Cadastro = ({ route, navigation }) => {
       <ScrollView>
         {route.params && route.params.id ? <Input label='Código do Cliente' editable={false} value={route.params.id.toString()} /> : false && route.params && route.params.idLocal && Alert.alert('Dados Sincronizando', 'Os dados deste cliente não foram sincronizado com o servidor!')}
 
+        <Input
+          errorMessage={!estado && 'Selecione uma UF.'}
+          label='Estado'
+          leftIcon={<Icon name='search' size={20} onPress={() => setModalEstados(!modalEstados)} />}
+          rightIcon={<Icon name='close' size={20} onPress={() => {
+            setEstado(null);
+            setEstadoId(0);
+            setCidadeId(null);
+            setCidade(null);
+          }} />}
+          placeholder='Pesquise e selecione um estado'
+          value={estado ? estado.nome : null}
+        />
+        <Selecionar setEstado={setEstado} setModal={setModalEstados} modalEstados={modalEstados}/>
+
         <CampoTexto
           //mensagemDeErro='Nome/Razão Social é obrigatório.'
           //nomeDoCampo='Nome/Razão Social'
@@ -213,47 +216,6 @@ const Cadastro = ({ route, navigation }) => {
           valor={cep}
           setValor={setCep} />
 
-        {/* begin estados */}
-        <Input
-          errorMessage={!estado && 'Selecione uma UF.'}
-          label='Estado'
-          leftIcon={<Icon name='search' size={20} onPress={() => setModalEstados(!modalEstados)} />}
-          rightIcon={<Icon name='close' size={20} onPress={() => {
-            setEstado(null);
-            setEstadoId(0);
-            setCidadeId(null);
-            setCidade(null);
-          }} />}
-          placeholder='Pesquise e selecione um estado'
-          value={estado}
-        />
-        <Dialog overlayStyle={{ marginTop: 100 }} isVisible={modalEstados} onBackdropPress={() => setModalEstados(!modalEstados)}>
-          <Dialog.Title title='Estados' />
-          <SearchBar
-            lightTheme={true}
-            placeholder={`Digite o nome do estado`}
-            onChangeText={value => pesquisarEstados(value)}
-            value={estado}
-          />
-          <ScrollView>
-            {estados.map((item, i) => (
-              <ListItem key={item.id.toString()} bottomDivider
-                onPress={() => {
-                  setEstadoId(item.id);
-                  setEstado(item.nome);
-                  //Reset da cidade
-                  setCidadeId(null);
-                  setCidade(null);
-                  setModalEstados(!modalEstados);
-                }}>
-                <ListItem.Content>
-                  <ListItem.Title>{`${item.nome}`}</ListItem.Title>
-                </ListItem.Content>
-              </ListItem>
-            ))}
-          </ScrollView>
-        </Dialog>
-        {/* end estados */}
         {/* begin cidades */}
         <Input
           errorMessage={!cidade && 'Selecione uma cidade!'}
