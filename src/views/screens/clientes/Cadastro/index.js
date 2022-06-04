@@ -13,12 +13,12 @@ import CampoTelefone from '../../../components/CampoTelefone';
 import CampoCelular from '../../../components/CampoCelular';
 import CampoCEP from '../../../components/CampoCEP';
 import CampoCpfOuCnpj from '../../../components/CampoCpfOuCnpj';
-import Selecionar from '../../estados/Selecionar';
+import SelecionarEstado from '../../estados/Selecionar';
+import SelecionarCidade from '../../cidades/Selecionar';
 
 const Cadastro = ({ route, navigation }) => {
   const [carregando, setCarregando] = useState(false);
   const [idCliente, setIdCliente] = useState(null);
-  //const [cliente, setCliente] = useState(null);
   const [idLocal, setIdLocal] = useState(null);
   const [nomeRazaoSocial, setNomeRazaoSocial] = useState(null);
   const [apelidoNomeFantazia, setApelidoNomeFantazia] = useState(null);
@@ -123,21 +123,6 @@ const Cadastro = ({ route, navigation }) => {
       <ScrollView>
         {route.params && route.params.id ? <Input label='Código do Cliente' editable={false} value={route.params.id.toString()} /> : false && route.params && route.params.idLocal && Alert.alert('Dados Sincronizando', 'Os dados deste cliente não foram sincronizado com o servidor!')}
 
-        <Input
-          errorMessage={!estado && 'Selecione uma UF.'}
-          label='Estado'
-          leftIcon={<Icon name='search' size={20} onPress={() => setModalEstados(!modalEstados)} />}
-          rightIcon={<Icon name='close' size={20} onPress={() => {
-            setEstado(null);
-            setEstadoId(0);
-            setCidadeId(null);
-            setCidade(null);
-          }} />}
-          placeholder='Pesquise e selecione um estado'
-          value={estado ? estado.nome : null}
-        />
-        <Selecionar setEstado={setEstado} setModal={setModalEstados} modalEstados={modalEstados}/>
-
         <CampoTexto
           //mensagemDeErro='Nome/Razão Social é obrigatório.'
           //nomeDoCampo='Nome/Razão Social'
@@ -216,7 +201,21 @@ const Cadastro = ({ route, navigation }) => {
           valor={cep}
           setValor={setCep} />
 
-        {/* begin cidades */}
+        <Input
+          errorMessage={!estado && 'Selecione uma UF.'}
+          label='Estado'
+          leftIcon={<Icon name='search' size={20} onPress={() => setModalEstados(!modalEstados)} />}
+          rightIcon={<Icon name='close' size={20} onPress={() => {
+            setEstado(null);
+            setEstadoId(0);
+            setCidadeId(null);
+            setCidade(null);
+          }} />}
+          placeholder='Pesquise e selecione um estado'
+          value={estado}
+        />
+        <SelecionarEstado setId={setEstadoId} setNome={setEstado} setModal={setModalEstados} modalEstados={modalEstados} />
+
         <Input
           errorMessage={!cidade && 'Selecione uma cidade!'}
           label='Cidade'
@@ -224,7 +223,7 @@ const Cadastro = ({ route, navigation }) => {
             if (estado != null)
               setModalCidades(!modalCidades);
             else
-              Alert.alert(`Selecione primeiro o estado!`);
+              Alert.alert(`Atenção`,`Selecione primeiro o estado!`);
           }} />}
           rightIcon={<Icon name='close' size={20} onPress={() => {
             setCidadeId(null);
@@ -233,32 +232,14 @@ const Cadastro = ({ route, navigation }) => {
           placeholder='Pesquise e selecione uma cidade'
           value={cidade}
         />
-        <Dialog
-          overlayStyle={{ marginTop: 100 }}
-          isVisible={modalCidades} onBackdropPress={() => setModalCidades(!modalCidades)}>
-          <Dialog.Title title='Cidades' />
-          <SearchBar
-            lightTheme={true}
-            placeholder={`Digite o nome do cidade`}
-            onChangeText={value => pesquisarCidades(value)}
-            value={cidade}
-          />
-          <ScrollView>
-            {cidades.map((item, i) => (
-              <ListItem key={item.id.toString()} bottomDivider
-                onPress={() => {
-                  setCidadeId(item.id);
-                  setCidade(item.nome);
-                  setModalCidades(!modalCidades);
-                }}>
-                <ListItem.Content>
-                  <ListItem.Title>{`${item.nome}`}</ListItem.Title>
-                </ListItem.Content>
-              </ListItem>
-            ))}
-          </ScrollView>
-        </Dialog>
-        {/* end cidades */}
+        <SelecionarCidade
+          setId={setCidadeId}
+          setNome={setCidade}
+          setModal={setModalCidades}
+          modalCidades={modalCidades}
+          estadoId={estadoId}
+        />
+
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', margin: 10 }}>
           <BotaoCancelar carregando={carregando} titulo='Cancelar' pressionado={() => navigation.goBack()} desabilitado={false} />
           <BotaoAlterar carregando={carregando} titulo={route.params ? 'Alterar' : 'Salvar'} pressionado={salvarCliente} desabilitado={

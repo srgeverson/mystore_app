@@ -6,18 +6,19 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from '../../../../assets/styles/theme';
 import { ScrollView } from 'react-native';
 
-const Selecionar = ({ setModal, setCidade, modalCidades }) => {
+const Selecionar = ({ setModal, setNome, setId, modalCidades, estadoId }) => {
 
     const [carregando, setCarregando] = useState(false);
 
-    const [Cidades, setCidades] = useState([]);
+    const [cidades, setCidades] = useState([]);
 
     const [nomeCidade] = useState(null);
 
     const pesquisarCidades = async (nome) => {
         try {
             setCarregando(true);
-            const lista = await buscarPorConterNome(nome);
+            console.log(`${nome} - ${estadoId}`)
+            const lista = await buscarPorConterNome(nome, estadoId);
             setCidades(lista.rows.raw());
         } catch (error) {
             console.log(`Ocorreu no método pesquisarCidades erro em /src/viwes/cidades/Selecionar -> ${new Date()} -> erro: ${error}`);
@@ -36,7 +37,7 @@ const Selecionar = ({ setModal, setCidade, modalCidades }) => {
                     onChangeText={value => pesquisarCidades(value)}
                     value={nomeCidade}
                     searchIcon={carregando && <Icon
-                        name="check"
+                        name="spinner"
                         size={theme.sizes.icon}
                         color={theme.colors.light}
                         style={{ marginRight: theme.margins.iconTextRight }} />}
@@ -48,7 +49,8 @@ const Selecionar = ({ setModal, setCidade, modalCidades }) => {
                                 key={cidade.id.toString()}
                                 bottomDivider
                                 onPress={() => {
-                                    setCidade({ id: cidade.id, nome: cidade.nome });
+                                    setId(cidade.id);
+                                    setNome(cidade.nome);
                                     setModal(false);
                                 }}>
                                 <ListItem.Content>
