@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, SafeAreaView, ScrollView, View } from 'react-native';
 import { Input } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { atualizarTudoPorIdLocal, buscarPorIdLocal, cadastrar } from '../../../../services/ClienteService';
 import BotaoCancelar from '../../../components/BotaoCancelar';
 import BotaoAlterar from '../../../components/BotaoAlterar';
@@ -185,44 +184,9 @@ const Cadastro = ({ route, navigation }) => {
           valor={cep}
           setValor={setCep} />
 
-        {/* <Input
-          errorMessage={!estado && 'Selecione uma UF.'}
-          label='Estado'
-          leftIcon={<Icon name='search' size={20} onPress={() => setModalEstados(!modalEstados)} />}
-          rightIcon={<Icon name='close' size={20} onPress={() => {
-            setEstado(null);
-            setEstadoId(0);
-            setCidadeId(null);
-            setCidade(null);
-          }} />}
-          placeholder='Pesquise e selecione um estado'
-          value={estado}
-        /> */}
         <SelecionarEstado modal={modalEstados} nome={estado} setId={setEstadoId} setModal={setModalEstados} setNome={setEstado} />
 
-        <Input
-          errorMessage={!cidade && 'Selecione uma cidade!'}
-          label='Cidade'
-          leftIcon={<Icon name='search' size={20} onPress={() => {
-            if (estado != null)
-              setModalCidades(!modalCidades);
-            else
-              Alert.alert(`Atenção`,`Selecione primeiro o estado!`);
-          }} />}
-          rightIcon={<Icon name='close' size={20} onPress={() => {
-            setCidadeId(null);
-            setCidade(null);
-          }} />}
-          placeholder='Pesquise e selecione uma cidade'
-          value={cidade}
-        />
-        <SelecionarCidade
-          setId={setCidadeId}
-          setNome={setCidade}
-          setModal={setModalCidades}
-          modalCidades={modalCidades}
-          estadoId={estadoId}
-        />
+        <SelecionarCidade estadoId={estadoId} modal={modalCidades} nome={cidade} setId={setCidadeId} setModal={setModalCidades} setNome={setCidade} />
 
         <View style={theme.containners.buttonsCancelConfir}>
           <BotaoCancelar carregando={carregando} titulo='Cancelar' pressionado={() => navigation.goBack()} desabilitado={false} />

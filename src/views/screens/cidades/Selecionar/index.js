@@ -4,9 +4,10 @@ import { ListItem, SearchBar } from 'react-native-elements';
 import { buscarPorConterNome } from '../../../../services/CidadeService';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from '../../../../assets/styles/theme';
-import { ScrollView } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
+import { Input } from 'react-native-elements';
 
-const Selecionar = ({ setModal, setNome, setId, modalCidades, estadoId }) => {
+const Selecionar = ({ estadoId, modal, nome, setId, setModal, setNome }) => {
 
     const [carregando, setCarregando] = useState(false);
 
@@ -29,7 +30,23 @@ const Selecionar = ({ setModal, setNome, setId, modalCidades, estadoId }) => {
 
     return (
         <>
-            <Dialog overlayStyle={{ marginTop: 100 }} isVisible={modalCidades} onBackdropPress={() => setModal(!modalCidades)}>
+            <Input
+                errorMessage={!nome && 'Selecione uma cidade!'}
+                label='Cidade'
+                leftIcon={<Icon name='search' size={20} onPress={() => {
+                    if (estadoId != null)
+                        setModal(!modal);
+                    else
+                        Alert.alert(`Atenção`, `Selecione primeiro o estado!`);
+                }} />}
+                rightIcon={<Icon name='close' size={20} onPress={() => {
+                    setId(null);
+                    setNome(null);
+                }} />}
+                placeholder='Pesquise e selecione uma cidade'
+                value={nome}
+            />
+            <Dialog overlayStyle={{ marginTop: theme.margins.selecionarMarginTop }} isVisible={modal} onBackdropPress={() => setModal(!modal)}>
                 <Dialog.Title title='Cidades' />
                 <SearchBar
                     lightTheme={true}
