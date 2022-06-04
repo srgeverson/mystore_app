@@ -16,15 +16,17 @@ const Selecionar = ({ estadoId, modal, nome, setId, setModal, setNome }) => {
     const [nomeCidade] = useState(null);
 
     const pesquisarCidades = async (nome) => {
-        try {
-            setCarregando(true);
-            console.log(`${nome} - ${estadoId}`)
-            const lista = await buscarPorConterNome(nome, estadoId);
-            setCidades(lista.rows.raw());
-        } catch (error) {
-            console.log(`Ocorreu no método pesquisarCidades erro em /src/viwes/cidades/Selecionar -> ${new Date()} -> erro: ${error}`);
-        } finally {
-            setCarregando(false);
+        if (nome) {
+            try {
+                setCarregando(true);
+                console.log(`${nome} - ${estadoId}`)
+                const lista = await buscarPorConterNome(nome, estadoId);
+                setCidades(lista.rows.raw());
+            } catch (error) {
+                console.log(`Ocorreu no método pesquisarCidades erro em /src/viwes/cidades/Selecionar -> ${new Date()} -> erro: ${error}`);
+            } finally {
+                setCarregando(false);
+            }
         }
     }
 

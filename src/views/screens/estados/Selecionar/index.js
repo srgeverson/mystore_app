@@ -16,14 +16,16 @@ const Selecionar = ({ setId, modal, nome, setModal, setNome }) => {
     const [nomeEstado] = useState(null);
 
     const pesquisarEstados = async (nome) => {
-        try {
-            setCarregando(true);
-            const lista = await buscarPorConterNome(nome);
-            setEstados(lista.rows.raw());
-        } catch (error) {
-            console.log(`Ocorreu no método pesquisarEstados erro em /src/viwes/estados/Selecionar -> ${new Date()} -> erro: ${error}`);
-        } finally {
-            setCarregando(false);
+        if (nome) {
+            try {
+                setCarregando(true);
+                const lista = await buscarPorConterNome(nome);
+                setEstados(lista.rows.raw());
+            } catch (error) {
+                console.log(`Ocorreu no método pesquisarEstados erro em /src/viwes/estados/Selecionar -> ${new Date()} -> erro: ${error}`);
+            } finally {
+                setCarregando(false);
+            }
         }
     }
 
