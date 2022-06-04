@@ -28,7 +28,8 @@ export const theme = {
     },
     margins: {
         iconTextLeft: 5,
-        iconTextRight: 5
+        iconTextRight: 5,
+        selecionarMarginTop: 100
     },
     positions: {
         imageLogoLeft: (Dimensions.get('window').width - logoWidth) / 4
