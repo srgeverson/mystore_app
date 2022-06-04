@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from '../../../../assets/styles/theme';
 import { ScrollView } from 'react-native';
 
-const Selecionar = ({ setModal, setEstado, modalEstados }) => {
+const Selecionar = ({ setModal, setNome, setId, modalEstados }) => {
 
     const [carregando, setCarregando] = useState(false);
 
@@ -36,7 +36,7 @@ const Selecionar = ({ setModal, setEstado, modalEstados }) => {
                     onChangeText={value => pesquisarEstados(value)}
                     value={nomeEstado}
                     searchIcon={carregando && <Icon
-                        name="check"
+                        name="spinner"
                         size={theme.sizes.icon}
                         color={theme.colors.light}
                         style={{ marginRight: theme.margins.iconTextRight }} />}
@@ -48,7 +48,8 @@ const Selecionar = ({ setModal, setEstado, modalEstados }) => {
                                 key={estado.id.toString()}
                                 bottomDivider
                                 onPress={() => {
-                                    setEstado({ id: estado.id, nome: estado.nome });
+                                    setId(estado.id);
+                                    setNome(estado.nome);
                                     setModal(false);
                                 }}>
                                 <ListItem.Content>
