@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, SafeAreaView, ScrollView, View } from 'react-native';
-import { Dialog, Input, ListItem, SearchBar } from 'react-native-elements';
+import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { atualizarTudoPorIdLocal, buscarPorIdLocal, cadastrar } from '../../../../services/ClienteService';
-import { buscarPorConterNome as buscarPorConterNomeCidade } from '../../../../services/CidadeService';
-import { buscarPorConterNome as buscarPorConterNomeEstado } from '../../../../services/EstadoService';
 import BotaoCancelar from '../../../components/BotaoCancelar';
 import BotaoAlterar from '../../../components/BotaoAlterar';
 import { createGuid } from '../../../../core/Utils';
@@ -15,6 +13,7 @@ import CampoCEP from '../../../components/CampoCEP';
 import CampoCpfOuCnpj from '../../../components/CampoCpfOuCnpj';
 import SelecionarEstado from '../../estados/Selecionar';
 import SelecionarCidade from '../../cidades/Selecionar';
+import { theme } from '../../../../assets/styles/theme';
 
 const Cadastro = ({ route, navigation }) => {
   const [carregando, setCarregando] = useState(false);
@@ -37,19 +36,6 @@ const Cadastro = ({ route, navigation }) => {
   const [cidadeId, setCidadeId] = useState(null);
   const [cidade, setCidade] = useState(null);
   const [modalCidades, setModalCidades] = useState(false);
-  const [cidades, setCidades] = useState([]);
-
-  const pesquisarCidades = async (nome) => {
-    setCarregando(true);
-    try {
-      const lista = await buscarPorConterNomeCidade(nome, estadoId);
-      setCidades(lista.rows.raw());
-    } catch (error) {
-      console.log(`Ocorreu no método pesquisarCidades erro em /src/viwes/estados/Listar -> ${new Date()} -> erro: ${error}`);
-    } finally {
-      setCarregando(false);
-    }
-  }
 
   const salvarCliente = () => {
     const guid = createGuid();
@@ -86,7 +72,6 @@ const Cadastro = ({ route, navigation }) => {
       setIdCliente(route.params.id);
   }, [])
 
-
   const pesquisarClientePorIdLocal = async (idLocal) => {
     setCarregando(true);
     try {
@@ -119,7 +104,7 @@ const Cadastro = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, margin: 10 }}>
+    <SafeAreaView style={theme.containners.formCrudDefault}>
       <ScrollView>
         {route.params && route.params.id ? <Input label='Código do Cliente' editable={false} value={route.params.id.toString()} /> : false && route.params && route.params.idLocal && Alert.alert('Dados Sincronizando', 'Os dados deste cliente não foram sincronizado com o servidor!')}
 
@@ -178,7 +163,6 @@ const Cadastro = ({ route, navigation }) => {
           descricaoDoCampo='Número'
           valor={numero}
           setValor={setNumero} />
-
 
         <CampoTexto
           //mensagemDeErro='Complemento é obrigatório.'
@@ -240,7 +224,7 @@ const Cadastro = ({ route, navigation }) => {
           estadoId={estadoId}
         />
 
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', margin: 10 }}>
+        <View style={theme.containners.buttonsCancelConfir}>
           <BotaoCancelar carregando={carregando} titulo='Cancelar' pressionado={() => navigation.goBack()} desabilitado={false} />
           <BotaoAlterar carregando={carregando} titulo={route.params ? 'Alterar' : 'Salvar'} pressionado={salvarCliente} desabilitado={
             !nomeRazaoSocial ||
