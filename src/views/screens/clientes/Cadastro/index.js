@@ -185,7 +185,7 @@ const Cadastro = ({ route, navigation }) => {
           valor={cep}
           setValor={setCep} />
 
-        <Input
+        {/* <Input
           errorMessage={!estado && 'Selecione uma UF.'}
           label='Estado'
           leftIcon={<Icon name='search' size={20} onPress={() => setModalEstados(!modalEstados)} />}
@@ -197,8 +197,8 @@ const Cadastro = ({ route, navigation }) => {
           }} />}
           placeholder='Pesquise e selecione um estado'
           value={estado}
-        />
-        <SelecionarEstado setId={setEstadoId} setNome={setEstado} setModal={setModalEstados} modalEstados={modalEstados} />
+        /> */}
+        <SelecionarEstado modal={modalEstados} nome={estado} setId={setEstadoId} setModal={setModalEstados} setNome={setEstado} />
 
         <Input
           errorMessage={!cidade && 'Selecione uma cidade!'}

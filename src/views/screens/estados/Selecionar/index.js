@@ -5,8 +5,9 @@ import { buscarPorConterNome } from '../../../../services/EstadoService';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from '../../../../assets/styles/theme';
 import { ScrollView } from 'react-native';
+import { Input } from 'react-native-elements';
 
-const Selecionar = ({ setModal, setNome, setId, modalEstados }) => {
+const Selecionar = ({ setId, modal, nome, setModal, setNome }) => {
 
     const [carregando, setCarregando] = useState(false);
 
@@ -28,7 +29,18 @@ const Selecionar = ({ setModal, setNome, setId, modalEstados }) => {
 
     return (
         <>
-            <Dialog overlayStyle={{ marginTop: 100 }} isVisible={modalEstados} onBackdropPress={() => setModal(!modalEstados)}>
+            <Input
+                errorMessage={!nome && 'Selecione uma UF.'}
+                label='Estado'
+                leftIcon={<Icon name='search' size={20} onPress={() => setModal(!modal)} />}
+                rightIcon={<Icon name='close' size={20} onPress={() => {
+                    setNome(null);
+                    setId(null);
+                }} />}
+                placeholder='Pesquise e selecione um estado'
+                value={nome}
+            />
+            <Dialog overlayStyle={{ marginTop: 100 }} isVisible={modal} onBackdropPress={() => setModal(!modal)}>
                 <Dialog.Title title='Estados' />
                 <SearchBar
                     lightTheme={true}
