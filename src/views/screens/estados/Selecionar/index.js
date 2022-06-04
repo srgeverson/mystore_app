@@ -40,7 +40,7 @@ const Selecionar = ({ setId, modal, nome, setModal, setNome }) => {
                 placeholder='Pesquise e selecione um estado'
                 value={nome}
             />
-            <Dialog overlayStyle={{ marginTop: 100 }} isVisible={modal} onBackdropPress={() => setModal(!modal)}>
+            <Dialog overlayStyle={{ marginTop: theme.margins.selecionarMarginTop }} isVisible={modal} onBackdropPress={() => setModal(!modal)}>
                 <Dialog.Title title='Estados' />
                 <SearchBar
                     lightTheme={true}
