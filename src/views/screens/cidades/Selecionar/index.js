@@ -19,7 +19,6 @@ const Selecionar = ({ estadoId, modal, nome, setId, setModal, setNome }) => {
         if (nome) {
             try {
                 setCarregando(true);
-                console.log(`${nome} - ${estadoId}`)
                 const lista = await buscarPorConterNome(nome, estadoId);
                 setCidades(lista.rows.raw());
             } catch (error) {
