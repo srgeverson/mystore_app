@@ -17,36 +17,6 @@ export const atualizarTudoPorIdLocal = async (cliente) => {
     }
 }
 
-export const getClientes = async (token, idEmpresa) => {
-    try {
-        const ultimaVersao = await ClienteRepository.selectUltimaVersao();
-        let ultVersao = -1;
-        if (ultimaVersao.rows && ultimaVersao.rows.item(0).versao != null)
-            ultVersao = ultimaVersao.rows.item(0).versao;
-            
-        return await api(token)
-            .get(`/v1/empresas/${idEmpresa}/clientes/versao?ultimaVersao=${ultVersao}`)
-            .then((respose) => {
-                if (respose.data !== null) {
-                    return respose.data;
-                }
-            }).catch((error) => {
-                console.log(`Erro na requisição da API andpoint getClientes! Erro: ${error.message}`);
-                if (error.response) {
-                    return {
-                        codigo: error.response.status,
-                        erro: error.response.data.error,
-                        mensagem: error.response.data.error_description,
-                    }
-                } else {
-                    throw error;
-                }
-            });
-    } catch (error) {
-        console.log(`Erro no método getClientes do arquivo ClientesService -> ${new Date()} -> erro: ${error}`);
-    }
-}
-
 export const buscarPorConterNome = async (nome) => {
     try {
         return ClienteRepository.selectLikeByNome(nome);
@@ -103,15 +73,15 @@ export const cadastrarOuAtualizar = async (cliente) => {
     }
 }
 
-export const postClientes = async (token, idEmpresa, cliente) => {
+export const getClientes = async (token, idEmpresa) => {
     try {
-        // const ultimaVersao = await ClienteRepository.selectUltimaVersao();
-        // let ultVersao = -1;
-        // if (ultimaVersao.rows && ultimaVersao.rows.item(0).versao != null)
-        //     ultVersao = ultimaVersao.rows.item(0).versao;
-            
+        const ultimaVersao = await ClienteRepository.selectUltimaVersao();
+        let ultVersao = -1;
+        if (ultimaVersao.rows && ultimaVersao.rows.item(0).versao != null)
+            ultVersao = ultimaVersao.rows.item(0).versao;
+
         return await api(token)
-            .post(`/v1/empresas/${idEmpresa}/clientes`, cliente)
+            .get(`/v1/empresas/${idEmpresa}/clientes/versao?ultimaVersao=${ultVersao}`)
             .then((respose) => {
                 if (respose.data !== null) {
                     return respose.data;
@@ -119,13 +89,39 @@ export const postClientes = async (token, idEmpresa, cliente) => {
             }).catch((error) => {
                 console.log(`Erro na requisição da API andpoint getClientes! Erro: ${error.message}`);
                 if (error.response) {
-                    return error.response.data;
+                    return {
+                        codigo: error.response.status,
+                        erro: error.response.data.error,
+                        mensagem: error.response.data.error_description,
+                    }
                 } else {
                     throw error;
                 }
             });
     } catch (error) {
         console.log(`Erro no método getClientes do arquivo ClientesService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const postClientes = async (token, idEmpresa, cliente) => {
+    try {
+
+        return await api(token)
+            .post(`/v1/empresas/${idEmpresa}/clientes`, cliente)
+            .then((respose) => {
+                if (respose.data !== null) {
+                    return respose.data;
+                }
+            }).catch((error) => {
+                console.log(`Erro na requisição da API andpoint postClientes! Erro: ${error.message}`);
+                if (error.response) {
+                    return error.response.data;
+                } else {
+                    throw error;
+                }
+            });
+    } catch (error) {
+        console.log(`Erro no método postClientes do arquivo ClientesService -> ${new Date()} -> erro: ${error}`);
     }
 }
 
