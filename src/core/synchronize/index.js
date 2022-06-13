@@ -1,6 +1,6 @@
 import { buscarEAtualizarRefreshToken, getLoginSalvo } from '../../services/UsuarioService';
 import { sincronizar as sincronizarCidade } from '../../services/CidadeService';
-import { sincronizar as sincronizarCliente } from '../../services/ClienteService';
+import { sincronizar as sincronizarCliente, enviar as enviarCliente } from '../../services/ClienteService';
 import { sincronizar as sincronizarEstado } from '../../services/EstadoService';
 import { calculaTempoDeAtualizacaoToken } from '../../services/UsuarioService';
 
@@ -56,7 +56,7 @@ export const enviandoDadosLocais = async () => {
     setInterval(async () => {
         console.log(`Iniciando o envio dos dados locais -> ${new Date()}...`);
         // await sincronizarCidade(token);
-        // await sincronizarCliente(token, empresa);
+        await enviarCliente(token, empresa);
         // await sincronizarEstado(token);
         console.log(`Finalizando o envio dos dados locais -> ${new Date()}...`);
     }, 60000);
