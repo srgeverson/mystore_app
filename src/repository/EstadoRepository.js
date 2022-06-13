@@ -40,12 +40,12 @@ class EstadoRepository {
     
     insertOrReplace(estado) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO estados (ativo, critica, id, id_local, nome, uf, versao) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            Database.insert('INSERT OR REPLACE INTO estados (ativo, criticas, id, idLocal, nome, uf, versao) VALUES (?, ?, ?, ?, ?, ?, ?)',
                 [
                     estado.ativo ? estado.ativo : false,
-                    estado.critica ? estado.critica : null,
+                    estado.criticas ? estado.criticas : null,
                     estado.id ? estado.id : null,
-                    estado.id_local ? estado.id_local : estado.id,
+                    estado.idLocal ? estado.idLocal : estado.id,
                     estado.nome ? estado.nome : null,
                     estado.uf ? estado.uf : null,
                     estado.versao ? estado.versao : null,

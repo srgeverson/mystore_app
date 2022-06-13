@@ -33,7 +33,7 @@ class CidadeRepository {
                 ativo,
                 celular,
                 cpfCnpj,
-                critica,
+                criticas,
                 dataCadastro,
                 email,
                 empresasId,
@@ -49,17 +49,17 @@ class CidadeRepository {
                     cliente.ativo ? cliente.ativo : null,
                     cliente.celular ? cliente.celular : null,
                     cliente.cpfCnpj ? cliente.cpfCnpj : null,
-                    cliente.critica ? cliente.critica : null,
+                    cliente.criticas ? cliente.criticas : null,
                     cliente.dataCadastro ? cliente.dataCadastro : null,
                     cliente.email ? cliente.email : null,
                     cliente.empresasId ? cliente.empresasId : null,
-                    cliente.enderecosId ? cliente.enderecoId : null,
+                    cliente.enderecosId ? cliente.enderecosId : null,
                     null,//NULL pois este campo deve possuir o id retornado pela API
                     cliente.idLocal ? cliente.idLocal : cliente.id,
                     cliente.nomeRazaoSocial ? cliente.nomeRazaoSocial : null,
                     cliente.telefone ? cliente.telefone : null,
                     cliente.versao ? cliente.versao : null,
-                ])     .then((success) => {
+                ]).then((success) => {
                     resolve(success);
                 })
                 .catch((error) => {
@@ -76,7 +76,7 @@ class CidadeRepository {
                 ativo,
                 celular,
                 cpfCnpj,
-                critica,
+                criticas,
                 dataCadastro,
                 email,
                 empresasId,
@@ -92,7 +92,7 @@ class CidadeRepository {
                     cliente.ativo ? cliente.ativo : null,
                     cliente.celular ? cliente.celular : null,
                     cliente.cpfCnpj ? cliente.cpfCnpj : null,
-                    cliente.critica ? cliente.critica : null,
+                    cliente.criticas ? cliente.criticas : null,
                     cliente.dataCadastro ? cliente.dataCadastro : null,
                     cliente.email ? cliente.email : null,
                     cliente.empresasId ? cliente.empresasId : null,
@@ -172,9 +172,9 @@ class CidadeRepository {
         });
     }
 
-    selectLikeByNome(nome) {
+    selectLikeByApelidoOrNome(nome) {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM clientes WHERE (apelidoNomeFantazia LIKE '%${nome}%');`, [])
+            Database.select(`SELECT * FROM clientes WHERE (apelidoNomeFantazia LIKE '%${nome}%' OR nomeRazaoSocial LIKE '%${nome}%');`, [])
                 .then((success) => {
                     resolve(success);
                 })
@@ -184,9 +184,21 @@ class CidadeRepository {
         });
     }
 
-    selectLikeByApelidoOrNome(nome) {
+    selectLikeByIdDistinctIdLocal() {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM clientes WHERE (apelidoNomeFantazia LIKE '%${nome}%' OR nomeRazaoSocial LIKE '%${nome}%');`, [])
+            Database.select(`SELECT * FROM clientes WHERE id <> IdLocal OR versao IS NULL;`, [])
+                .then((success) => {
+                    resolve(success);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    selectLikeByNome(nome) {
+        return new Promise((resolve, reject) => {
+            Database.select(`SELECT * FROM clientes WHERE (apelidoNomeFantazia LIKE '%${nome}%');`, [])
                 .then((success) => {
                     resolve(success);
                 })
@@ -230,7 +242,7 @@ class CidadeRepository {
         sql += 'ativo = ?, ';
         sql += 'celular = ?, ';
         sql += 'cpfCnpj = ?, ';
-        sql += 'critica = ?, ';
+        sql += 'criticas = ?, ';
         sql += 'dataCadastro = ?, ';
         sql += 'email = ?, ';
         sql += 'empresasId = ?, ';
@@ -250,7 +262,7 @@ class CidadeRepository {
                 cliente.ativo ? cliente.ativo : null,
                 cliente.celular ? cliente.celular : null,
                 cliente.cpfCnpj ? cliente.cpfCnpj : null,
-                cliente.critica ? cliente.critica : null,
+                cliente.criticas ? cliente.criticas : null,
                 cliente.dataCadastro ? cliente.dataCadastro : null,
                 cliente.email ? cliente.email : null,
                 cliente.empresasId ? cliente.empresasId : null,

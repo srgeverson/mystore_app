@@ -28,7 +28,7 @@ class CidadeRepository {
 
     insert(cidade) {
         return new Promise((resolve, reject) => {
-            Database.insert(`INSERT INTO cidades VALUES (?, ?, ?);`, [cidade.id, cidade.nome, cidade.estados_id])
+            Database.insert(`INSERT INTO cidades VALUES (?, ?, ?);`, [cidade.id, cidade.nome, cidade.estadosId])
                 .then((success) => {
                     resolve(success);
                 })
@@ -40,13 +40,13 @@ class CidadeRepository {
     
     insertOrReplace(cidade) {
         return new Promise((resolve, reject) => {
-            Database.insert('INSERT OR REPLACE INTO cidades (ativo, critica, id, id_local, estados_id, nome, versao) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            Database.insert('INSERT OR REPLACE INTO cidades (ativo, criticas, id, idLocal, estadosId, nome, versao) VALUES (?, ?, ?, ?, ?, ?, ?)',
                 [
                     cidade.ativo ? cidade.ativo : false,
-                    cidade.critica ? cidade.critica : null,
+                    cidade.criticas ? cidade.criticas : null,
                     cidade.id ? cidade.id : null,
-                    cidade.id_local ? cidade.id_local : cidade.id,
-                    cidade.estados_id ? cidade.estados_id : null,
+                    cidade.idLocal ? cidade.idLocal : cidade.id,
+                    cidade.estadosId ? cidade.estadosId : null,
                     cidade.nome ? cidade.nome : null,
                     cidade.versao ? cidade.versao : null,
                 ])
@@ -73,7 +73,7 @@ class CidadeRepository {
     
     selectLikeByNomeAndEstadoId(nome, estadoId) {
         return new Promise((resolve, reject) => {
-            Database.select(`SELECT * FROM cidades WHERE (ativo = true AND nome LIKE '%${nome}%' AND estados_id = ${estadoId});`, [])
+            Database.select(`SELECT * FROM cidades WHERE (ativo = true AND nome LIKE '%${nome}%' AND estadosId = ${estadoId});`, [])
                 .then((success) => {
                     resolve(success);
                 })

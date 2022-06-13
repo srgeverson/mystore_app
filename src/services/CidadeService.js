@@ -61,7 +61,7 @@ export const sincronizar = async (token) => {
         if (cidade._embedded)
             cidade._embedded.cidades.forEach(async (element) => {
                 await cadastrarOuAtualizar({
-                    id: element.id, nome: element.nome, versao: element.versao, estados_id: element.estado.id, ativo: element.ativo
+                    id: element.id, nome: element.nome, versao: element.versao, estadosId: element.estado.id, ativo: element.ativo
                 })
             });
     } catch (error) {
