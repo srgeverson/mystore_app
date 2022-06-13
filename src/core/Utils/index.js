@@ -18,4 +18,6 @@ const extractorFirstLeterNames = (value) => {
         return '):';//Campo indefinido/nulo
 }
 
-export { createGuid, extractorFirstLeterNames, keyExtractor }
+const isNumber = (value) => !isNaN(value);
+
+export { createGuid, extractorFirstLeterNames, isNumber, keyExtractor }
