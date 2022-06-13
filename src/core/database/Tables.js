@@ -7,12 +7,12 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
-        critica: {
+        criticas: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
         },
-        estados_id: {
+        estadosId: {
             type: Types.INTEGER,
             primary_key: false,
             default_value: null,
@@ -22,7 +22,7 @@ export const Tables = {
             primary_key: true,
             default_value: null,
         },
-        id_local: {
+        idLocal: {
             type: Types.INTEGER,
             primary_key: false,
             default_value: null,
@@ -59,7 +59,7 @@ export const Tables = {
             primary_key: false,
             default_value: null,
         },
-        critica: {
+        criticas: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
@@ -117,13 +117,55 @@ export const Tables = {
             default_value: null,
         },
     },
+    endereco:{
+	    bairro: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        cep: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        cidadesId:{
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+	    complemento: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        id: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        idLocal: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+        logradouro:  {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+	    numero: {
+            type: Types.TEXT,
+            primary_key: false,
+            default_value: null,
+        },
+    },
     estados: {
         ativo: {
             type: Types.BOOLEAN,
             primary_key: false,
             default_value: null,
         },
-        critica: {
+        criticas: {
             type: Types.TEXT,
             primary_key: false,
             default_value: null,
@@ -133,7 +175,7 @@ export const Tables = {
             primary_key: true,
             default_value: null,
         },
-        id_local: {
+        idLocal: {
             type: Types.INTEGER,
             primary_key: false,
             default_value: null,
