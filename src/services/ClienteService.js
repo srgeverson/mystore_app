@@ -73,6 +73,81 @@ export const cadastrarOuAtualizar = async (cliente) => {
     }
 }
 
+export const enviar = async (token, empresa) => {
+    try {
+        //const { empresa, token } = await getLoginSalvo();
+        //console.log('Ops...');
+        const clientesLocal = ClienteRepository.selectLikeByIdDistinctIdLocal();
+        //console.log('Qtd: ' + select.rows.length);
+        //console.log(select.rows.raw());
+        clientesLocal.rows.raw().forEach(async (element) => {
+            console.log(isNumber(element.idLocal));
+            if (!isNumber(element.idLocal)) {
+                const clienteLocal = {
+                    nomeRazaoSocial: element.nomeRazaoSocial,
+                    apelidoNomeFantazia: element.apelidoNomeFantazia,
+                    cpfCnpj: element.cpfCnpj,
+                    celular: element.celular,
+                    telefone: element.telefone,
+                    email: element.email,
+                    endereco: {
+                        logradouro: element.endereco ? element.endereco.logradouro : null,
+                        numero: element.endereco ? element.endereco.numero : null,
+                        complemento: element.endereco ? element.endereco.complemento : null,
+                        bairro: element.endereco ? element.endereco.bairro : null,
+                        cep: element.endereco ? element.endereco.cep : null,
+                        cidade: {
+                            id: element.endereco ? element.endereco.cidade ? element.endereco.cidade.id : null : null
+                        }
+                    }
+                }
+                const cliente = await postClientes(token, empresa, clienteLocal);
+                if (cliente.status == 201) {
+                    console.log('Clientes enviado comsucesso!');
+                    await cadastrarOuAtualizar(cliente);
+                } else {
+                    if (cliente.status == 400) {
+                        const criticas = cliente.objects.map((object) => object.userMessage).join(', ');
+                        console.log(criticas);
+                        await cadastrarOuAtualizar({ element, ...{ criticas } });
+                    }
+                }
+            } else if (!element.versao) {
+                const clienteLocal = {
+                    nomeRazaoSocial: element.nomeRazaoSocial,
+                    apelidoNomeFantazia: element.apelidoNomeFantazia,
+                    cpfCnpj: element.cpfCnpj,
+                    celular: element.celular,
+                    telefone: element.telefone,
+                    email: element.email,
+                    endereco: {
+                        id: element.endereco ? element.endereco.id : null,
+                        logradouro: element.endereco ? element.endereco.logradouro : null,
+                        numero: element.endereco ? element.endereco.numero : null,
+                        complemento: element.endereco ? element.endereco.complemento : null,
+                        bairro: element.endereco ? element.endereco.bairro : null,
+                        cep: element.endereco ? element.endereco.cep : null,
+                        cidade: {
+                            id: element.endereco ? element.endereco.cidade ? element.endereco.cidade.id : null : null
+                        }
+                    }
+                }
+                const cliente = await putClientes(token, empresa, clienteLocal, element.id);
+                if (cliente.status == 200) {
+                    console.log('Clientes enviado comsucesso!');
+                    await cadastrarOuAtualizar(cliente);
+                } else if (cliente.status == 400) {
+                    console.log('Clientes foi criticado ao enviar!');
+                    const criticas = cliente.objects.map((object) => object.userMessage).join(', ');
+                    await cadastrarOuAtualizar({ element, ...{ criticas } });
+                }
+            }
+        });
+    } catch (error) {
+        console.log(`Erro no método enviar do arquivo ClienteService  -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
 export const getClientes = async (token, idEmpresa) => {
     try {
         const ultimaVersao = await ClienteRepository.selectUltimaVersao();
@@ -87,7 +162,7 @@ export const getClientes = async (token, idEmpresa) => {
                     return respose.data;
                 }
             }).catch((error) => {
-                console.log(`Erro na requisição da API andpoint getClientes! Erro: ${error.message}`);
+                console.log(`Erro na requisição da API endpoint getClientes! Erro: ${error.message}`);
                 if (error.response) {
                     return {
                         codigo: error.response.status,
@@ -105,7 +180,6 @@ export const getClientes = async (token, idEmpresa) => {
 
 export const postClientes = async (token, idEmpresa, cliente) => {
     try {
-
         return await api(token)
             .post(`/v1/empresas/${idEmpresa}/clientes`, cliente)
             .then((respose) => {
@@ -113,7 +187,7 @@ export const postClientes = async (token, idEmpresa, cliente) => {
                     return respose.data;
                 }
             }).catch((error) => {
-                console.log(`Erro na requisição da API andpoint postClientes! Erro: ${error.message}`);
+                console.log(`Erro na requisição da API endpoint postClientes! Erro: ${error.message}`);
                 if (error.response) {
                     return error.response.data;
                 } else {
@@ -122,6 +196,27 @@ export const postClientes = async (token, idEmpresa, cliente) => {
             });
     } catch (error) {
         console.log(`Erro no método postClientes do arquivo ClientesService -> ${new Date()} -> erro: ${error}`);
+    }
+}
+
+export const putClientes = async (token, idEmpresa, cliente, idCliente) => {
+    try {
+        return await api(token)
+            .put(`/v1/empresas/${idEmpresa}/clientes/${idCliente}`, cliente)
+            .then((respose) => {
+                if (respose.data !== null) {
+                    return respose.data;
+                }
+            }).catch((error) => {
+                console.log(`Erro na requisição da API endpoint putClientes! Erro: ${error.message}`);
+                if (error.response) {
+                    return error.response.data;
+                } else {
+                    throw error;
+                }
+            });
+    } catch (error) {
+        console.log(`Erro no método putClientes do arquivo ClientesService -> ${new Date()} -> erro: ${error}`);
     }
 }
 
